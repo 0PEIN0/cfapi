@@ -20,7 +20,7 @@ http://codeforces.com/api/help
 #### Technologies Used
 1. *Bootstrap 3.3.4*
 2. *JQuery 2.1.3* (only for supporting bootstrap library)
-3. *AngularJS 1.4.0-rc.1* (will use 1.4 upon final release, for now it's this release candidate)
+3. *AngularJS 1.4.0-rc.2* (will use 1.4 upon final release, for now it's this release candidate)
 
 #### Licensed Under
 GNU General Public License version 2
