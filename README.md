@@ -6,7 +6,7 @@ Codeforces api client built using AngularJS. The most important fact about this 
 Download this repository and run **index.html** file on your favorite browser([chrome](https://www.google.com/chrome/browser/desktop/) usage recommended).
 
 #### How to Change Default Handle
-Open **'js/conf-settings-structure.js'** file on a text editor and change the property value of *this.defaultUserHandle* to your intended handle.
+Open '**js/conf-settings-structure.js**' file on a text editor and change the property value of '*this.defaultUserHandle*' to your intended handle.
 
 #### Features Available
 1. *Personal Submission List*
