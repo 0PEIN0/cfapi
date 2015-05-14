@@ -8,7 +8,8 @@ Download this repository and run index.html file on your favourite browser([chro
 ##### Features Available
 1. *Personal Submission List*
 2. *Recent Submissions on Codeforces*
-3. *Contest Standings with Country Filter* 
+3. *Contest Standings with Country Filter*
+4. *All Table Columns are Sortable.*
 
 ##### Api Documentation
 http://codeforces.com/api/help
