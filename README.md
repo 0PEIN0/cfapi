@@ -15,8 +15,8 @@ Open '**js/conf-settings-structure.js**' file on a text editor and change the pr
 4. *All Table Columns are Sortable.*
 
 #### Api Documentations
-[Api Definition Help](http://codeforces.com/api/help)
-[Api Introduction/Community Discussion](http://codeforces.com/blog/entry/12520)
+* [Api Definition Help](http://codeforces.com/api/help)
+* [Api Introduction/Community Discussion](http://codeforces.com/blog/entry/12520)
 
 #### Technologies Used
 1. *Bootstrap 3.3.4*
