@@ -1,0 +1,40 @@
+<!-- Author: S. M. Ijaz-ul-Amin Chowdhury -->
+<!-- Codeforces Handle: .PEIN. -->
+<!-- Github Username: 0PEIN0 -->
+<!-- Github Repository Link: https://github.com/0PEIN0/cfapi -->
+<!-- License: GNU General Public License version 2 -->
+<!DOCTYPE html lang="en">
+<html data-ng-app="CodeforcesApplication" data-ng-controller="CodeforcesController">
+	<head>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+		<link rel="stylesheet" href="css/codeforces.css">
+		<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+		<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0-rc.1/angular.min.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0-rc.1/angular-sanitize.js"></script>
+		<script type="text/javascript" src="js/core-libraries.js"></script>
+		<script type="text/javascript" src="js/conf-settings-structures.js"></script>
+		<script type="text/javascript" src="js/directives.js"></script>
+		<script type="text/javascript" src="js/api-operations.js"></script>
+	</head>
+	<body>
+		<div class="overlay" data-ng-show="showLoadingFlag==true">
+		    Loading...
+		</div>
+		<div data-ng-show="showLoadingFlag==false">
+			<div>
+				<ul class="nav nav-pills">
+				  <li role="presentation" data-ng-click="navElementClicked(0)" data-ng-class="(currentNavIndex==0) ? 'active' : ''"><a href="javascript:void(0);">User Statistics of {{userHandle}}</a></li>
+				  <li role="presentation" data-ng-click="navElementClicked(1)" data-ng-class="(currentNavIndex==1) ? 'active' : ''"><a href="javascript:void(0);">Recent practice submissions on Codeforces</a></li>
+				  <li role="presentation" data-ng-click="navElementClicked(2)" data-ng-class="(currentNavIndex==2) ? 'active' : ''"><a href="javascript:void(0);">Contest Standings</a></li>
+				</ul>
+			</div>
+			<div>
+				<codeforces-user-statistics-directive data-ng-show="navigationFlags[0] == true" show-loading-flag="showLoadingFlag" show-user-statistics-flag="navigationFlags[0]"></codeforces-user-statistics-directive>
+				<codeforces-recent-submissions-directive data-ng-show="navigationFlags[1] == true" show-loading-flag="showLoadingFlag" show-recent-submissions-flag="navigationFlags[1]"></codeforces-recent-submissions-directive>
+				<codeforces-rank-list-directive data-ng-show="navigationFlags[2] == true" show-loading-flag="showLoadingFlag" show-rank-list-flag="navigationFlags[2]"></codeforces-rank-list-directive>
+			</div>
+		</div>
+	</body>
+</html>
