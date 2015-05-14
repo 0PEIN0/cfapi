@@ -25,9 +25,7 @@
 		<div data-ng-show="showLoadingFlag==false">
 			<div>
 				<ul class="nav nav-pills">
-				  <li role="presentation" data-ng-click="navElementClicked(0)" data-ng-class="(currentNavIndex==0) ? 'active' : ''"><a href="javascript:void(0);">User Statistics of {{userHandle}}</a></li>
-				  <li role="presentation" data-ng-click="navElementClicked(1)" data-ng-class="(currentNavIndex==1) ? 'active' : ''"><a href="javascript:void(0);">Recent practice submissions on Codeforces</a></li>
-				  <li role="presentation" data-ng-click="navElementClicked(2)" data-ng-class="(currentNavIndex==2) ? 'active' : ''"><a href="javascript:void(0);">Contest Standings</a></li>
+				  <li data-ng-repeat="item in navElementNameList track by $index" role="presentation" data-ng-click="navElementClicked(item.index)" data-ng-class="(currentNavIndex==item.index) ? 'active' : ''"><a href="javascript:void(0);" data-ng-bind='item.title'></a></li>
 				</ul>
 			</div>
 			<div>

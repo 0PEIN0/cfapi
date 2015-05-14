@@ -765,9 +765,18 @@ function CodeforcesApiService( $http , $timeout , $sce , lssObj , cfsObj , cfcOb
 }
 
 function CodeforcesController( $scope , cfApi ) {
+	
+	$scope.transformNavElementNameToPageName = function( navElementName ) {
+		var res ;
+		res = navElementName.toLowerCase() ;
+		while( res.search( ' ' ) != -1 ) {
+			res = res.replace( ' ' , '-' ) ;
+		}
+		return res ;
+	} ;
 
 	$scope.navElementClicked = function( idx ) {
-		var i , len ;
+		var i , len , pageName ;
 		len = $scope.navigationFlags.length ;
 		for( i = len ; i <= idx + 1 ; i++ ) {
 			$scope.navigationFlags.push( false ) ;
@@ -779,12 +788,18 @@ function CodeforcesController( $scope , cfApi ) {
 			$scope.showLoadingFlag = true ;
 			$scope.currentNavIndex = idx ;
 			$scope.navigationFlags[ idx ] = true ;
+			pageName = $scope.transformNavElementNameToPageName( $scope.navElementNameList[ idx ].title ) ;
+			ga( 'send' , 'pageview' , pageName ) ;
 		}
 	} ;
 
 	$scope.init = function() {
 		$scope.userHandle = cfApi.getDefaultUserHandle() ;
 		$scope.navigationFlags = [] ;
+		$scope.navElementNameList = [] ;
+		$scope.navElementNameList.push( { title : 'User Statistics of ' + $scope.userHandle , index : 0 } ) ;
+		$scope.navElementNameList.push( { title : 'Recent Practice Submissions on Codeforces' , index : 1 } ) ;
+		$scope.navElementNameList.push( { title : 'Contest Standings' , index : 2 } ) ;
 		$scope.currentNavIndex = 1 ;
 		$scope.navElementClicked( $scope.currentNavIndex ) ;
 	} ;
