@@ -3,7 +3,7 @@
 Codeforces api client built using AngularJS. The most important fact about this api-client is that you don't need a server to run it. You can just run the index.html file and use it from there. And if you insist on running this on a server, that would work too. Currently the features are extremely limited, I'll add more as we go forward.
 
 #### How to Run
-Download this repository and run **index.html** file on your favourite browser([chrome](https://www.google.com/chrome/browser/desktop/) usage recommended).
+Download this repository and run **index.html** file on your favorite browser([chrome](https://www.google.com/chrome/browser/desktop/) usage recommended).
 
 #### Features Available
 1. *Personal Submission List*
