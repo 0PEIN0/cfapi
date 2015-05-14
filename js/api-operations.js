@@ -506,7 +506,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		return res ;
 	} ;
 
-	this.parseUserSubmissions = function( data ) {
+	this.parseSubmissions = function( data ) {
 		var i , sz1 , res , j , sz2 , fl , submission ;
 		res = {} ;
 		res.dataList = [] ;
@@ -569,7 +569,30 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		res.summary.verdicts = res.summary.verdicts.sort( function( left , right ) {
 			return right.frequency - left.frequency ;
 		} ) ;
+		res.summary.verdictsAlphabeticallySorted = [] ;
+		sz1 = res.summary.verdicts.length ;
+		for( i = 0 ; i < sz1 ; i++ ) {
+			res.summary.verdictsAlphabeticallySorted.push( res.summary.verdicts[ i ] ) ;
+		}
+		res.summary.verdictsAlphabeticallySorted = res.summary.verdictsAlphabeticallySorted.sort( function( left , right ) {
+			if( left == null || right == null ) {
+				return 0 ;
+			}
+			return ( left.name.localeCompare( right.name ) <= 0 ) ? false : true ;
+		} ) ;
 		res.summary.users = self.getAuthorList( data ) ;
+		return res ;
+	} ;
+	
+	this.parseSubmissionListByVerdict = function( submissionList , verdictName ) {
+		var res , i , sz ;
+		res = [] ;
+		sz = submissionList.length ;
+		for( i = 0 ; i < sz ; i++ ) {
+			if( submissionList[ i ].verdict.toLowerCase().search( verdictName.toLowerCase() ) != -1 ) {
+				res.push( submissionList[ i ] ) ;
+			}
+		}
 		return res ;
 	} ;
 	
@@ -708,11 +731,15 @@ function CodeforcesApiService( $http , $timeout , $sce , lssObj , cfsObj , cfcOb
 	} ;
 
 	this.getRecentSubmissionsForAllInPractice = function( callbackFunction , count ) {
-		self.makeJsonpRequest( self.cfaubObj.buildRecentSubmissionsForAllInPracticeUrl( count ) , self.cfdlpObj.parseUserSubmissions , callbackFunction , false ) ;
+		self.makeJsonpRequest( self.cfaubObj.buildRecentSubmissionsForAllInPracticeUrl( count ) , self.cfdlpObj.parseSubmissions , callbackFunction , false ) ;
 	} ;
 	
 	this.getSubmissionList = function( callbackFunction , count ) {
-		self.makeJsonpRequest( self.cfaubObj.buildRecentSubmissionsForAllInPracticeUrl( count ) , self.cfdlpObj.parseUserSubmissions , callbackFunction , false ) ;
+		self.makeJsonpRequest( self.cfaubObj.buildRecentSubmissionsForAllInPracticeUrl( count ) , self.cfdlpObj.parseSubmissions , callbackFunction , false ) ;
+	} ;
+	
+	this.getSubmissionListByVerdict = function( submissionList , verdictName ) {
+		return self.cfdlpObj.parseSubmissionListByVerdict( submissionList , verdictName ) ;
 	} ;
 	
 	this.updateSubmissionsDataListWithUserInfo = function( submissionsListObj , userInfoList ) {
@@ -760,7 +787,7 @@ function CodeforcesApiService( $http , $timeout , $sce , lssObj , cfsObj , cfcOb
 	} ;
 
 	this.getUserSubmissions = function( callbackFunction , userHandle , from , count ) {
-		self.makeJsonpRequest( self.cfaubObj.buildUserStatusUrl( userHandle , from , count ) , self.cfdlpObj.parseUserSubmissions , callbackFunction , false ) ;
+		self.makeJsonpRequest( self.cfaubObj.buildUserStatusUrl( userHandle , from , count ) , self.cfdlpObj.parseSubmissions , callbackFunction , false ) ;
 	} ;
 }
 

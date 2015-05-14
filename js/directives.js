@@ -225,11 +225,18 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 						<div>\
 							Verdict distribution breakdown: <span class="label" data-ng-repeat="item in submissionList.summary.verdicts" data-ng-bind="item.name + \' : \' + item.frequency" data-ng-class="item.cssClass"></span>\
 						</div>\
+						<div>\
+							Filter by Verdict: \
+							<select data-ng-change="verdictSelected()" data-ng-model="selectedVerdict">\
+								<option value="">All Verdicts</option>\
+								<option data-ng-repeat="item in verdictList" data-ng-bind="item.name+\' (\'+item.frequency+\')\'" value="{{item.name}}"></option>\
+							</select>\
+						</div>\
 					</div>\
 					<div data-ng-show="showUnofficialOptionCheckbox==true">\
 						<input type="checkbox" aria-label="..." data-ng-model="showUnofficialUserSubmissionsFlag">Show Unofficial\
 					</div>\
-					<codeforces-table-directive column-list="submissionTableStructure" rowcell-list="submissionList.dataList" ></codeforces-table-directive>\
+					<codeforces-table-directive column-list="submissionTableStructure" rowcell-list="submissionList.filteredDataList" ></codeforces-table-directive>\
 				</div>\
 			</div>' ,
 		scope : {
@@ -239,6 +246,15 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 			'showUnofficialOptionCheckbox' : '='
 	    } ,
         link: function( scope , element , attrs ) {
+
+			scope.verdictSelected = function() {
+				if( scope.selectedVerdict != null && scope.selectedVerdict != '' ) {
+					scope.submissionList.filteredDataList = cfApi.getSubmissionListByVerdict( scope.submissionList.dataList , scope.selectedVerdict ) ;
+				}
+				else {
+					scope.submissionList.filteredDataList = scope.submissionList.dataList ;
+				}
+			} ;
 			
 			scope.userListInfoResponse = function( response ) {
 				scope.userInfoList = scope.userInfoList.concat( response.dataList ) ;
@@ -256,14 +272,22 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 			
 			scope.submissionListLoadedFlagChanged = function( newValue , oldValue ) {
 				if( newValue == true ) {
+					scope.submissionList.filteredDataList = scope.submissionList.dataList ;
+					scope.verdictList = scope.submissionList.summary.verdictsAlphabeticallySorted ;
 					cfApi.getUserInfo( scope.userListInfoResponse , scope.submissionList.summary.users ) ;
 					cfApi.getProblems( scope.problemListResponse ) ;
 				}
 			} ;
-
-			scope.$watch( 'submissionListLoadedFlag' , scope.submissionListLoadedFlagChanged , true ) ;
-			scope.userInfoList = [] ;
-			scope.submissionTableStructure = cftsObj.getCustomSubmissionTableStructure( false ) ;
+			
+			scope.init = function() {
+				scope.$watch( 'submissionListLoadedFlag' , scope.submissionListLoadedFlagChanged , true ) ;
+				scope.userInfoList = [] ;
+				scope.verdictList = [] ;
+				scope.selectedVerdict = '' ;
+				scope.submissionTableStructure = cftsObj.getCustomSubmissionTableStructure( false ) ;
+			} ;
+			
+			scope.init() ;
 		}
 	} ;
 }
