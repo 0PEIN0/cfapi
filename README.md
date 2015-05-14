@@ -7,3 +7,5 @@ Technologies used:
 i) Bootstrap 3.3.4
 ii) JQuery 2.1.3
 ii) AngularJS 1.4.0-rc.1
+
+Licensed under: GNU General Public License version 2
