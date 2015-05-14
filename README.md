@@ -14,8 +14,9 @@ Open '**js/conf-settings-structure.js**' file on a text editor and change the pr
 3. *Contest Standings with Country Filter*
 4. *All Table Columns are Sortable.*
 
-#### Api Documentation
-http://codeforces.com/api/help
+#### Api Documentations
+[Api Definition Help](http://codeforces.com/api/help)
+[Api Introduction/Community Discussion](http://codeforces.com/blog/entry/12520)
 
 #### Technologies Used
 1. *Bootstrap 3.3.4*
