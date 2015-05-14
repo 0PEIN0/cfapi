@@ -262,9 +262,6 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		authorHandles = '' ;
 		countryList = cfsObj.getCountryListAsObject() ;
 		for( i = 0 ; i < sz ; i++ ) {
-			if( i > 0 ) {
-				authorHandles += '<span>,</span>' ;
-			}
 			handle = memberList[ i ].handle ;
 			countryImageHtml = '' ;
 			if( userInfoObj != null && userInfoObj.country != null && userInfoObj.country != '' && countryList[ userInfoObj.country ] != null ) {
