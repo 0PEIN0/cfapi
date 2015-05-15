@@ -234,7 +234,7 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 						</div>\
 					</div>\
 					<div data-ng-show="showUnofficialOptionCheckbox==true">\
-						<input type="checkbox" aria-label="..." data-ng-model="showUnofficialUserSubmissionsFlag">Show Unofficial\
+						<input type="checkbox" aria-label="..." data-ng-model="showUnofficialUserSubmissionsFlag" data-ng-change="showUnofficialUserSubmissionsFlagChanged()">Show Unofficial\
 					</div>\
 					<codeforces-table-directive column-list="submissionTableStructure" rowcell-list="submissionList.filteredDataList" ></codeforces-table-directive>\
 				</div>\
@@ -246,14 +246,15 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 			'showUnofficialOptionCheckbox' : '='
 	    } ,
         link: function( scope , element , attrs ) {
+			var self ;
+			self = {} ;
+			
+			self.filterSubmissionDataList = function() {
+				scope.submissionList.filteredDataList = cfApi.getSubmissionListThroughFilter( scope.submissionList.dataList , scope.selectedVerdict , scope.showUnofficialUserSubmissionsFlag ) ;
+			} ;
 
 			scope.verdictSelected = function() {
-				if( scope.selectedVerdict != null && scope.selectedVerdict != '' ) {
-					scope.submissionList.filteredDataList = cfApi.getSubmissionListThroughFilter( scope.submissionList.dataList , scope.selectedVerdict ) ;
-				}
-				else {
-					scope.submissionList.filteredDataList = scope.submissionList.dataList ;
-				}
+				self.filterSubmissionDataList() ;
 			} ;
 			
 			scope.userListInfoResponse = function( response ) {
@@ -268,6 +269,10 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 				scope.submissionTableStructure = cftsObj.getCustomSubmissionTableStructure( true ) ;
 				problemSetList = response ;
 				scope.submissionList = cfApi.updateSubmissionsDataListwithProblemInfo( scope.submissionList , problemSetList ) ;
+			} ;
+			
+			scope.showUnofficialUserSubmissionsFlagChanged = function() {
+				self.filterSubmissionDataList() ;
 			} ;
 			
 			scope.submissionListLoadedFlagChanged = function( newValue , oldValue ) {
@@ -285,6 +290,7 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 				scope.verdictList = [] ;
 				scope.selectedVerdict = '' ;
 				scope.submissionTableStructure = cftsObj.getCustomSubmissionTableStructure( false ) ;
+				scope.showUnofficialUserSubmissionsFlag = true ;
 			} ;
 			
 			scope.init() ;
@@ -299,7 +305,8 @@ function CodeforcesUserStatisticsDirective( cfApi ) {
 		template : '<codeforces-submissions-directive submission-list-loaded-flag="submissionListLoadedFlag" submission-list="submissionList" show-unofficial-accpted-submission-summary-flag="true" show-unofficial-option-checkbox="true"></codeforces-submissions-directive>' ,
 		scope : {
 	    	'showLoadingFlag' : '=' , 
-			'showUserStatisticsFlag' : '='
+			'showUserStatisticsFlag' : '=' , 
+			'userHandle' : '='
 	    } ,
         link: function( scope , element , attrs ) {
 			
@@ -311,7 +318,7 @@ function CodeforcesUserStatisticsDirective( cfApi ) {
 			
 			scope.showUserStatisticsFlagChanged = function( newValue , oldValue ) {
 				if( newValue == true ) {
-					cfApi.getSubmissionList( scope.submissionListResponse ) ;
+					cfApi.getUserSubmissions( scope.submissionListResponse , scope.userHandle ) ;
 				}
 			} ;
 

@@ -584,18 +584,20 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		return res ;
 	} ;
 	
-	this.parseSubmissionListThroughFilter = function( submissionList , verdictName ) {
-		var res , i , sz ;
+	this.parseSubmissionListThroughFilter = function( submissionList , verdictName , showUnofficialSubmissions ) {
+		var res , i , sz , fl ;
 		res = [] ;
-		if( verdictName == null || verdictName == '' ) {
-			res = submissionList ;
-		}
-		else {
-			sz = submissionList.length ;
-			for( i = 0 ; i < sz ; i++ ) {
-				if( submissionList[ i ].verdict.toLowerCase().search( verdictName.toLowerCase() ) != -1 ) {
-					res.push( submissionList[ i ] ) ;
-				}
+		sz = submissionList.length ;
+		for( i = 0 ; i < sz ; i++ ) {
+			fl = 1 ;
+			if( verdictName != null && verdictName != '' && submissionList[ i ].verdict.toLowerCase().search( verdictName.toLowerCase() ) == -1 ) {
+				fl = 0 ;
+			}
+			if( showUnofficialSubmissions != null && showUnofficialSubmissions == false && submissionList[ i ].inContestSubmission == false ) {
+				fl = 0 ;
+			}
+			if( fl == 1 ) {
+				res.push( submissionList[ i ] ) ;
 			}
 		}
 		return res ;
@@ -739,12 +741,8 @@ function CodeforcesApiService( $http , $timeout , $sce , lssObj , cfsObj , cfcOb
 		self.makeJsonpRequest( self.cfaubObj.buildRecentSubmissionsForAllInPracticeUrl( count ) , self.cfdlpObj.parseSubmissions , callbackFunction , false ) ;
 	} ;
 	
-	this.getSubmissionList = function( callbackFunction , count ) {
-		self.makeJsonpRequest( self.cfaubObj.buildRecentSubmissionsForAllInPracticeUrl( count ) , self.cfdlpObj.parseSubmissions , callbackFunction , false ) ;
-	} ;
-	
-	this.getSubmissionListThroughFilter = function( submissionList , verdictName ) {
-		return self.cfdlpObj.parseSubmissionListThroughFilter( submissionList , verdictName ) ;
+	this.getSubmissionListThroughFilter = function( submissionList , verdictName , showUnofficialSubmissions ) {
+		return self.cfdlpObj.parseSubmissionListThroughFilter( submissionList , verdictName , showUnofficialSubmissions ) ;
 	} ;
 	
 	this.updateSubmissionsDataListWithUserInfo = function( submissionsListObj , userInfoList ) {
