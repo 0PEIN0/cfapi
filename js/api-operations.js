@@ -861,8 +861,8 @@ function CodeforcesController( $scope , cfApi ) {
 		$scope.userHandle = cfApi.getDefaultUserHandle() ;
 		$scope.navigationFlags = [] ;
 		$scope.navElementNameList = [] ;
-		$scope.navElementNameList.push( { title : 'User Statistics of ' + $scope.userHandle , index : 0 } ) ;
-		$scope.navElementNameList.push( { title : 'Recent Practice Submissions on Codeforces' , index : 1 } ) ;
+		$scope.navElementNameList.push( { title : 'Submissions of ' + $scope.userHandle , index : 0 } ) ;
+		$scope.navElementNameList.push( { title : 'Problemset Status' , index : 1 } ) ;
 		$scope.navElementNameList.push( { title : 'Contest Standings' , index : 2 } ) ;
 		len = $scope.navElementNameList.length ;
 		for( i = 0 ; i < len ; i++ ) {
