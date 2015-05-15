@@ -279,6 +279,7 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 				if( newValue == true ) {
 					scope.submissionList.filteredDataList = scope.submissionList.dataList ;
 					scope.verdictList = scope.submissionList.summary.verdictsAlphabeticallySorted ;
+					scope.userInfoList = [] ;
 					cfApi.getUserInfo( scope.userListInfoResponse , scope.submissionList.summary.users ) ;
 					cfApi.getProblems( scope.problemListResponse ) ;
 				}
@@ -286,7 +287,6 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 			
 			scope.init = function() {
 				scope.$watch( 'submissionListLoadedFlag' , scope.submissionListLoadedFlagChanged , true ) ;
-				scope.userInfoList = [] ;
 				scope.verdictList = [] ;
 				scope.selectedVerdict = '' ;
 				scope.submissionTableStructure = cftsObj.getCustomSubmissionTableStructure( false ) ;
@@ -318,12 +318,12 @@ function CodeforcesUserStatisticsDirective( cfApi ) {
 			
 			scope.showUserStatisticsFlagChanged = function( newValue , oldValue ) {
 				if( newValue == true ) {
+					scope.submissionListLoadedFlag = false ;
 					cfApi.getUserSubmissions( scope.submissionListResponse , scope.userHandle ) ;
 				}
 			} ;
 
 			scope.$watch( 'showUserStatisticsFlag' , scope.showUserStatisticsFlagChanged , true ) ;
-			scope.submissionListLoadedFlag = false ;
 		}
 	} ;
 }
@@ -347,12 +347,12 @@ function CodeforcesRecentSubmissionsDirective( cfApi ) {
 			
 			scope.showRecentSubmissionsFlagChanged = function( newValue , oldValue ) {
 				if( newValue == true ) {
+					scope.submissionListLoadedFlag = false ;
 					cfApi.getRecentSubmissionsForAllInPractice( scope.submissionListResponse ) ;
 				}
 			} ;
 
 			scope.$watch( 'showRecentSubmissionsFlag' , scope.showRecentSubmissionsFlagChanged , true ) ;
-			scope.submissionListLoadedFlag = false ;
 		}
 	} ;
 }
