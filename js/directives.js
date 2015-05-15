@@ -131,7 +131,7 @@ function CodeforcesContestStandingDirective( cfApi , cftsObj ) {
 								<option data-ng-repeat="item in contestList.dataList" data-ng-bind="item.name" value="{{item.id}}" data-ng-init="contestListLoading($index)"></option>\
 							</select>\
 							<select data-ng-change="countrySelected()" data-ng-model="selectedCountry">\
-								<option value="">All Countries</option>\
+								<option value="">Any Country</option>\
 								<option data-ng-repeat="item in countryList" data-ng-bind="item.countryName" value="{{item.countryName}}"></option>\
 							</select>\
 						</div>\
@@ -228,7 +228,7 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 						<div>\
 							Filter by Verdict: \
 							<select data-ng-change="verdictSelected()" data-ng-model="selectedVerdict">\
-								<option value="">All Verdicts</option>\
+								<option value="">Any Verdict</option>\
 								<option data-ng-repeat="item in verdictList" data-ng-bind="item.name+\' (\'+item.frequency+\')\'" value="{{item.name}}"></option>\
 							</select>\
 						</div>\
