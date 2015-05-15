@@ -368,7 +368,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		submission.executionMemoryHtml = '' + dataObject.memoryConsumedMegaBytes + ' MB' ;
 		return submission ;
 	} ;
-	
+
 	self.getAuthorList = function( dataList ) {
 		var authorList , i , sz1 , j , sz2 , userMap , mapCnt ;
 		authorList = [] ;
@@ -507,7 +507,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 	} ;
 
 	this.parseSubmissions = function( data ) {
-		var i , sz1 , res , j , sz2 , fl , submission ;
+		var i , sz1 , res , j , sz2 , fl , submission , k , sz3 ;
 		res = {} ;
 		res.dataList = [] ;
 		res.summary = {} ;
@@ -518,6 +518,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		res.summary.totalInContestAccepted = 0 ;
 		res.summary.languages = [] ;
 		res.summary.verdicts = [] ;
+		res.summary.tags = [] ;
 		for( i = 0 ; i < sz1 ; i++ ) {
 			data[ i ].creationDateTimeString = self.makeDateTimeStringFromMilliseconds( data[ i ].creationTimeSeconds ) ;
 			data[ i ].problemName = data[ i ].problem.name ;
@@ -530,7 +531,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 			data[ i ].verdictTextCssClass = self.buildCssClassFromVerdict( data[ i ].verdict ) ;
 			submission = self.buildSubmissionObject( data[ i ] ) ;
 			res.dataList.push( submission ) ;
-			//summary calculations
+			//summary build up calculations
 			if( data[ i ].inContestSubmission == true ) {
 				res.summary.totalInContest++ ;
 			}
@@ -546,6 +547,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 				if( res.summary.languages[ j ].name == data[ i ].programmingLanguage ) {
 					fl = 1 ;
 					res.summary.languages[ j ].frequency++ ;
+					break ;
 				}
 			}
 			if( fl == 0 ) {
@@ -557,16 +559,36 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 				if( res.summary.verdicts[ j ].name == data[ i ].verdict ) {
 					fl = 1 ;
 					res.summary.verdicts[ j ].frequency++ ;
+					break ;
 				}
 			}
 			if( fl == 0 ) {
 				res.summary.verdicts.push( { name : data[ i ].verdict , frequency : 1 , cssClass : data[ i ].verdictTextCssClass } ) ;
 			}
+			sz3 = data[ i ].problem.tags.length ;
+			for( k = 0 ; k < sz3 ; k++ ) {
+				fl = 0 ;
+				sz2 = res.summary.tags.length ;
+				for( j = 0 ; j < sz2 ; j++ ) {
+					if( res.summary.tags[ j ].name == data[ i ].problem.tags[ k ] ) {
+						fl = 1 ;
+						res.summary.tags[ j ].frequency++ ;
+						break ;
+					}
+				}
+				if( fl == 0 ) {
+					res.summary.tags.push( { name : data[ i ].problem.tags[ k ] , frequency : 1 } ) ;
+				}
+			}
 		}
+		//summary sortings
 		res.summary.languages = res.summary.languages.sort( function( left , right ) {
 			return right.frequency - left.frequency ;
 		} ) ;
 		res.summary.verdicts = res.summary.verdicts.sort( function( left , right ) {
+			return right.frequency - left.frequency ;
+		} ) ;
+		res.summary.tags = res.summary.tags.sort( function( left , right ) {
 			return right.frequency - left.frequency ;
 		} ) ;
 		res.summary.verdictsAlphabeticallySorted = [] ;
@@ -578,13 +600,24 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 			if( left == null || right == null ) {
 				return 0 ;
 			}
-			return ( left.name.localeCompare( right.name ) <= 0 ) ? false : true ;
+			return left.name.localeCompare( right.name ) ;
+		} ) ;
+		res.summary.tagsAlphabeticallySorted = [] ;
+		sz1 = res.summary.tags.length ;
+		for( i = 0 ; i < sz1 ; i++ ) {
+			res.summary.tagsAlphabeticallySorted.push( res.summary.tags[ i ] ) ;
+		}
+		res.summary.tagsAlphabeticallySorted = res.summary.tagsAlphabeticallySorted.sort( function( left , right ) {
+			if( left == null || right == null ) {
+				return 0 ;
+			}
+			return left.name.localeCompare( right.name ) ;
 		} ) ;
 		res.summary.users = self.getAuthorList( data ) ;
 		return res ;
 	} ;
 	
-	this.parseSubmissionListThroughFilter = function( submissionList , verdictName , showUnofficialSubmissions ) {
+	this.parseSubmissionListThroughFilter = function( submissionList , verdictName , showUnofficialSubmissions , tagName ) {
 		var res , i , sz , fl ;
 		res = [] ;
 		sz = submissionList.length ;
@@ -594,6 +627,9 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 				fl = 0 ;
 			}
 			if( showUnofficialSubmissions != null && showUnofficialSubmissions == false && submissionList[ i ].inContestSubmission == false ) {
+				fl = 0 ;
+			}
+			if( tagName != null && tagName != '' && submissionList[ i ].problemTags.toLowerCase().search( tagName.toLowerCase() ) == -1 ) {
 				fl = 0 ;
 			}
 			if( fl == 1 ) {
@@ -741,8 +777,8 @@ function CodeforcesApiService( $http , $timeout , $sce , lssObj , cfsObj , cfcOb
 		self.makeJsonpRequest( self.cfaubObj.buildRecentSubmissionsForAllInPracticeUrl( count ) , self.cfdlpObj.parseSubmissions , callbackFunction , false ) ;
 	} ;
 	
-	this.getSubmissionListThroughFilter = function( submissionList , verdictName , showUnofficialSubmissions ) {
-		return self.cfdlpObj.parseSubmissionListThroughFilter( submissionList , verdictName , showUnofficialSubmissions ) ;
+	this.getSubmissionListThroughFilter = function( submissionList , verdictName , showUnofficialSubmissions , tagName ) {
+		return self.cfdlpObj.parseSubmissionListThroughFilter( submissionList , verdictName , showUnofficialSubmissions , tagName ) ;
 	} ;
 	
 	this.updateSubmissionsDataListWithUserInfo = function( submissionsListObj , userInfoList ) {

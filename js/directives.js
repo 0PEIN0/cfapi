@@ -226,6 +226,13 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 							Verdict distribution breakdown: <span class="label" data-ng-repeat="item in submissionList.summary.verdicts" data-ng-bind="item.name + \' : \' + item.frequency" data-ng-class="item.cssClass"></span>\
 						</div>\
 						<div>\
+							Filter by Tag: \
+							<select data-ng-change="tagSelected()" data-ng-model="selectedTag">\
+								<option value="">Any Tag</option>\
+								<option data-ng-repeat="item in tagList" data-ng-bind="item.name+\' (\'+item.frequency+\')\'" value="{{item.name}}"></option>\
+							</select>\
+						</div>\
+						<div>\
 							Filter by Verdict: \
 							<select data-ng-change="verdictSelected()" data-ng-model="selectedVerdict">\
 								<option value="">Any Verdict</option>\
@@ -250,10 +257,14 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 			self = {} ;
 			
 			self.filterSubmissionDataList = function() {
-				scope.submissionList.filteredDataList = cfApi.getSubmissionListThroughFilter( scope.submissionList.dataList , scope.selectedVerdict , scope.showUnofficialUserSubmissionsFlag ) ;
+				scope.submissionList.filteredDataList = cfApi.getSubmissionListThroughFilter( scope.submissionList.dataList , scope.selectedVerdict , scope.showUnofficialUserSubmissionsFlag , scope.selectedTag ) ;
 			} ;
 
 			scope.verdictSelected = function() {
+				self.filterSubmissionDataList() ;
+			} ;
+			
+			scope.tagSelected = function() {
 				self.filterSubmissionDataList() ;
 			} ;
 			
@@ -279,6 +290,7 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 				if( newValue == true ) {
 					scope.submissionList.filteredDataList = scope.submissionList.dataList ;
 					scope.verdictList = scope.submissionList.summary.verdictsAlphabeticallySorted ;
+					scope.tagList = scope.submissionList.summary.tagsAlphabeticallySorted ;
 					scope.userInfoList = [] ;
 					cfApi.getUserInfo( scope.userListInfoResponse , scope.submissionList.summary.users ) ;
 					cfApi.getProblems( scope.problemListResponse ) ;
