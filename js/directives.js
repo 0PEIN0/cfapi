@@ -116,7 +116,7 @@ function CodeforcesTableDirective( $sce , cfcObj , shsObj ) {
     } ;
 }
 
-function CodeforcesRankListDirective( cfApi , cftsObj ) {
+function CodeforcesContestStandingDirective( cfApi , cftsObj ) {
 	return {
 		restrict : 'E' ,
 		replace : true ,
@@ -249,7 +249,7 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 
 			scope.verdictSelected = function() {
 				if( scope.selectedVerdict != null && scope.selectedVerdict != '' ) {
-					scope.submissionList.filteredDataList = cfApi.getSubmissionListByVerdict( scope.submissionList.dataList , scope.selectedVerdict ) ;
+					scope.submissionList.filteredDataList = cfApi.getSubmissionListThroughFilter( scope.submissionList.dataList , scope.selectedVerdict ) ;
 				}
 				else {
 					scope.submissionList.filteredDataList = scope.submissionList.dataList ;

@@ -584,13 +584,18 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		return res ;
 	} ;
 	
-	this.parseSubmissionListByVerdict = function( submissionList , verdictName ) {
+	this.parseSubmissionListThroughFilter = function( submissionList , verdictName ) {
 		var res , i , sz ;
 		res = [] ;
-		sz = submissionList.length ;
-		for( i = 0 ; i < sz ; i++ ) {
-			if( submissionList[ i ].verdict.toLowerCase().search( verdictName.toLowerCase() ) != -1 ) {
-				res.push( submissionList[ i ] ) ;
+		if( verdictName == null || verdictName == '' ) {
+			res = submissionList ;
+		}
+		else {
+			sz = submissionList.length ;
+			for( i = 0 ; i < sz ; i++ ) {
+				if( submissionList[ i ].verdict.toLowerCase().search( verdictName.toLowerCase() ) != -1 ) {
+					res.push( submissionList[ i ] ) ;
+				}
 			}
 		}
 		return res ;
@@ -738,8 +743,8 @@ function CodeforcesApiService( $http , $timeout , $sce , lssObj , cfsObj , cfcOb
 		self.makeJsonpRequest( self.cfaubObj.buildRecentSubmissionsForAllInPracticeUrl( count ) , self.cfdlpObj.parseSubmissions , callbackFunction , false ) ;
 	} ;
 	
-	this.getSubmissionListByVerdict = function( submissionList , verdictName ) {
-		return self.cfdlpObj.parseSubmissionListByVerdict( submissionList , verdictName ) ;
+	this.getSubmissionListThroughFilter = function( submissionList , verdictName ) {
+		return self.cfdlpObj.parseSubmissionListThroughFilter( submissionList , verdictName ) ;
 	} ;
 	
 	this.updateSubmissionsDataListWithUserInfo = function( submissionsListObj , userInfoList ) {
@@ -844,7 +849,7 @@ app.service( 'LocalStorageService' , [ 'CodeforcesConfiguration' , LocalStorageS
 app.service( 'CodeforcesApiService' , [ '$http' , '$timeout' , '$sce' , 'LocalStorageService' , 'CodeforcesSettings' , 'CodeforcesConfiguration' , 'StringHandler' , CodeforcesApiService ] ) ;
 app.controller( 'CodeforcesController' , [ '$scope' , 'CodeforcesApiService' , CodeforcesController ] ) ;
 app.directive( 'codeforcesTableDirective' , [ '$sce' , 'CodeforcesConfiguration' , 'SortHandlerService' , CodeforcesTableDirective ] ) ;
-app.directive( 'codeforcesRankListDirective' , [ 'CodeforcesApiService' , 'CodeforcesTableStructures' , CodeforcesRankListDirective ] ) ;
+app.directive( 'codeforcesContestStandingDirective' , [ 'CodeforcesApiService' , 'CodeforcesTableStructures' , CodeforcesContestStandingDirective ] ) ;
 app.directive( 'codeforcesSubmissionsDirective' , [ 'CodeforcesApiService' , 'CodeforcesTableStructures' , CodeforcesSubmissionsDirective ] ) ;
 app.directive( 'codeforcesUserStatisticsDirective' , [ 'CodeforcesApiService' , CodeforcesUserStatisticsDirective ] ) ;
 app.directive( 'codeforcesRecentSubmissionsDirective' , [ 'CodeforcesApiService' , CodeforcesRecentSubmissionsDirective ] ) ;
