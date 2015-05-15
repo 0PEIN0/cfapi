@@ -354,7 +354,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		submission.problemName = dataObject.problem.name ;
 		submission.problemNameHtml = self.generateProblemHtml( dataObject ) ;
 		submission.problemTags = dataObject.problem.tags.join( ', ' ) ;
-		submission.problemTagsHtml = '<span class="problem-info">' + submission.problemTags + '</span>' ;
+		submission.problemTagsHtml = ( submission.problemTags == '' ) ? '' : '<span class="problem-info">' + submission.problemTags + '</span>' ;
 		submission.problemIdentification = '' + dataObject.problem.contestId + '-' + dataObject.problem.index ;
 		submission.userSolved = 0 ;
 		submission.userSolvedHtml = '' ;
