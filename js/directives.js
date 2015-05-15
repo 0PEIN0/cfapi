@@ -213,11 +213,11 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 				<div class="panel-heading"><h3>Recent practice submissions on Codeforces</h3></div>\
 				<div class="panel-body">\
 					<div class="well well-sm">\
-						<div data-ng-show="showUnofficialAccptedSubmissionSummaryFlag==true">\
-							Total Accepted Submissions(including unofficial ones): <span class="badge badge-custom" data-ng-bind="userSubmissions.summary.totalAccepted+\' / \'+userSubmissions.summary.total"></span>\
-						</div>\
 						<div>\
 							Total Accepted Submissions: <span class="badge badge-custom" data-ng-bind="submissionList.summary.totalAccepted+\' / \'+submissionList.summary.total"></span>\
+						</div>\
+						<div data-ng-show="showContestAccptedSubmissionSummaryFlag==true">\
+							Total Accepted Submissions(during contests): <span class="badge badge-custom" data-ng-bind="submissionList.summary.totalInContestAccepted+\' / \'+submissionList.summary.totalInContest"></span>\
 						</div>\
 						<div>\
 							Language usage breakdown: <span class="badge badge-custom" data-ng-repeat="item in submissionList.summary.languages" data-ng-bind="item.name + \' : \' + item.frequency"></span>\
@@ -242,7 +242,7 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 		scope : {
 			'submissionListLoadedFlag' : '=' ,
 	    	'submissionList' : '=' , 
-			'showUnofficialAccptedSubmissionSummaryFlag' : '=' ,
+			'showContestAccptedSubmissionSummaryFlag' : '=' ,
 			'showUnofficialOptionCheckbox' : '='
 	    } ,
         link: function( scope , element , attrs ) {
@@ -302,7 +302,7 @@ function CodeforcesUserStatisticsDirective( cfApi ) {
 	return {
 		restrict : 'E' ,
 		transclude : true ,
-		template : '<codeforces-submissions-directive submission-list-loaded-flag="submissionListLoadedFlag" submission-list="submissionList" show-unofficial-accpted-submission-summary-flag="true" show-unofficial-option-checkbox="true"></codeforces-submissions-directive>' ,
+		template : '<codeforces-submissions-directive submission-list-loaded-flag="submissionListLoadedFlag" submission-list="submissionList" show-contest-accpted-submission-summary-flag="true" show-unofficial-option-checkbox="true"></codeforces-submissions-directive>' ,
 		scope : {
 	    	'showLoadingFlag' : '=' , 
 			'showUserStatisticsFlag' : '=' , 
@@ -332,7 +332,7 @@ function CodeforcesRecentSubmissionsDirective( cfApi ) {
 	return {
 		restrict : 'E' ,
 		transclude : true ,
-		template : '<codeforces-submissions-directive submission-list-loaded-flag="submissionListLoadedFlag" submission-list="submissionList" show-unofficial-accpted-submission-summary-flag="false" show-unofficial-option-checkbox="false"></codeforces-submissions-directive>' ,
+		template : '<codeforces-submissions-directive submission-list-loaded-flag="submissionListLoadedFlag" submission-list="submissionList" show-contest-accpted-submission-summary-flag="false" show-unofficial-option-checkbox="false"></codeforces-submissions-directive>' ,
 		scope : {
 	    	'showLoadingFlag' : '=' , 
 			'showRecentSubmissionsFlag' : '='

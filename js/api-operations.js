@@ -807,11 +807,8 @@ function CodeforcesController( $scope , cfApi ) {
 
 	$scope.navElementClicked = function( idx ) {
 		var i , len , pageName ;
-		len = $scope.navigationFlags.length ;
-		for( i = len ; i <= idx + 1 ; i++ ) {
-			$scope.navigationFlags.push( false ) ;
-		}
 		if( idx != null ) {
+			len = $scope.navigationFlags.length ;
 			for( i = 0 ; i < len ; i++ ) {
 				$scope.navigationFlags[ i ] = false ;
 			}
@@ -824,12 +821,17 @@ function CodeforcesController( $scope , cfApi ) {
 	} ;
 
 	$scope.init = function() {
+		var i , len ;
 		$scope.userHandle = cfApi.getDefaultUserHandle() ;
 		$scope.navigationFlags = [] ;
 		$scope.navElementNameList = [] ;
 		$scope.navElementNameList.push( { title : 'User Statistics of ' + $scope.userHandle , index : 0 } ) ;
 		$scope.navElementNameList.push( { title : 'Recent Practice Submissions on Codeforces' , index : 1 } ) ;
 		$scope.navElementNameList.push( { title : 'Contest Standings' , index : 2 } ) ;
+		len = $scope.navElementNameList.length ;
+		for( i = 0 ; i < len ; i++ ) {
+			$scope.navigationFlags.push( false ) ;
+		}
 		$scope.currentNavIndex = 1 ;
 		$scope.navElementClicked( $scope.currentNavIndex ) ;
 	} ;
