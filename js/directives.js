@@ -15,7 +15,7 @@ function CodeforcesTableDirective( $sce , cfcObj , shsObj ) {
         	<table class="table table-striped table-bordered customTable">\
 	            <thead>\
 	              <th data-ng-repeat="column in columnList">\
-	                  <div><a href="javascript:void(0);" data-ng-click="sortColumn($index)">{{column.name}} <span class="glyphicon glyphicon-sort" aria-hidden="{{column.ariaHidden}}"></span></a></div>\
+	                  <div><a href="javascript:void(0);" data-ng-click="sortColumn($index)">{{column.name}} <span class="glyphicon glyphicon-sort"></span></a></div>\
 	              </th>\
 	            </thead>\
 	            <tbody>\
