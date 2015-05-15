@@ -205,6 +205,11 @@ table tr td {
   font-family : verdana , arial , sans-serif ;
 }
 
+.well-sm div {
+  margin-top : 0.30em ;
+  margin-bottom : 0.30em ; 
+}
+
 .overlay {
   background-color : rgba( 0 , 0 , 0 , 0.8 ) ;
   z-index : 999 ;

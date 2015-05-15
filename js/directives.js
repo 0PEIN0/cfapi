@@ -231,8 +231,6 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 								<option value="">Any Tag</option>\
 								<option data-ng-repeat="item in tagList" data-ng-bind="item.name+\' (\'+item.frequency+\')\'" value="{{item.name}}"></option>\
 							</select>\
-						</div>\
-						<div>\
 							Filter by Verdict: \
 							<select data-ng-change="verdictSelected()" data-ng-model="selectedVerdict">\
 								<option value="">Any Verdict</option>\
