@@ -227,19 +227,25 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 						</div>\
 						<div>\
 							Filter by Tag: \
-							<select data-ng-change="tagSelected()" data-ng-model="selectedTag">\
+							<select data-ng-change="filterSubmissionDataList()" data-ng-model="selectedTag">\
 								<option value="">Any Tag</option>\
 								<option data-ng-repeat="item in tagList" data-ng-bind="item.name+\' (\'+item.frequency+\')\'" value="{{item.name}}"></option>\
 							</select>\
+							Filter by Language: \
+							<select data-ng-change="filterSubmissionDataList()" data-ng-model="selectedLanguage">\
+								<option value="">Any Language</option>\
+								<option data-ng-repeat="item in languageList" data-ng-bind="item.name+\' (\'+item.frequency+\')\'" value="{{item.name}}"></option>\
+							</select>\
 							Filter by Verdict: \
-							<select data-ng-change="verdictSelected()" data-ng-model="selectedVerdict">\
+							<select data-ng-change="filterSubmissionDataList()" data-ng-model="selectedVerdict">\
 								<option value="">Any Verdict</option>\
 								<option data-ng-repeat="item in verdictList" data-ng-bind="item.name+\' (\'+item.frequency+\')\'" value="{{item.name}}"></option>\
 							</select>\
+							<button type="button" data-ng-click="clearFilters()" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> Clear Filters</button>\
 						</div>\
 					</div>\
 					<div data-ng-show="showUnofficialOptionCheckbox==true">\
-						<input type="checkbox" aria-label="..." data-ng-model="showUnofficialUserSubmissionsFlag" data-ng-change="showUnofficialUserSubmissionsFlagChanged()">Show Unofficial\
+						<input type="checkbox" aria-label="..." data-ng-model="showUnofficialUserSubmissionsFlag" data-ng-change="filterSubmissionDataList()">Show Unofficial\
 					</div>\
 					<codeforces-table-directive column-list="submissionTableStructure" rowcell-list="submissionList.filteredDataList" ></codeforces-table-directive>\
 				</div>\
@@ -251,19 +257,17 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 			'showUnofficialOptionCheckbox' : '='
 	    } ,
         link: function( scope , element , attrs ) {
-			var self ;
-			self = {} ;
-			
-			self.filterSubmissionDataList = function() {
-				scope.submissionList.filteredDataList = cfApi.getSubmissionListThroughFilter( scope.submissionList.dataList , scope.selectedVerdict , scope.showUnofficialUserSubmissionsFlag , scope.selectedTag ) ;
-			} ;
 
-			scope.verdictSelected = function() {
-				self.filterSubmissionDataList() ;
+			scope.filterSubmissionDataList = function() {
+				scope.submissionList.filteredDataList = cfApi.getSubmissionListThroughFilter( scope.submissionList.dataList , scope.selectedVerdict , scope.showUnofficialUserSubmissionsFlag , scope.selectedTag , scope.selectedLanguage ) ;
 			} ;
 			
-			scope.tagSelected = function() {
-				self.filterSubmissionDataList() ;
+			scope.clearFilters = function() {
+				scope.selectedTag = '' ;
+				scope.selectedLanguage = '' ;
+				scope.selectedVerdict = '' ;
+				scope.showUnofficialUserSubmissionsFlag = true ;
+				scope.filterSubmissionDataList() ;
 			} ;
 			
 			scope.userListInfoResponse = function( response ) {
@@ -280,15 +284,12 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 				scope.submissionList = cfApi.updateSubmissionsDataListwithProblemInfo( scope.submissionList , problemSetList ) ;
 			} ;
 			
-			scope.showUnofficialUserSubmissionsFlagChanged = function() {
-				self.filterSubmissionDataList() ;
-			} ;
-			
 			scope.submissionListLoadedFlagChanged = function( newValue , oldValue ) {
 				if( newValue == true ) {
 					scope.submissionList.filteredDataList = scope.submissionList.dataList ;
 					scope.verdictList = scope.submissionList.summary.verdictsAlphabeticallySorted ;
 					scope.tagList = scope.submissionList.summary.tagsAlphabeticallySorted ;
+					scope.languageList = scope.submissionList.summary.languagesAlphabeticallySorted ;
 					scope.userInfoList = [] ;
 					cfApi.getUserInfo( scope.userListInfoResponse , scope.submissionList.summary.users ) ;
 					cfApi.getProblems( scope.problemListResponse ) ;

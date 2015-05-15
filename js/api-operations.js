@@ -591,6 +591,17 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		res.summary.tags = res.summary.tags.sort( function( left , right ) {
 			return right.frequency - left.frequency ;
 		} ) ;
+		res.summary.languagesAlphabeticallySorted = [] ;
+		sz1 = res.summary.languages.length ;
+		for( i = 0 ; i < sz1 ; i++ ) {
+			res.summary.languagesAlphabeticallySorted.push( res.summary.languages[ i ] ) ;
+		}
+		res.summary.languagesAlphabeticallySorted = res.summary.languagesAlphabeticallySorted.sort( function( left , right ) {
+			if( left == null || right == null ) {
+				return 0 ;
+			}
+			return left.name.localeCompare( right.name ) ;
+		} ) ;
 		res.summary.verdictsAlphabeticallySorted = [] ;
 		sz1 = res.summary.verdicts.length ;
 		for( i = 0 ; i < sz1 ; i++ ) {
@@ -617,7 +628,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		return res ;
 	} ;
 	
-	this.parseSubmissionListThroughFilter = function( submissionList , verdictName , showUnofficialSubmissions , tagName ) {
+	this.parseSubmissionListThroughFilter = function( submissionList , verdictName , showUnofficialSubmissions , tagName , languageName ) {
 		var res , i , sz , fl ;
 		res = [] ;
 		sz = submissionList.length ;
@@ -630,6 +641,9 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 				fl = 0 ;
 			}
 			if( tagName != null && tagName != '' && submissionList[ i ].problemTags.toLowerCase().search( tagName.toLowerCase() ) == -1 ) {
+				fl = 0 ;
+			}
+			if( languageName != null && languageName != '' && submissionList[ i ].lang.toLowerCase().search( languageName.toLowerCase() ) == -1 ) {
 				fl = 0 ;
 			}
 			if( fl == 1 ) {
@@ -777,8 +791,8 @@ function CodeforcesApiService( $http , $timeout , $sce , lssObj , cfsObj , cfcOb
 		self.makeJsonpRequest( self.cfaubObj.buildRecentSubmissionsForAllInPracticeUrl( count ) , self.cfdlpObj.parseSubmissions , callbackFunction , false ) ;
 	} ;
 	
-	this.getSubmissionListThroughFilter = function( submissionList , verdictName , showUnofficialSubmissions , tagName ) {
-		return self.cfdlpObj.parseSubmissionListThroughFilter( submissionList , verdictName , showUnofficialSubmissions , tagName ) ;
+	this.getSubmissionListThroughFilter = function( submissionList , verdictName , showUnofficialSubmissions , tagName , languageName ) {
+		return self.cfdlpObj.parseSubmissionListThroughFilter( submissionList , verdictName , showUnofficialSubmissions , tagName , languageName ) ;
 	} ;
 	
 	this.updateSubmissionsDataListWithUserInfo = function( submissionsListObj , userInfoList ) {
