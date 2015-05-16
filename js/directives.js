@@ -407,7 +407,6 @@ function CodeforcesContestSubmissionsDirective( cfApi ) {
 			
 			scope.submissionListResponse = function( response ) {
 				scope.submissionList = response ;
-				console.log( response ) ;
 				scope.showLoadingFlag = false ;
 				scope.submissionListLoadedFlag = true ;
 			} ;
