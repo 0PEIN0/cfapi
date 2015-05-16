@@ -426,8 +426,8 @@ function CodeforcesContestSubmissionsDirective( cfApi , cfcObj ) {
 			scope.contestSelected = function() {
 				if( scope.selectedContest != null ) {
 					scope.showLoadingFlag = true ;
-					cfApi.getContestStatus( scope.submissionListResponse , cfcObj.defaultContestId , 1 , 1000 ) ;
-					scope.selectedCountry = '' ;
+					scope.submissionListLoadedFlag = false ;
+					cfApi.getContestStatus( scope.submissionListResponse , scope.selectedContest , 1 , 1000 ) ;
 				}
 			} ;
 			
