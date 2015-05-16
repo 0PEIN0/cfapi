@@ -384,20 +384,21 @@ function CodeforcesRecentSubmissionsDirective( cfApi ) {
 	} ;
 }
 
-
 function CodeforcesContestSubmissionsDirective( cfApi , cfcObj ) {
 	return {
 		restrict : 'E' ,
 		transclude : true ,
+		replace : true ,
 		template : '\
-			<div class="well well-sm">\
-				<div>\
+			<div>\
+				<div class="well well-sm">\
 					Select Contest: \
 					<select data-ng-change="contestSelected()" data-ng-model="selectedContest">\
 						<option data-ng-repeat="item in contestList.dataList" data-ng-bind="item.name" value="{{item.id}}" data-ng-init="contestListLoading($index)"></option>\
 					</select>\
-				<div>\
-			<codeforces-submissions-directive submission-list-loaded-flag="submissionListLoadedFlag" submission-list="submissionList" show-contest-accpted-submission-summary-flag="false" show-unofficial-option-checkbox="false" page-header="pageHeader"></codeforces-submissions-directive>' ,
+				</div>\
+				<codeforces-submissions-directive submission-list-loaded-flag="submissionListLoadedFlag" submission-list="submissionList" show-contest-accpted-submission-summary-flag="false" show-unofficial-option-checkbox="false" page-header="pageHeader"></codeforces-submissions-directive>\
+			</div>' ,
 		scope : {
 	    	'showLoadingFlag' : '=' , 
 			'showContestSubmissionsFlag' : '=' ,
