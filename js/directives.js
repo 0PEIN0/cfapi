@@ -141,7 +141,7 @@ function CodeforcesContestStandingDirective( cfApi , cftsObj ) {
 			</div>' ,
 		scope : {
 	    	'showLoadingFlag' : '=' , 
-			'showRankListFlag' : '=' ,
+			'showStandingFlag' : '=' ,
 			'pageHeader' : '='
 	    } ,
         link: function( scope , element , attrs ) {
@@ -191,13 +191,13 @@ function CodeforcesContestStandingDirective( cfApi , cftsObj ) {
 				}
 			} ;
 			
-			scope.showRankListFlagChanged = function( newValue , oldValue ) {
+			scope.showStandingFlagChanged = function( newValue , oldValue ) {
 				if( newValue == true ) {
 					cfApi.getContestList( scope.contestListResponse ) ;
 				}
 			} ;
 
-			scope.$watch( 'showRankListFlag' , scope.showRankListFlagChanged , true ) ;
+			scope.$watch( 'showStandingFlag' , scope.showStandingFlagChanged , true ) ;
 			scope.countryList = cfApi.getCountryList() ;
 			scope.userHandle = cfApi.getDefaultUserHandle() ;
 		}
