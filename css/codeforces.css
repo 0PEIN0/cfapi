@@ -225,3 +225,11 @@ table tr td {
   height : 100% ;
   display : block ;
 }​
+
+.table-cell-generic {
+  font-size : 12px ;
+}
+
+.table-column-header {
+  font-size : 11px ;
+}
