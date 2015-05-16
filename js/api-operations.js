@@ -261,6 +261,11 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		sz = memberList.length ;
 		authorHandles = '' ;
 		countryList = cfsObj.getCountryListAsObject() ;
+		if( userInfoObj != null && userInfoObj.country != null && userInfoObj.country != '' ) {
+			while( userInfoObj.country.search( ' ' ) != -1 ) {
+				userInfoObj.country = userInfoObj.country.replace( ' ' , '' ) ;
+			}
+		}
 		for( i = 0 ; i < sz ; i++ ) {
 			handle = memberList[ i ].handle ;
 			countryImageHtml = '' ;
@@ -519,6 +524,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		res.summary.languages = [] ;
 		res.summary.verdicts = [] ;
 		res.summary.tags = [] ;
+		res.summary.countries = [] ;
 		for( i = 0 ; i < sz1 ; i++ ) {
 			data[ i ].creationDateTimeString = self.makeDateTimeStringFromMilliseconds( data[ i ].creationTimeSeconds ) ;
 			data[ i ].problemName = data[ i ].problem.name ;
@@ -591,6 +597,9 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		res.summary.tags = res.summary.tags.sort( function( left , right ) {
 			return right.frequency - left.frequency ;
 		} ) ;
+		res.summary.countries = res.summary.countries.sort( function( left , right ) {
+			return right.frequency - left.frequency ;
+		} ) ;
 		res.summary.languagesAlphabeticallySorted = [] ;
 		sz1 = res.summary.languages.length ;
 		for( i = 0 ; i < sz1 ; i++ ) {
@@ -628,7 +637,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		return res ;
 	} ;
 	
-	this.parseSubmissionListThroughFilter = function( submissionList , verdictName , showUnofficialSubmissions , tagName , languageName ) {
+	this.parseSubmissionListThroughFilter = function( submissionList , verdictName , showUnofficialSubmissions , tagName , languageName , countryName ) {
 		var res , i , sz , fl ;
 		res = [] ;
 		sz = submissionList.length ;
@@ -637,13 +646,16 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 			if( verdictName != null && verdictName != '' && submissionList[ i ].verdict.toLowerCase().search( verdictName.toLowerCase() ) == -1 ) {
 				fl = 0 ;
 			}
-			if( showUnofficialSubmissions != null && showUnofficialSubmissions == false && submissionList[ i ].inContestSubmission == false ) {
+			if( fl == 1 && showUnofficialSubmissions != null && showUnofficialSubmissions == false && submissionList[ i ].inContestSubmission == false ) {
 				fl = 0 ;
 			}
-			if( tagName != null && tagName != '' && submissionList[ i ].problemTags.toLowerCase().search( tagName.toLowerCase() ) == -1 ) {
+			if( fl == 1 && tagName != null && tagName != '' && submissionList[ i ].problemTags.toLowerCase().search( tagName.toLowerCase() ) == -1 ) {
 				fl = 0 ;
 			}
-			if( languageName != null && languageName != '' && submissionList[ i ].lang.toLowerCase().search( languageName.toLowerCase() ) == -1 ) {
+			if( fl == 1 && languageName != null && languageName != '' && submissionList[ i ].lang.toLowerCase().search( languageName.toLowerCase() ) == -1 ) {
+				fl = 0 ;
+			}
+			if( fl == 1 && countryName != null && countryName != '' && ( submissionList[ i ].country == null || submissionList[ i ].country == '' || submissionList[ i ].country.toLowerCase() != countryName.toLowerCase() ) ) {
 				fl = 0 ;
 			}
 			if( fl == 1 ) {
@@ -653,19 +665,46 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		return res ;
 	} ;
 	
-	this.parseSubmissionsWithUserInfo = function( submissionList , userInfoList ) {
-		var i , sz1 , j , sz2 ;
+	this.parseSubmissionsWithUserInfo = function( submissionListObj , userInfoList ) {
+		var i , sz1 , j , sz2 , submissionList , fl , sz3 , k ;
+		submissionList = submissionListObj.dataList ;
 		sz1 = submissionList.length ;
 		sz2 = userInfoList.length ;
 		for( i = 0 ; i < sz1 ; i++ ) {
 			for( j = 0 ; j < sz2 ; j++ ) {
 				if( submissionList[ i ].handle[ 0 ].handle == userInfoList[ j ].handle )  {
 					submissionList[ i ].handleHtml = self.generateHandleHtml( submissionList[ i ] , 'handle' , userInfoList[ j ] ) ;
+					if( userInfoList[ j ].country != null && userInfoList[ j ].country != '' ) {
+						submissionList[ i ].country = userInfoList[ j ].country ;
+						sz3 = submissionListObj.summary.countries.length ;
+						fl = 0 ;
+						for( k = 0 ; k < sz3 ; k++ ) {
+							if( submissionListObj.summary.countries[ k ].name == userInfoList[ j ].country ) {
+								fl = 1 ;
+								submissionListObj.summary.countries[ k ].frequency++ ;
+								break ;
+							}
+						}
+						if( fl == 0 ) {
+							submissionListObj.summary.countries.push( { name : userInfoList[ j ].country , frequency : 1 } ) ;
+						}
+					}
 					break ;
 				}
 			}
 		}
-		return submissionList ;
+		submissionListObj.summary.countriesAlphabeticallySorted = [] ;
+		sz1 = submissionListObj.summary.countries.length ;
+		for( i = 0 ; i < sz1 ; i++ ) {
+			submissionListObj.summary.countriesAlphabeticallySorted.push( submissionListObj.summary.countries[ i ] ) ;
+		}
+		submissionListObj.summary.countriesAlphabeticallySorted = submissionListObj.summary.countriesAlphabeticallySorted.sort( function( left , right ) {
+			if( left == null || right == null ) {
+				return 0 ;
+			}
+			return left.name.localeCompare( right.name ) ;
+		} ) ;
+		return submissionListObj ;
 	} ;
 	
 	this.parseSubmissionsWithProblemSet = function( submissionList , problemSetList ) {
@@ -791,14 +830,13 @@ function CodeforcesApiService( $http , $timeout , $sce , lssObj , cfsObj , cfcOb
 		self.makeJsonpRequest( self.cfaubObj.buildRecentSubmissionsForAllInPracticeUrl( count ) , self.cfdlpObj.parseSubmissions , callbackFunction , false ) ;
 	} ;
 	
-	this.getSubmissionListThroughFilter = function( submissionList , verdictName , showUnofficialSubmissions , tagName , languageName ) {
-		return self.cfdlpObj.parseSubmissionListThroughFilter( submissionList , verdictName , showUnofficialSubmissions , tagName , languageName ) ;
+	this.getSubmissionListThroughFilter = function( submissionList , verdictName , showUnofficialSubmissions , tagName , languageName , countryList ) {
+		return self.cfdlpObj.parseSubmissionListThroughFilter( submissionList , verdictName , showUnofficialSubmissions , tagName , languageName , countryList ) ;
 	} ;
 	
 	this.updateSubmissionsDataListWithUserInfo = function( submissionsListObj , userInfoList ) {
 		var res ;
-		res = submissionsListObj ;
-		res.dataList = self.cfdlpObj.parseSubmissionsWithUserInfo( submissionsListObj.dataList , userInfoList ) ;
+		res = self.cfdlpObj.parseSubmissionsWithUserInfo( submissionsListObj , userInfoList ) ;
 		return res ;
 	} ;
 	

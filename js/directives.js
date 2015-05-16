@@ -241,6 +241,11 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 								<option value="">Any Verdict</option>\
 								<option data-ng-repeat="item in verdictList" data-ng-bind="item.name+\' (\'+item.frequency+\')\'" value="{{item.name}}"></option>\
 							</select>\
+							Filter by Country: \
+							<select data-ng-change="filterSubmissionDataList()" data-ng-model="selectedCountry">\
+								<option value="">Any Country</option>\
+								<option data-ng-repeat="item in countryList" data-ng-bind="item.name+\' (\'+item.frequency+\')\'" value="{{item.name}}"></option>\
+							</select>\
 							<button type="button" data-ng-click="clearFilters()" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> Clear Filters</button>\
 						</div>\
 					</div>\
@@ -259,13 +264,14 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
         link: function( scope , element , attrs ) {
 
 			scope.filterSubmissionDataList = function() {
-				scope.submissionList.filteredDataList = cfApi.getSubmissionListThroughFilter( scope.submissionList.dataList , scope.selectedVerdict , scope.showUnofficialUserSubmissionsFlag , scope.selectedTag , scope.selectedLanguage ) ;
+				scope.submissionList.filteredDataList = cfApi.getSubmissionListThroughFilter( scope.submissionList.dataList , scope.selectedVerdict , scope.showUnofficialUserSubmissionsFlag , scope.selectedTag , scope.selectedLanguage , scope.selectedCountry ) ;
 			} ;
 			
 			scope.clearFilters = function() {
 				scope.selectedTag = '' ;
 				scope.selectedLanguage = '' ;
 				scope.selectedVerdict = '' ;
+				scope.selectedCountry = '' ;
 				scope.showUnofficialUserSubmissionsFlag = true ;
 				scope.filterSubmissionDataList() ;
 			} ;
@@ -274,6 +280,7 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 				scope.userInfoList = scope.userInfoList.concat( response.dataList ) ;
 				if( scope.submissionList != null && scope.submissionList.summary.users.length > 0 && scope.userInfoList.length == scope.submissionList.summary.users.length ) {
 					scope.submissionList = cfApi.updateSubmissionsDataListWithUserInfo( scope.submissionList , scope.userInfoList ) ;
+					scope.countryList = scope.submissionList.summary.countriesAlphabeticallySorted ;
 				}
 			} ;
 			
@@ -290,6 +297,7 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 					scope.verdictList = scope.submissionList.summary.verdictsAlphabeticallySorted ;
 					scope.tagList = scope.submissionList.summary.tagsAlphabeticallySorted ;
 					scope.languageList = scope.submissionList.summary.languagesAlphabeticallySorted ;
+					scope.countryList = [] ;
 					scope.userInfoList = [] ;
 					cfApi.getUserInfo( scope.userListInfoResponse , scope.submissionList.summary.users ) ;
 					cfApi.getProblems( scope.problemListResponse ) ;
