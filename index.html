@@ -25,14 +25,14 @@
 		<div data-ng-show="showLoadingFlag==false">
 			<div>
 				<ul class="nav nav-pills">
-				  <li data-ng-repeat="item in navElementNameList track by $index" role="presentation" data-ng-click="navElementClicked(item.index)" data-ng-class="(currentNavIndex==item.index) ? 'active' : ''"><a href="javascript:void(0);" data-ng-bind='item.title'></a></li>
+				  <li data-ng-repeat="item in navElementNameList track by $index" role="presentation" data-ng-click="navElementClicked(item.index)" data-ng-class="(currentNavIndex==item.index) ? 'active' : ''"><a href="javascript:void(0);" data-ng-bind-html='item.title'></a></li>
 				  <li><a href="https://github.com/0PEIN0/cfapi/issues" target="_blank"><img class="bug-image" src="images/bug.png"/></a></li>
 				</ul>
 			</div>
 			<div>
-				<codeforces-user-statistics-directive data-ng-show="navigationFlags[0] == true" show-loading-flag="showLoadingFlag" show-user-statistics-flag="navigationFlags[0]" user-handle="userHandle"></codeforces-user-statistics-directive>
-				<codeforces-recent-submissions-directive data-ng-show="navigationFlags[1] == true" show-loading-flag="showLoadingFlag" show-recent-submissions-flag="navigationFlags[1]"></codeforces-recent-submissions-directive>
-				<codeforces-contest-standing-directive data-ng-show="navigationFlags[2] == true" show-loading-flag="showLoadingFlag" show-rank-list-flag="navigationFlags[2]"></codeforces-contest-standing-directive>
+				<codeforces-user-statistics-directive data-ng-show="navigationFlags[0] == true" show-loading-flag="showLoadingFlag" show-user-statistics-flag="navigationFlags[0]" page-header="navElementNameList[0].title" user-handle="userHandle"></codeforces-user-statistics-directive>
+				<codeforces-recent-submissions-directive data-ng-show="navigationFlags[1] == true" show-loading-flag="showLoadingFlag" show-recent-submissions-flag="navigationFlags[1]" page-header="navElementNameList[1].title"></codeforces-recent-submissions-directive>
+				<codeforces-contest-standing-directive data-ng-show="navigationFlags[2] == true" show-loading-flag="showLoadingFlag" show-rank-list-flag="navigationFlags[2]" page-header="navElementNameList[2].title"></codeforces-contest-standing-directive>
 			</div>
 		</div>
 	</body>

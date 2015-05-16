@@ -15,13 +15,13 @@ function CodeforcesTableDirective( $sce , cfcObj , shsObj ) {
         	<table class="table table-striped table-bordered customTable">\
 	            <thead>\
 	              <th data-ng-repeat="column in columnList">\
-	                  <div><a href="javascript:void(0);" data-ng-click="sortColumn($index)">{{column.name}} <span class="glyphicon glyphicon-sort"></span></a></div>\
+	                  <div class="table-column-header"><a href="javascript:void(0);" data-ng-click="sortColumn($index)">{{column.name}} <span class="glyphicon glyphicon-sort"></span></a></div>\
 	              </th>\
 	            </thead>\
 	            <tbody>\
 	              <tr data-ng-repeat="row in rowcellList track by $index" data-ng-init="rowIndex = $index">\
 	                <td data-ng-repeat="column in columnList track by $index" data-ng-init="columnIndex = $index">\
-	                    <div data-ng-bind-html="forceTrustHtml( getTableCellHtml( rowIndex , columnIndex ) )"></div>\
+	                    <div class="table-cell-generic" data-ng-bind-html="forceTrustHtml( getTableCellHtml( rowIndex , columnIndex ) )"></div>\
 	                </td>\
 	              </tr>\
 	            </tbody>\
@@ -123,7 +123,7 @@ function CodeforcesContestStandingDirective( cfApi , cftsObj ) {
 		transclude : true ,
 		template : '\
 			<div class="panel panel-info">\
-				<div class="panel-heading"><h3>Country Contest Standings</h3></div>\
+				<div class="panel-heading"><h3 data-ng-bind-html="pageHeader"></h3></div>\
 				<div class="panel-body">\
 					<div class="well well-sm">\
 						<div>\
@@ -141,7 +141,8 @@ function CodeforcesContestStandingDirective( cfApi , cftsObj ) {
 			</div>' ,
 		scope : {
 	    	'showLoadingFlag' : '=' , 
-			'showRankListFlag' : '='
+			'showRankListFlag' : '=' ,
+			'pageHeader' : '='
 	    } ,
         link: function( scope , element , attrs ) {
 			
@@ -210,7 +211,7 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 		transclude : true ,
 		template : '\
 			<div class="panel panel-info">\
-				<div class="panel-heading"><h3>Recent practice submissions on Codeforces</h3></div>\
+				<div class="panel-heading"><h3 data-ng-bind-html="pageHeader"></h3></div>\
 				<div class="panel-body">\
 					<div class="well well-sm">\
 						<div>\
@@ -256,7 +257,8 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 			'submissionListLoadedFlag' : '=' ,
 	    	'submissionList' : '=' , 
 			'showContestAccptedSubmissionSummaryFlag' : '=' ,
-			'showUnofficialOptionCheckbox' : '='
+			'showUnofficialOptionCheckbox' : '=' ,
+			'pageHeader' : '='
 	    } ,
         link: function( scope , element , attrs ) {
 
@@ -318,11 +320,12 @@ function CodeforcesUserStatisticsDirective( cfApi ) {
 	return {
 		restrict : 'E' ,
 		transclude : true ,
-		template : '<codeforces-submissions-directive submission-list-loaded-flag="submissionListLoadedFlag" submission-list="submissionList" show-contest-accpted-submission-summary-flag="true" show-unofficial-option-checkbox="true"></codeforces-submissions-directive>' ,
+		template : '<codeforces-submissions-directive submission-list-loaded-flag="submissionListLoadedFlag" submission-list="submissionList" show-contest-accpted-submission-summary-flag="true" show-unofficial-option-checkbox="true" page-header="pageHeader"></codeforces-submissions-directive>' ,
 		scope : {
 	    	'showLoadingFlag' : '=' , 
 			'showUserStatisticsFlag' : '=' , 
-			'userHandle' : '='
+			'userHandle' : '=' ,
+			'pageHeader' : '='
 	    } ,
         link: function( scope , element , attrs ) {
 			
@@ -348,10 +351,11 @@ function CodeforcesRecentSubmissionsDirective( cfApi ) {
 	return {
 		restrict : 'E' ,
 		transclude : true ,
-		template : '<codeforces-submissions-directive submission-list-loaded-flag="submissionListLoadedFlag" submission-list="submissionList" show-contest-accpted-submission-summary-flag="false" show-unofficial-option-checkbox="false"></codeforces-submissions-directive>' ,
+		template : '<codeforces-submissions-directive submission-list-loaded-flag="submissionListLoadedFlag" submission-list="submissionList" show-contest-accpted-submission-summary-flag="false" show-unofficial-option-checkbox="false" page-header="pageHeader"></codeforces-submissions-directive>' ,
 		scope : {
 	    	'showLoadingFlag' : '=' , 
-			'showRecentSubmissionsFlag' : '='
+			'showRecentSubmissionsFlag' : '=' ,
+			'pageHeader' : '='
 	    } ,
         link: function( scope , element , attrs ) {
 			

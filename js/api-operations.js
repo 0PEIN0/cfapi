@@ -882,7 +882,7 @@ function CodeforcesApiService( $http , $timeout , $sce , lssObj , cfsObj , cfcOb
 	} ;
 }
 
-function CodeforcesController( $scope , cfApi ) {
+function CodeforcesController( $scope , $sce , cfApi ) {
 	
 	$scope.transformNavElementNameToPageName = function( navElementName ) {
 		var res ;
@@ -903,7 +903,7 @@ function CodeforcesController( $scope , cfApi ) {
 			$scope.showLoadingFlag = true ;
 			$scope.currentNavIndex = idx ;
 			$scope.navigationFlags[ idx ] = true ;
-			pageName = $scope.transformNavElementNameToPageName( $scope.navElementNameList[ idx ].title ) ;
+			pageName = $scope.transformNavElementNameToPageName( $scope.navElementNameList[ idx ].name ) ;
 			ga( 'send' , 'pageview' , pageName ) ;
 		}
 	} ;
@@ -913,9 +913,9 @@ function CodeforcesController( $scope , cfApi ) {
 		$scope.userHandle = cfApi.getDefaultUserHandle() ;
 		$scope.navigationFlags = [] ;
 		$scope.navElementNameList = [] ;
-		$scope.navElementNameList.push( { title : 'Submissions of ' + $scope.userHandle , index : 0 } ) ;
-		$scope.navElementNameList.push( { title : 'Problemset Status' , index : 1 } ) ;
-		$scope.navElementNameList.push( { title : 'Contest Standings' , index : 2 } ) ;
+		$scope.navElementNameList.push( { name : 'Submissions of ' + $scope.userHandle , title : $sce.trustAsHtml( 'Submissions of <strong>' + $scope.userHandle + '</strong>' ) , index : 0 } ) ;
+		$scope.navElementNameList.push( { name : 'Problemset Status' , title : $sce.trustAsHtml( 'Problemset Status' ) , index : 1 } ) ;
+		$scope.navElementNameList.push( { name : 'Contest Standings' , title : $sce.trustAsHtml( 'Contest Standings' ) , index : 2 } ) ;
 		len = $scope.navElementNameList.length ;
 		for( i = 0 ; i < len ; i++ ) {
 			$scope.navigationFlags.push( false ) ;
@@ -935,7 +935,7 @@ app.service( 'StringHandler' , [ StringHandler ] ) ;
 app.service( 'SortHandlerService' , [ SortHandlerService ] ) ;
 app.service( 'LocalStorageService' , [ 'CodeforcesConfiguration' , LocalStorageService ] ) ;
 app.service( 'CodeforcesApiService' , [ '$http' , '$timeout' , '$sce' , 'LocalStorageService' , 'CodeforcesSettings' , 'CodeforcesConfiguration' , 'StringHandler' , CodeforcesApiService ] ) ;
-app.controller( 'CodeforcesController' , [ '$scope' , 'CodeforcesApiService' , CodeforcesController ] ) ;
+app.controller( 'CodeforcesController' , [ '$scope' , '$sce' , 'CodeforcesApiService' , CodeforcesController ] ) ;
 app.directive( 'codeforcesTableDirective' , [ '$sce' , 'CodeforcesConfiguration' , 'SortHandlerService' , CodeforcesTableDirective ] ) ;
 app.directive( 'codeforcesContestStandingDirective' , [ 'CodeforcesApiService' , 'CodeforcesTableStructures' , CodeforcesContestStandingDirective ] ) ;
 app.directive( 'codeforcesSubmissionsDirective' , [ 'CodeforcesApiService' , 'CodeforcesTableStructures' , CodeforcesSubmissionsDirective ] ) ;
