@@ -12,7 +12,7 @@
 		<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
 		<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0-rc.2/angular.min.js"></script>
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0-rc.2/angular-sanitize.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0-rc.2/angular-sanitize.min.js"></script>
 		<script type="text/javascript" src="js/core-libraries.js"></script>
 		<script type="text/javascript" src="js/conf-settings-structures.js"></script>
 		<script type="text/javascript" src="js/directives.js"></script>
@@ -26,6 +26,7 @@
 			<div>
 				<ul class="nav nav-pills">
 				  <li data-ng-repeat="item in navElementNameList track by $index" role="presentation" data-ng-click="navElementClicked(item.index)" data-ng-class="(currentNavIndex==item.index) ? 'active' : ''"><a href="javascript:void(0);" data-ng-bind='item.title'></a></li>
+				  <li><a href="https://github.com/0PEIN0/cfapi/issues" target="_blank"><img class="bug-image" src="images/bug.png"/></a></li>
 				</ul>
 			</div>
 			<div>
