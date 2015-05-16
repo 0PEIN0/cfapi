@@ -226,22 +226,19 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 							Verdict distribution breakdown: <span class="label" data-ng-repeat="item in submissionList.summary.verdicts" data-ng-bind="item.name + \' : \' + item.frequency" data-ng-class="item.cssClass"></span>\
 						</div>\
 						<div>\
-							Filter by Tag: \
+							Filters: \
 							<select data-ng-change="filterSubmissionDataList()" data-ng-model="selectedTag">\
 								<option value="">Any Tag</option>\
 								<option data-ng-repeat="item in tagList" data-ng-bind="item.name+\' (\'+item.frequency+\')\'" value="{{item.name}}"></option>\
 							</select>\
-							Filter by Language: \
 							<select data-ng-change="filterSubmissionDataList()" data-ng-model="selectedLanguage">\
 								<option value="">Any Language</option>\
 								<option data-ng-repeat="item in languageList" data-ng-bind="item.name+\' (\'+item.frequency+\')\'" value="{{item.name}}"></option>\
 							</select>\
-							Filter by Verdict: \
 							<select data-ng-change="filterSubmissionDataList()" data-ng-model="selectedVerdict">\
 								<option value="">Any Verdict</option>\
 								<option data-ng-repeat="item in verdictList" data-ng-bind="item.name+\' (\'+item.frequency+\')\'" value="{{item.name}}"></option>\
 							</select>\
-							Filter by Country: \
 							<select data-ng-change="filterSubmissionDataList()" data-ng-model="selectedCountry">\
 								<option value="">Any Country</option>\
 								<option data-ng-repeat="item in countryList" data-ng-bind="item.name+\' (\'+item.frequency+\')\'" value="{{item.name}}"></option>\
