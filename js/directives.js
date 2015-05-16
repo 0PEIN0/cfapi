@@ -127,6 +127,7 @@ function CodeforcesContestStandingDirective( cfApi , cftsObj ) {
 				<div class="panel-body">\
 					<div class="well well-sm">\
 						<div>\
+							Filters: \
 							<select data-ng-change="contestSelected()" data-ng-model="selectedContest">\
 								<option data-ng-repeat="item in contestList.dataList" data-ng-bind="item.name" value="{{item.id}}" data-ng-init="contestListLoading($index)"></option>\
 							</select>\
@@ -134,6 +135,7 @@ function CodeforcesContestStandingDirective( cfApi , cftsObj ) {
 								<option value="">Any Country</option>\
 								<option data-ng-repeat="item in countryList" data-ng-bind="item.countryName" value="{{item.countryName}}"></option>\
 							</select>\
+							<button type="button" data-ng-click="clearFilters()" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> Clear Filters</button>\
 						</div>\
 					</div>\
 					<codeforces-table-directive column-list="customStandingTableStructure" rowcell-list="contestStandingsList.filteredDataList"></codeforces-table-directive>\
@@ -145,6 +147,11 @@ function CodeforcesContestStandingDirective( cfApi , cftsObj ) {
 			'pageHeader' : '='
 	    } ,
         link: function( scope , element , attrs ) {
+			
+			scope.clearFilters = function() {
+				scope.selectedCountry = '' ;
+				scope.countrySelected() ;
+			} ;
 			
 			scope.userListInfoResponse = function( response ) {
 				scope.userInfoList = scope.userInfoList.concat( response.dataList ) ;
@@ -373,6 +380,65 @@ function CodeforcesRecentSubmissionsDirective( cfApi ) {
 			} ;
 
 			scope.$watch( 'showRecentSubmissionsFlag' , scope.showRecentSubmissionsFlagChanged , true ) ;
+		}
+	} ;
+}
+
+
+function CodeforcesContestSubmissionsDirective( cfApi ) {
+	return {
+		restrict : 'E' ,
+		transclude : true ,
+		template : '\
+			<div class="well well-sm">\
+				<div>\
+					Select Contest: \
+					<select data-ng-change="contestSelected()" data-ng-model="selectedContest">\
+						<option data-ng-repeat="item in contestList.dataList" data-ng-bind="item.name" value="{{item.id}}" data-ng-init="contestListLoading($index)"></option>\
+					</select>\
+				<div>\
+			<codeforces-submissions-directive submission-list-loaded-flag="submissionListLoadedFlag" submission-list="submissionList" show-contest-accpted-submission-summary-flag="false" show-unofficial-option-checkbox="false" page-header="pageHeader"></codeforces-submissions-directive>' ,
+		scope : {
+	    	'showLoadingFlag' : '=' , 
+			'showContestSubmissionsFlag' : '=' ,
+			'pageHeader' : '='
+	    } ,
+        link: function( scope , element , attrs ) {
+			
+			scope.submissionListResponse = function( response ) {
+				scope.submissionList = response ;
+				console.log( response ) ;
+				scope.showLoadingFlag = false ;
+				scope.submissionListLoadedFlag = true ;
+			} ;
+			
+			scope.contestListLoading = function( idx ) {
+				if( idx == scope.contestList.dataList.length - 1 ) {
+					scope.selectedContest = '' + scope.contestList.summary.initialLoadContestId ;
+					scope.contestSelected() ;
+				}
+			} ;
+		
+			scope.contestListResponse = function( response ) {
+				scope.contestList = response ;
+			} ;
+			
+			scope.contestSelected = function() {
+				if( scope.selectedContest != null ) {
+					scope.showLoadingFlag = true ;
+					cfApi.getContestStatus( scope.submissionListResponse , cfApi.getDefaultContestId() , 1 , 1000 ) ;
+					scope.selectedCountry = '' ;
+				}
+			} ;
+			
+			scope.showContestSubmissionsFlagChanged = function( newValue , oldValue ) {
+				if( newValue == true ) {
+					scope.submissionListLoadedFlag = false ;
+					cfApi.getContestList( scope.contestListResponse ) ;
+				}
+			} ;
+
+			scope.$watch( 'showContestSubmissionsFlag' , scope.showContestSubmissionsFlagChanged , true ) ;
 		}
 	} ;
 }
