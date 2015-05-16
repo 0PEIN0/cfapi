@@ -116,7 +116,7 @@ function CodeforcesTableDirective( $sce , cfcObj , shsObj ) {
     } ;
 }
 
-function CodeforcesContestStandingDirective( cfApi , cftsObj ) {
+function CodeforcesContestStandingDirective( cfApi , cfcObj , cftsObj ) {
 	return {
 		restrict : 'E' ,
 		replace : true ,
@@ -205,7 +205,7 @@ function CodeforcesContestStandingDirective( cfApi , cftsObj ) {
 			} ;
 
 			scope.$watch( 'showStandingFlag' , scope.showStandingFlagChanged , true ) ;
-			scope.countryList = cfApi.getCountryList() ;
+			scope.countryList = cfcObj.defaultContestId ;
 			scope.userHandle = cfApi.getDefaultUserHandle() ;
 		}
 	} ;
@@ -385,7 +385,7 @@ function CodeforcesRecentSubmissionsDirective( cfApi ) {
 }
 
 
-function CodeforcesContestSubmissionsDirective( cfApi ) {
+function CodeforcesContestSubmissionsDirective( cfApi , cfcObj ) {
 	return {
 		restrict : 'E' ,
 		transclude : true ,
@@ -425,7 +425,7 @@ function CodeforcesContestSubmissionsDirective( cfApi ) {
 			scope.contestSelected = function() {
 				if( scope.selectedContest != null ) {
 					scope.showLoadingFlag = true ;
-					cfApi.getContestStatus( scope.submissionListResponse , cfApi.getDefaultContestId() , 1 , 1000 ) ;
+					cfApi.getContestStatus( scope.submissionListResponse , cfcObj.defaultContestId , 1 , 1000 ) ;
 					scope.selectedCountry = '' ;
 				}
 			} ;

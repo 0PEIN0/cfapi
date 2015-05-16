@@ -63,14 +63,6 @@ function CodeforcesApiService( $http , $timeout , $sce , lssObj , cfsObj , cfcOb
 	this.getDefaultUserHandle = function() {
 		return self.cfcObj.defaultUserHandle ;
 	} ;
-	
-	this.getCountryList = function() {
-		return self.cfsObj.getCountryList() ;
-	} ;
-	
-	this.getDefaultContestId = function() {
-		return self.cfcObj.defaultContestId ;
-	} ;
 
 	this.getContestHacks = function( callbackFunction , contestId ) {
 		self.makeJsonpRequest( self.cfaubObj.buildContestHacksUrl( contestId ) , self.cfdlpObj.parseDefaultNoParsing , callbackFunction , false ) ;
