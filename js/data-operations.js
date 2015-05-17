@@ -328,15 +328,15 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		userStanding.penaltyHtml = '' + dataObject.penalty ;
 		userStanding.hacks = dataObject.successfulHackCount ;
 		userStanding.hacksUnsuccessful = dataObject.unsuccessfulHackCount ;
-		userStanding.hacksHtml = '<div class="standing-cell-challenge-parent-div">' ;
+		userStanding.hacksHtml = '<div>' ;
 		if( dataObject.successfulHackCount > 0 ) {
-			userStanding.hacksHtml += '<div class="standings-cell-challenge-success">' + '+' + dataObject.successfulHackCount + '</div>' ;
+			userStanding.hacksHtml += '<span class="standings-cell-challenge-success">' + '+' + dataObject.successfulHackCount + '</span>' ;
 		}
 		if( dataObject.successfulHackCount > 0 && dataObject.unsuccessfulHackCount > 0 ) {
-			userStanding.hacksHtml += '<div class="standings-cell-challenge-seperator">' + ' : ' + '</div>' ;
+			userStanding.hacksHtml += '<span class="standings-cell-challenge-seperator">' + ' : ' + '</span>' ;
 		}
 		if( dataObject.unsuccessfulHackCount > 0 ) {
-			userStanding.hacksHtml += '<div class="standings-cell-challenge-fail">' + '-' + dataObject.unsuccessfulHackCount + '</div>' ;
+			userStanding.hacksHtml += '<span class="standings-cell-challenge-fail">' + '-' + dataObject.unsuccessfulHackCount + '</span>' ;
 		}
 		userStanding.hacksHtml += '</div>' ;
 		sz = dataObject.problemResults.length ;
