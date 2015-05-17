@@ -4,6 +4,7 @@ Codeforces api client built using AngularJS. The most important fact about this 
 
 #### How to Run
 [Download](https://github.com/0PEIN0/cfapi/archive/master.zip) this repository and run **index.html** file on your favorite browser([chrome](https://www.google.com/chrome/browser/desktop/) usage recommended).
+Also you can view the page on web [here](http://0pein0.github.io/cfapi/).
 
 #### How to Change Default Handle
 Open '**js/conf-settings-structure.js**' file on a text editor and change the property value of '*this.defaultUserHandle*' to your intended handle.
