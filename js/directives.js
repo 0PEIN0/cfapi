@@ -14,14 +14,14 @@ function CodeforcesTableDirective( $sce , cfcObj , shsObj ) {
         template : '\
         	<table class="table table-striped table-bordered customTable">\
 	            <thead>\
-	              <th data-ng-repeat="column in columnList">\
-	                  <div class="table-column-header"><a href="javascript:void(0);" data-ng-click="sortColumn($index)">{{column.name}} <span class="glyphicon glyphicon-sort"></span></a></div>\
+	              <th data-ng-repeat="column in columnList" data-ng-style="{\'width\':((column.width!=null)?\'{{column.width}}\':\'\')}">\
+	                  <span><a href="javascript:void(0);" data-ng-click="sortColumn($index)">{{column.name}} <span class="glyphicon glyphicon-sort"></span></a></span>\
 	              </th>\
 	            </thead>\
 	            <tbody>\
 	              <tr data-ng-repeat="row in rowcellList track by $index" data-ng-init="rowIndex = $index">\
 	                <td data-ng-repeat="column in columnList track by $index" data-ng-init="columnIndex = $index">\
-	                    <div class="table-cell-generic" data-ng-bind-html="forceTrustHtml( getTableCellHtml( rowIndex , columnIndex ) )"></div>\
+	                    <span class="table-cell-generic" data-ng-bind-html="forceTrustHtml( getTableCellHtml( rowIndex , columnIndex ) )"></span>\
 	                </td>\
 	              </tr>\
 	            </tbody>\

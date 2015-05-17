@@ -124,9 +124,7 @@ License: GNU General Public License version 2
 
 .flag-img {
   position : relative ;
-  top : 3px ;
-  margin-right : 0.35em ;
-  margin-left : 5px ;
+  top : 0.5px ;
   border : 0 ;
   float : left ;
 }
@@ -137,17 +135,14 @@ License: GNU General Public License version 2
   font-weight : bold ;
   cursor : auto ;
   text-align : center ;
-  font-size : 0.9em ;
+  font-size : 1.0em ;
   border-collapse : collapse ;
   border-spacing : 0 ;
   border-spacing : 2px ;
   border-color : gray ;
   float : left ;
-  margin-left : 10px ;
-}
-
-.user-rating-core:hover {
-  text-decoration : none !important ;
+  margin-left : 5px ;
+  margin-right : 5px ;
 }
 
 .user-rating-red {
@@ -190,6 +185,11 @@ License: GNU General Public License version 2
 .customTable {
   table-layout : fixed ;
   word-wrap : break-word ;
+  font-size : 13.0px ;
+}
+
+.table>thead>tr>th {
+  font-size : 11px ;
 }
 
 table tr td {
@@ -203,7 +203,7 @@ table tr td {
 
 .problem-info {
   background-color : #f0f0f0 ;
-  font-size : 12px ;
+  font-size : 10px ;
   padding : 0 3px 2px 3px ;
   margin : 2px ;
   font-family : verdana , arial , sans-serif ;
@@ -230,10 +230,6 @@ table tr td {
   display : block ;
 }​
 
-.table-cell-generic {
+span.table-cell-generic {
   font-size : 12px ;
-}
-
-.table-column-header {
-  font-size : 11px ;
 }
