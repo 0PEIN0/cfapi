@@ -227,3 +227,20 @@ table tr td {
 span.table-cell-generic {
   font-size : 12px ;
 }
+
+.generic-select-tag {
+  width : 15% ;
+  float : left ;
+  padding : 0px 0px 0px 0px ;
+  height : 23px ;
+  font-size : 13px ;
+  border-radius : 0px 0px 0px 0px ;
+  font-family : 'Helvetica Neue' , Helvetica , Arial , sans-serif ;
+  margin-left : 2.5px ;
+  margin-right : 2.5px ;
+}
+
+.filter-span {
+  float : left ;
+  margin-right : 2.5px ;
+}

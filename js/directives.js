@@ -127,11 +127,11 @@ function CodeforcesContestStandingDirective( cfApi , cfcObj , cftsObj ) {
 				<div class="panel-body">\
 					<div class="well well-sm">\
 						<div>\
-							Filters: \
-							<select data-ng-change="contestSelected()" data-ng-model="selectedContest">\
+							<span class="filter-span">Filters:</span> \
+							<select class="form-control generic-select-tag" data-ng-change="contestSelected()" data-ng-model="selectedContest">\
 								<option data-ng-repeat="item in contestList.dataList" data-ng-bind="item.name" value="{{item.id}}" data-ng-init="contestListLoading($index)"></option>\
 							</select>\
-							<select data-ng-change="countrySelected()" data-ng-model="selectedCountry">\
+							<select class="form-control generic-select-tag" data-ng-change="countrySelected()" data-ng-model="selectedCountry">\
 								<option value="">Any Country</option>\
 								<option data-ng-repeat="item in countryList" data-ng-bind="item.countryName" value="{{item.countryName}}"></option>\
 							</select>\
@@ -234,20 +234,20 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 							Verdict distribution breakdown: <span class="label" data-ng-repeat="item in submissionList.summary.verdicts" data-ng-bind="item.name + \' : \' + item.frequency" data-ng-class="item.cssClass"></span>\
 						</div>\
 						<div>\
-							Filters: \
-							<select data-ng-change="filterSubmissionDataList()" data-ng-model="selectedTag">\
+							<span class="filter-span">Filters: </span>\
+							<select class="form-control generic-select-tag" data-ng-change="filterSubmissionDataList()" data-ng-model="selectedTag">\
 								<option value="">Any Tag</option>\
 								<option data-ng-repeat="item in tagList" data-ng-bind="item.name+\' (\'+item.frequency+\')\'" value="{{item.name}}"></option>\
 							</select>\
-							<select data-ng-change="filterSubmissionDataList()" data-ng-model="selectedLanguage">\
+							<select class="form-control generic-select-tag" data-ng-change="filterSubmissionDataList()" data-ng-model="selectedLanguage">\
 								<option value="">Any Language</option>\
 								<option data-ng-repeat="item in languageList" data-ng-bind="item.name+\' (\'+item.frequency+\')\'" value="{{item.name}}"></option>\
 							</select>\
-							<select data-ng-change="filterSubmissionDataList()" data-ng-model="selectedVerdict">\
+							<select class="form-control generic-select-tag" data-ng-change="filterSubmissionDataList()" data-ng-model="selectedVerdict">\
 								<option value="">Any Verdict</option>\
 								<option data-ng-repeat="item in verdictList" data-ng-bind="item.name+\' (\'+item.frequency+\')\'" value="{{item.name}}"></option>\
 							</select>\
-							<select data-ng-change="filterSubmissionDataList()" data-ng-model="selectedCountry">\
+							<select class="form-control generic-select-tag" data-ng-change="filterSubmissionDataList()" data-ng-model="selectedCountry">\
 								<option value="">Any Country</option>\
 								<option data-ng-repeat="item in countryList" data-ng-bind="item.name+\' (\'+item.frequency+\')\'" value="{{item.name}}"></option>\
 							</select>\
@@ -393,7 +393,7 @@ function CodeforcesContestSubmissionsDirective( cfApi , cfcObj ) {
 			<div>\
 				<div class="well well-sm">\
 					Select Contest: \
-					<select data-ng-change="contestSelected()" data-ng-model="selectedContest">\
+					<select class="form-control generic-select-tag" data-ng-change="contestSelected()" data-ng-model="selectedContest">\
 						<option data-ng-repeat="item in contestList.dataList" data-ng-bind="item.name" value="{{item.id}}" data-ng-init="contestListLoading($index)"></option>\
 					</select>\
 				</div>\
