@@ -31,3 +31,9 @@ GNU General Public License version 2
 
 #### Feedback
 Want something changed or found a bug, feel free to create an issue. I'll address them at my earliest convenience.
+
+#### Other Projects for Codeforces Platform
+* [Python Codeforces API Wrapper library](http://codeforces.com/blog/entry/13515) by [soon](http://codeforces.com/profile/soon)
+* [Codeforces Favourite Blog Update Notifier](http://codeforces.com/blog/entry/13444) by [phantom11](http://codeforces.com/profile/phantom11)
+* [CodeforcesApiController](http://codeforces.com/blog/entry/15543) by [marX](http://codeforces.com/profile/marX)
+* [Small utility to Codeforces API in Python](http://codeforces.com/blog/entry/12993) by [thebvog](http://codeforces.com/profile/thebvog)
