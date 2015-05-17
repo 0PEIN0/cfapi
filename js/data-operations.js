@@ -720,11 +720,11 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 	this.parseSubmissionsWithProblemSet = function( submissionList , problemSetList ) {
 		var i , sz1 , j , sz2 , problemIdentification ;
 		sz1 = submissionList.length ;
-		sz2 = problemSetList.length ; 
+		sz2 = problemSetList.length ;
 		for( i = 0 ; i < sz1 ; i++ ) {
 			for( j = 0 ; j < sz2 ; j++ ) {
 				problemIdentification = '' + problemSetList[ j ].contestId + '-' + problemSetList[ j ].index ;
-				if( submissionList[ i ].problemIdentification == problemIdentification || submissionList[ i ].problemName == problemSetList[ j ].name )  {
+				if( submissionList[ i ].problemIdentification == problemIdentification || ( submissionList[ i ].problemName == problemSetList[ j ].name && parseInt( submissionList[ i ].problemIdentification.split( '-' )[ 0 ] ) < cfcObj.gymMinimumContestId ) )  { 
 					submissionList[ i ].userSolved = problemSetList[ j ].solvedCount ;
 					submissionList[ i ].userSolvedHtml = '' + submissionList[ i ].userSolved ;
 					break ;
