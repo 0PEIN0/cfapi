@@ -169,12 +169,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 			}
 		}
 		if( fl == 0 ) {
-			if( dataObject.verdict == null ) {
-				verdictText = 'In Queue' ;
-			}
-			else {
-				verdictText = dataObject.verdict + ' on test ' + ( dataObject.passedTestCount + 1 ) ;
-			}
+			verdictText = dataObject.verdict + ' on test ' + ( dataObject.passedTestCount + 1 ) ;
 		}
 		return verdictText ;
 	} ;

@@ -138,6 +138,11 @@ function StringHandler() {
 		var i , sz ;
 		sz = associationList.length ;
 		if( textString == null ) {
+			for( i = 0 ; i < sz ; i++ ) {
+				if( associationList[ i ].source == null ) {
+					return associationList[ i ].destination ;
+				}
+			}
 			return textString ;
 		}
 		textString = textString.toLowerCase() ;
