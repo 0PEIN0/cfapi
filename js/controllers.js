@@ -45,7 +45,7 @@ function CodeforcesController( $scope , $sce , cfApi ) {
 		for( i = 0 ; i < len ; i++ ) {
 			$scope.navigationFlags.push( false ) ;
 		}
-		$scope.currentNavIndex = 2 ;
+		$scope.currentNavIndex = 1 ;
 		$scope.navElementClicked( $scope.currentNavIndex ) ;
 	} ;
 

@@ -20,6 +20,7 @@ function CodeforcesConfiguration() {
 	this.defaultContestId = 278 ;//262
 	this.perApiRequestUserHandleLimit = 500 ;
 	this.subsequentApiCallTimeoutInMilliseconds = 400 ;
+	this.gymMinimumContestId = 100000 ;
 	
 	this.jsonpUrlParameter = null ;
 	this.angularHttpObj = null ;

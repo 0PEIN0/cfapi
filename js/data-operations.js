@@ -283,7 +283,12 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 	self.generateProblemHtml = function( dataObject ) {
 		var problemHtml ;
 		problemHtml = '' ;
-		problemHtml += '<a target="_blank" href="http://codeforces.com/problemset/problem/' + dataObject.problem.contestId + '/' + dataObject.problem.index + '"><div>' + dataObject.problem.name + '</div></a>' ;
+		if( dataObject.problem.contestId >= cfcObj.gymMinimumContestId ) {		
+			problemHtml += '<a target="_blank" href="http://codeforces.com/gym/' + dataObject.problem.contestId + '/problem/' + dataObject.problem.index + '"><div>' + dataObject.problem.name + '</div></a>' ;
+		}
+		else {
+			problemHtml += '<a target="_blank" href="http://codeforces.com/problemset/problem/' + dataObject.problem.contestId + '/' + dataObject.problem.index + '"><div>' + dataObject.problem.name + '</div></a>' ;		
+		}
 		if( dataObject.problem.contestId != null && dataObject.problem.index != null ) {
 			problemHtml += '<span class="problem-info">(' + dataObject.problem.contestId + '-' + dataObject.problem.index + ')</span>' ;
 		}
