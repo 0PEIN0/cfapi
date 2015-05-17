@@ -616,7 +616,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 			res.summary.languagesAlphabeticallySorted.push( res.summary.languages[ i ] ) ;
 		}
 		res.summary.languagesAlphabeticallySorted = res.summary.languagesAlphabeticallySorted.sort( function( left , right ) {
-			if( left == null || right == null ) {
+			if( left == null || left.name == null || right == null || right.name == null ) {
 				return 0 ;
 			}
 			return left.name.localeCompare( right.name ) ;
@@ -627,7 +627,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 			res.summary.verdictsAlphabeticallySorted.push( res.summary.verdicts[ i ] ) ;
 		}
 		res.summary.verdictsAlphabeticallySorted = res.summary.verdictsAlphabeticallySorted.sort( function( left , right ) {
-			if( left == null || right == null ) {
+			if( left == null || left.name == null || right == null || right.name == null ) {
 				return 0 ;
 			}
 			return left.name.localeCompare( right.name ) ;
@@ -638,7 +638,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 			res.summary.tagsAlphabeticallySorted.push( res.summary.tags[ i ] ) ;
 		}
 		res.summary.tagsAlphabeticallySorted = res.summary.tagsAlphabeticallySorted.sort( function( left , right ) {
-			if( left == null || right == null ) {
+			if( left == null || left.name == null || right == null || right.name == null ) {
 				return 0 ;
 			}
 			return left.name.localeCompare( right.name ) ;
