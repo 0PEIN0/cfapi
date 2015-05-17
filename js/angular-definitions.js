@@ -16,7 +16,7 @@ app.service( 'LocalStorageService' , [ 'CodeforcesConfiguration' , LocalStorageS
 app.service( 'CodeforcesApiService' , [ '$http' , '$timeout' , '$sce' , 'LocalStorageService' , 'CodeforcesSettings' , 'CodeforcesConfiguration' , 'StringHandler' , CodeforcesApiService ] ) ;
 app.controller( 'CodeforcesController' , [ '$scope' , '$sce' , 'CodeforcesApiService' , CodeforcesController ] ) ;
 app.directive( 'codeforcesTableDirective' , [ '$sce' , 'CodeforcesConfiguration' , 'SortHandlerService' , CodeforcesTableDirective ] ) ;
-app.directive( 'codeforcesContestStandingDirective' , [ 'CodeforcesApiService' , 'CodeforcesConfiguration' , 'CodeforcesTableStructures' , CodeforcesContestStandingDirective ] ) ;
+app.directive( 'codeforcesContestStandingDirective' , [ 'CodeforcesApiService' , 'CodeforcesConfiguration' , 'CodeforcesSettings' , 'CodeforcesTableStructures' , CodeforcesContestStandingDirective ] ) ;
 app.directive( 'codeforcesSubmissionsDirective' , [ 'CodeforcesApiService' , 'CodeforcesTableStructures' , CodeforcesSubmissionsDirective ] ) ;
 app.directive( 'codeforcesUserStatisticsDirective' , [ 'CodeforcesApiService' , CodeforcesUserStatisticsDirective ] ) ;
 app.directive( 'codeforcesRecentSubmissionsDirective' , [ 'CodeforcesApiService' , CodeforcesRecentSubmissionsDirective ] ) ;

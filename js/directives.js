@@ -116,7 +116,7 @@ function CodeforcesTableDirective( $sce , cfcObj , shsObj ) {
     } ;
 }
 
-function CodeforcesContestStandingDirective( cfApi , cfcObj , cftsObj ) {
+function CodeforcesContestStandingDirective( cfApi , cfcObj , cfsObj , cftsObj ) {
 	return {
 		restrict : 'E' ,
 		replace : true ,
@@ -205,7 +205,7 @@ function CodeforcesContestStandingDirective( cfApi , cfcObj , cftsObj ) {
 			} ;
 
 			scope.$watch( 'showStandingFlag' , scope.showStandingFlagChanged , true ) ;
-			scope.countryList = cfcObj.defaultContestId ;
+			scope.countryList = cfsObj.getCountryList() ;
 			scope.userHandle = cfApi.getDefaultUserHandle() ;
 		}
 	} ;
