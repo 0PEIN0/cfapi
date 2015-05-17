@@ -58,6 +58,10 @@ License: GNU General Public License version 2
   background-color : #21A8BA;
 }
 
+.label-judgement-failed {
+  background-color : #0F40BA;
+}
+
 .standings-cell-core {
   padding : 0.5em ;
   font-size : 0.9em ;
