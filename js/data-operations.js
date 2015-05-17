@@ -176,7 +176,12 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 
 	self.buildCssClassFromVerdict = function( verdict ) {
 		var verdictTextCssClass ;
-		verdictTextCssClass = 'label-' + verdict.toLowerCase() ;
+		if( verdict == null ) {
+			verdictTextCssClass = 'label-in-queue' ;
+		}
+		else {
+			verdictTextCssClass = 'label-' + verdict.toLowerCase() ;
+		}
 		while( verdictTextCssClass.search( ' ' ) != -1 ) {
 			verdictTextCssClass = verdictTextCssClass.replace( ' ' , '-' ) ;
 		}
