@@ -10,10 +10,12 @@ Also you can view the page on web [here](http://0pein0.github.io/cfapi/).
 Open '**js/conf-settings-structure.js**' file on a text editor and change the property value of '*this.defaultUserHandle*' to your intended handle.
 
 #### Features Available
-1. *Personal Submission List*
-2. *Recent Submissions on Codeforces*
-3. *Contest Standings with Country Filter*
-4. *All Table Columns are Sortable.*
+1. *Personal submission list.*
+2. *Recent submissions on Codeforces.*
+3. *Contest standings with country filter.*
+4. *Contest submissions.*
+5. *All table columns are sortable. Strings and numbers are identified automatically while sorting.*
+6. *All tables have their own respective data filters.*
 
 #### Api Documentations
 * [Api Definition Help](http://codeforces.com/api/help)
