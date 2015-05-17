@@ -159,6 +159,9 @@ function StringHandler() {
 
 	this.makeTheFirstCharacterOfStringCapitalized = function( textString ) {
 		var res , len , i ;
+		if( textString == null ) {
+			return null ;
+		}
 		len = textString.length ;
 		res = '' ;
 		for( i = 0 ; i < len ; i++ ) {
