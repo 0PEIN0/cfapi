@@ -159,11 +159,11 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 
 	self.formatVerdictTextsToShow = function( dataObject ) {
 		var i , sz , verdictText , fl ;
-		sz = cfsObj.verdictDoesntHasCaseNumberToShow.length ;
+		sz = cfsObj.verdictDoesntHaveCaseNumberToShow.length ;
 		verdictText = dataObject.verdict ;
 		fl = 0 ;
 		for( i = 0 ; i < sz ; i++ ) {
-			if( dataObject.verdict == cfsObj.verdictDoesntHasCaseNumberToShow[ i ] ) {
+			if( dataObject.verdict == cfsObj.verdictDoesntHaveCaseNumberToShow[ i ] ) {
 				fl = 1 ;
 				break ;
 			}
@@ -275,12 +275,12 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 			handle = memberList[ i ].handle ;
 			countryImageHtml = '' ;
 			if( userInfoObj != null && userInfoObj.country != null && userInfoObj.country != '' && countryList[ userInfoObj.country ] != null ) {
-				countryImageHtml = '<a target="_blank" href="http://codeforces.com/ratings/country/' + userInfoObj.country + '">' + '<img title="' + userInfoObj.country + '" alt="' + userInfoObj.country + '" class="flag-img" src="' + countryList[ userInfoObj.country ] + '"></a>' ;
+				countryImageHtml = '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/ratings/country/' + userInfoObj.country + '">' + '<img title="' + userInfoObj.country + '" alt="' + userInfoObj.country + '" class="flag-img" src="' + countryList[ userInfoObj.country ] + '"></a>' ;
 			}
-			authorHandles += countryImageHtml + '<a target="_blank" href="http://codeforces.com/profile/' + handle + '">' + '<div class="user-rating-core ' + userHandleCssClass + '">' + handle + '</div>' + '</a>' ;
+			authorHandles += countryImageHtml + '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/profile/' + handle + '">' + '<div class="user-rating-core ' + userHandleCssClass + '">' + handle + '</div>' + '</a>' ;
 		}
 		if( dataObject[ propertyName ].teamName != null && dataObject[ propertyName ].teamName != '' ) {
-			authorHandles += ' (<a target="_blank" href="http://codeforces.com/team/' + dataObject[ propertyName ].teamId + '">' + dataObject[ propertyName ].teamName + '</a>)' ;
+			authorHandles += ' (<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/team/' + dataObject[ propertyName ].teamId + '">' + dataObject[ propertyName ].teamName + '</a>)' ;
 		}
 		return authorHandles ;
 	} ;
@@ -288,29 +288,59 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 	self.generateProblemHtml = function( dataObject ) {
 		var problemHtml ;
 		problemHtml = '' ;
-		if( dataObject.problem.contestId >= cfcObj.gymMinimumContestId ) {		
-			problemHtml += '<a target="_blank" href="http://codeforces.com/gym/' + dataObject.problem.contestId + '/problem/' + dataObject.problem.index + '"><div>' + dataObject.problem.name + '</div></a>' ;
+		if( dataObject.contestId >= cfcObj.gymMinimumContestId ) {		
+			problemHtml += '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/gym/' + dataObject.contestId + '/problem/' + dataObject.index + '"><div>' + dataObject.name + '</div></a>' ;
 		}
 		else {
-			problemHtml += '<a target="_blank" href="http://codeforces.com/problemset/problem/' + dataObject.problem.contestId + '/' + dataObject.problem.index + '"><div>' + dataObject.problem.name + '</div></a>' ;		
+			problemHtml += '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/problemset/problem/' + dataObject.contestId + '/' + dataObject.index + '"><div>' + dataObject.name + '</div></a>' ;		
 		}
-		if( dataObject.problem.contestId != null && dataObject.problem.index != null ) {
-			problemHtml += '<span class="problem-info">(' + dataObject.problem.contestId + '-' + dataObject.problem.index + ')</span>' ;
+		if( dataObject.contestId != null && dataObject.index != null ) {
+			problemHtml += '<span class="problem-info">(' + dataObject.contestId + '-' + dataObject.index + ')</span>' ;
 		}
-		if( dataObject.problem.points != null ) {
-			problemHtml += '<span class="problem-info">POINTS: ' + dataObject.problem.points + '</span>' ;
+		if( dataObject.points != null ) {
+			problemHtml += '<span class="problem-info">POINTS: ' + dataObject.points + '</span>' ;
 		}
 		return problemHtml ;
+	} ;
+	
+	self.generateProblemTagsHtml = function( dataObject ) {
+		var res ;
+		res = ( dataObject.problemTags == '' ) ? '' : '<span class="problem-info">' + dataObject.problemTags + '</span>' ;
+		return res ;
 	} ;
 	
 	self.buildSubmissionIdHtml = function( dataObject ) {
 		var res ;
 		res = '' ;
-		if( dataObject.problem.contestId < 100000 ) {
-			res += '<a target="_blank" href="http://codeforces.com/contest/' + dataObject.problem.contestId + '/submission/' + dataObject.id + '"><div>' + dataObject.id + '</div></a>' ;
+		if( dataObject.problem.contestId < cfcObj.gymMinimumContestId ) {
+			res += '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/contest/' + dataObject.problem.contestId + '/submission/' + dataObject.id + '"><div>' + dataObject.id + '</div></a>' ;
 		}
 		else {
 			res += '' + dataObject.id ;
+		}
+		return res ;
+	} ;
+	
+	self.buildContestIdHtml = function( dataObject ) {
+		var res ;
+		res = '' ;
+		if( dataObject.contestId < cfcObj.gymMinimumContestId ) {
+			res += '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/contest/' + dataObject.contestId + '"><div>' + dataObject.contestId + '</div></a>' ;
+		}
+		else {
+			res += '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/gym/' + dataObject.contestId + '"><div>' + dataObject.contestId + '</div></a>' ;
+		}
+		return res ;
+	} ;
+	
+	self.buildProblemIndexHtml = function( dataObject ) {
+		var res ;
+		res = '' ;
+		if( dataObject.contestId < cfcObj.gymMinimumContestId ) {
+			res += '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/contest/' + dataObject.contestId + '/problem/' + dataObject.index + '"><div>' + dataObject.index + '</div></a>' ;
+		}
+		else {
+			res += '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/gym/' + dataObject.contestId + '/problem/' + dataObject.index + '"><div>' + dataObject.index + '</div></a>' ;
 		}
 		return res ;
 	} ;
@@ -367,11 +397,11 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		submission.handle = dataObject.authorHandles ;
 		submission.handleHtml = self.generateHandleHtml( dataObject , 'author' , null ) ;
 		submission.problemName = dataObject.problem.name ;
-		submission.problemNameHtml = self.generateProblemHtml( dataObject ) ;
+		submission.problemNameHtml = self.generateProblemHtml( dataObject.problem ) ;
 		submission.problemTags = dataObject.problem.tags.join( ', ' ) ;
-		submission.problemTagsHtml = ( submission.problemTags == '' ) ? '' : '<span class="problem-info">' + submission.problemTags + '</span>' ;
+		submission.problemTagsHtml = self.generateProblemTagsHtml( submission ) ;
 		submission.problemIdentification = '' + dataObject.problem.contestId + '-' + dataObject.problem.index ;
-		submission.userSolved = 0 ;
+		submission.userSolved = -1 ;
 		submission.userSolvedHtml = '' ;
 		submission.lang = dataObject.programmingLanguage ;
 		submission.langHtml = dataObject.programmingLanguage ;
@@ -382,6 +412,42 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		submission.executionMemory = dataObject.memoryConsumedMegaBytes ;
 		submission.executionMemoryHtml = '' + dataObject.memoryConsumedMegaBytes + ' MB' ;
 		return submission ;
+	} ;
+	
+	self.buildProblemSetObject = function( dataObject ) {
+		var problem ;
+		problem = {} ;
+		problem.contestId = dataObject.contestId ;
+		problem.contestIdHtml = self.buildContestIdHtml( problem ) ;
+		problem.index = dataObject.index ;
+		problem.indexHtml = self.buildProblemIndexHtml( problem ) ;
+		problem.problemName = dataObject.name ;
+		problem.problemNameHtml = self.generateProblemHtml( dataObject ) ;
+		if( dataObject.tags == null || dataObject.tags.length == 0 ) {
+			problem.problemTags = '' ;
+		}
+		else {
+			problem.problemTags = dataObject.tags.join( ', ' ) ;
+		}
+		problem.problemTagsHtml = self.generateProblemTagsHtml( problem ) ;
+		if( dataObject.points == null ) {
+			problem.points = -1 ;
+			problem.pointsHtml = '' ;
+		}
+		else {
+			problem.points = dataObject.points ;
+			problem.pointsHtml = '' + problem.points ;
+		}
+		problem.userSolved = dataObject.solvedCount ;
+		problem.userSolvedHtml = '' + problem.userSolved ;
+		if( dataObject.type == null ) {
+			problem.problemType = '' ;
+		}
+		else {
+			problem.problemType = shObj.makeTheFirstCharacterOfStringCapitalized( dataObject.type.toLowerCase() ) ;
+		}
+		problem.problemTypeHtml = '' + problem.problemType ;
+		return problem ;
 	} ;
 
 	self.getAuthorList = function( dataList ) {
@@ -400,6 +466,69 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 			}
 		}
 		return authorList ;
+	} ;
+	
+	self.calculateSummaryOfAProperty = function( res , dataList , summaryPropertyName , dataListPropertyName ) {
+		var i , sz1 , j , sz2 , k , sz3 , fl , summaryPropertyNameAlphabeticallySorted ;
+		sz1 = dataList.length ;
+		res.summary[ summaryPropertyName ] = [] ;
+		for( i = 0 ; i < sz1 ; i++ ) {
+			if( ( typeof dataList[ i ][ dataListPropertyName ] ) == 'object' && dataList[ i ][ dataListPropertyName ].length >= 0 ) {
+				sz3 = dataList[ i ][ dataListPropertyName ].length ;
+				for( k = 0 ; k < sz3 ; k++ ) {
+					fl = 0 ;
+					sz2 = res.summary[ summaryPropertyName ].length ;
+					for( j = 0 ; j < sz2 ; j++ ) {
+						if( res.summary[ summaryPropertyName ][ j ].name == dataList[ i ][ dataListPropertyName ][ k ] ) {
+							fl = 1 ;
+							res.summary[ summaryPropertyName ][ j ].frequency++ ;
+							break ;
+						}
+					}
+					if( fl == 0 ) {
+						if( dataList[ i ][ dataListPropertyName ][ k ] != -1 && dataList[ i ][ dataListPropertyName ][ k ] != '' && dataList[ i ][ dataListPropertyName ][ k ] != null ) {
+							res.summary[ summaryPropertyName ].push( { name : dataList[ i ][ dataListPropertyName ][ k ] , frequency : 1 } ) ;
+						}
+					}
+				}
+			}
+			else {
+				sz2 = res.summary[ summaryPropertyName ].length ;
+				fl = 0 ;
+				for( j = 0 ; j < sz2 ; j++ ) {
+					if( res.summary[ summaryPropertyName ][ j ].name == dataList[ i ][ dataListPropertyName ] ) {
+						fl = 1 ;
+						res.summary[ summaryPropertyName ][ j ].frequency++ ;
+						break ;
+					}
+				}
+				if( fl == 0 ) {
+					if( dataList[ i ][ dataListPropertyName ] != -1 && dataList[ i ][ dataListPropertyName ] != '' && dataList[ i ][ dataListPropertyName ] != null ) {
+						res.summary[ summaryPropertyName ].push( { name : dataList[ i ][ dataListPropertyName ] , frequency : 1 } ) ;
+					}
+				}
+			}
+		}
+		res.summary[ summaryPropertyName ] = res.summary[ summaryPropertyName ].sort( function( left , right ) {
+			return right.frequency - left.frequency ;
+		} ) ;
+		summaryPropertyNameAlphabeticallySorted = summaryPropertyName + 'AlphabeticallySorted' ;
+		res.summary[ summaryPropertyNameAlphabeticallySorted ] = [] ;
+		sz1 = res.summary[ summaryPropertyName ].length ;
+		for( i = 0 ; i < sz1 ; i++ ) {
+			res.summary[ summaryPropertyNameAlphabeticallySorted ].push( res.summary[ summaryPropertyName ][ i ] ) ;
+		}
+		res.summary[ summaryPropertyNameAlphabeticallySorted ] = res.summary[ summaryPropertyNameAlphabeticallySorted ].sort( function( left , right ) {
+			if( left == null || left.name == null || right == null || right.name == null ) {
+				return 0 ;
+			}
+			if( isNaN( left.name ) == false || isNaN( right.name ) == false ) {
+				return left.name - right.name ;
+			}
+			return left.name.localeCompare( right.name ) ;
+		} ) ;
+		
+		return res ;
 	} ;
 
 	this.parseDefaultNoParsing = function( data ) {
@@ -462,13 +591,61 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 	this.parseProblemSet = function( data ) {
 		var res , i , len ;
 		res = {} ;
+		res.summary = {} ;
+		res.summary.total = data.problems.length ;
 		res.dataList = data.problems ;
 		len = res.dataList.length ;
 		for( i = 0 ; i < len ; i++ ) {
 			res.dataList[ i ].solvedCount = data.problemStatistics[ i ].solvedCount ;
 		}
+		return res ;
+	} ;
+	
+	this.parseProblemSetForTableData = function( data ) {
+		var res , i , len , problemSetObject ;
+		res = {} ;
 		res.summary = {} ;
-		res.summary.total = data.problems.length ;
+		len = data.problems.length ;
+		res.summary.total = len ;
+		res.dataList = [] ;
+		for( i = 0 ; i < len ; i++ ) {
+			problemSetObject = {} ;
+			problemSetObject.contestId = data.problems[ i ].contestId ;
+			problemSetObject.index = data.problems[ i ].index ;
+			problemSetObject.name = data.problems[ i ].name ;
+			problemSetObject.tags = data.problems[ i ].tags ;
+			problemSetObject.points = data.problems[ i ].points ;
+			problemSetObject.type = data.problems[ i ].type ;
+			problemSetObject.solvedCount = data.problemStatistics[ i ].solvedCount ;
+			problemSetObject = self.buildProblemSetObject( problemSetObject ) ;
+			res.dataList.push( problemSetObject ) ;
+		}
+		res = self.calculateSummaryOfAProperty( res , data.problems , 'tags' , 'tags' ) ;
+		res = self.calculateSummaryOfAProperty( res , data.problems , 'problemIndexes' , 'index' ) ;
+		res = self.calculateSummaryOfAProperty( res , data.problems , 'points' , 'points' ) ;
+		res.filteredDataList = res.dataList ;
+		return res ;
+	} ;
+	
+	this.parseProblemSetForTableDataThroughFilter = function( problemSetList , tagName , problemIndex , problemPoint ) {
+		var res , i , sz , fl ;
+		res = [] ;
+		sz = problemSetList.length ;
+		for( i = 0 ; i < sz ; i++ ) {
+			fl = 1 ;
+			if( fl == 1 && tagName != null && tagName != '' && problemSetList[ i ].problemTags.toLowerCase().search( tagName.toLowerCase() ) == -1 ) {
+				fl = 0 ;
+			}
+			if( fl == 1 && problemIndex != null && problemIndex != '' && problemSetList[ i ].index.toLowerCase().search( problemIndex.toLowerCase() ) == -1 ) {
+				fl = 0 ;
+			}
+			if( fl == 1 && problemPoint != null && problemPoint != '' && problemSetList[ i ].points != problemPoint ) {
+				fl = 0 ;
+			}
+			if( fl == 1 ) {
+				res.push( problemSetList[ i ] ) ;
+			}
+		}
 		return res ;
 	} ;
 	
@@ -653,7 +830,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		sz = submissionList.length ;
 		for( i = 0 ; i < sz ; i++ ) {
 			fl = 1 ;
-			if( verdictName != null && verdictName != '' && submissionList[ i ].verdict.toLowerCase().search( verdictName.toLowerCase() ) == -1 ) {
+			if( fl == 1 && verdictName != null && verdictName != '' && submissionList[ i ].verdict.toLowerCase().search( verdictName.toLowerCase() ) == -1 ) {
 				fl = 0 ;
 			}
 			if( fl == 1 && showUnofficialSubmissions != null && showUnofficialSubmissions == false && submissionList[ i ].inContestSubmission == false ) {

@@ -102,6 +102,14 @@ function CodeforcesApiService( $http , $timeout , $sce , lssObj , cfsObj , cfcOb
 	this.getProblems = function( callbackFunction , tags ) {
 		self.makeJsonpRequest( self.cfaubObj.buildProblemsUrl( tags ) , self.cfdlpObj.parseProblemSet , callbackFunction , false ) ;
 	} ;
+	
+	this.getProblemTableList = function( callbackFunction , tags ) {
+		self.makeJsonpRequest( self.cfaubObj.buildProblemsUrl( tags ) , self.cfdlpObj.parseProblemSetForTableData , callbackFunction , false ) ;
+	} ;
+	
+	this.getProblemTableListThroughFilter = function( problemSetList , tagName , problemIndex , problemPoint ) {
+		return self.cfdlpObj.parseProblemSetForTableDataThroughFilter( problemSetList , tagName , problemIndex , problemPoint ) ;
+	} ;
 
 	this.getRecentSubmissionsForAllInPractice = function( callbackFunction , count ) {
 		self.makeJsonpRequest( self.cfaubObj.buildRecentSubmissionsForAllInPracticeUrl( count ) , self.cfdlpObj.parseSubmissions , callbackFunction , false ) ;

@@ -6,7 +6,7 @@ Github Repository Link: https://github.com/0PEIN0/cfapi
 License: GNU General Public License version 2
 */
 
-function CodeforcesRootDirective( cfcObj , $sce ) {
+function CodeforcesRootDirective( cfcObj , cftsObj ) {
 	return {
         restrict : 'E' ,
         replace : true ,
@@ -20,7 +20,8 @@ function CodeforcesRootDirective( cfcObj , $sce ) {
 					<div>\
 						<ul class="nav nav-pills">\
 						  <li data-ng-repeat="item in navElementNameList track by $index" role="presentation" data-ng-click="navElementClicked(item.index)" data-ng-class="(currentNavIndex==item.index) ? \'active\' : \'\'"><a href="javascript:void(0);" data-ng-bind-html=\'item.title\'></a></li>\
-						  <li><a href="https://github.com/0PEIN0/cfapi/issues" target="_blank"><img alt="Report Bug" title="Report Bug" class="bug-image" src="images/bug.png"/></a></li>\
+						  <li><a href="https://github.com/0PEIN0/cfapi/issues" target="_blank"><img alt="Report Bug" title="Report Bug" class="navigation-image" src="images/bug.png"/></a></li>\
+						  <li><a href="https://github.com/0PEIN0/cfapi" target="_blank"><img alt="Repository" title="Repository" class="navigation-image" src="images/github.png"/></a></li>\
 						</ul>\
 					</div>\
 					<div>\
@@ -28,6 +29,7 @@ function CodeforcesRootDirective( cfcObj , $sce ) {
 						<codeforces-recent-submissions-directive data-ng-show="navigationFlags[1] == true" show-loading-flag="showLoadingFlag" show-recent-submissions-flag="navigationFlags[1]" page-header="navElementNameList[1].title"></codeforces-recent-submissions-directive>\
 						<codeforces-contest-submissions-directive data-ng-show="navigationFlags[2] == true" show-loading-flag="showLoadingFlag" show-contest-submissions-flag="navigationFlags[2]" page-header="navElementNameList[2].title"></codeforces-contest-submissions-directive>\
 						<codeforces-contest-standing-directive data-ng-show="navigationFlags[3] == true" show-loading-flag="showLoadingFlag" show-standing-flag="navigationFlags[3]" page-header="navElementNameList[3].title"></codeforces-contest-standing-directive>\
+						<codeforces-problem-set-directive data-ng-show="navigationFlags[4] == true" show-loading-flag="showLoadingFlag" show-problem-set-flag="navigationFlags[4]" page-header="navElementNameList[4].title"></codeforces-problem-set-directive>\
 					</div>\
 				</div>\
 			</div>' ,
@@ -63,16 +65,12 @@ function CodeforcesRootDirective( cfcObj , $sce ) {
 				var i , len ;
 				scope.userHandle = cfcObj.defaultUserHandle ;
 				scope.navigationFlags = [] ;
-				scope.navElementNameList = [] ;
-				scope.navElementNameList.push( { name : 'Submissions of ' + scope.userHandle , title : $sce.trustAsHtml( 'Submissions of <strong>' + scope.userHandle + '</strong>' ) , index : 0 } ) ;
-				scope.navElementNameList.push( { name : 'Problemset Status' , title : $sce.trustAsHtml( 'Problemset Status' ) , index : 1 } ) ;
-				scope.navElementNameList.push( { name : 'Contest Submissions' , title : $sce.trustAsHtml( 'Contest Submissions' ) , index : 2 } ) ;
-				scope.navElementNameList.push( { name : 'Contest Standings' , title : $sce.trustAsHtml( 'Contest Standings' ) , index : 3 } ) ;
+				scope.navElementNameList = cftsObj.getNavigationStructure( scope.userHandle ) ;
 				len = scope.navElementNameList.length ;
 				for( i = 0 ; i < len ; i++ ) {
 					scope.navigationFlags.push( false ) ;
 				}
-				scope.currentNavIndex = 1 ;
+				scope.currentNavIndex = 4 ;
 				scope.navElementClicked( scope.currentNavIndex ) ;
 			} ;
 		
@@ -161,6 +159,12 @@ function CodeforcesTableDirective( $sce , cfcObj , shsObj ) {
 					rightNumber = parseFloat( rightString ) ;
 					if( column.currentlySorted == 'asc' ) {
 						if( isNaN( leftNumber ) == false && isNaN( rightNumber ) == false ) {
+							if( leftNumber == -1 ) {
+								return true ;
+							}
+							if( rightNumber == -1 ) {
+								return false ;
+							}
 							if( leftNumber * constantForSorting > rightNumber * constantForSorting ) {
 								return true ;
 							}
@@ -174,6 +178,12 @@ function CodeforcesTableDirective( $sce , cfcObj , shsObj ) {
 					}
 					else {
 						if( isNaN( leftNumber ) == false && isNaN( rightNumber ) == false ) {
+							if( leftNumber == -1 ) {
+								return true ;
+							}
+							if( rightNumber == -1 ) {
+								return false ;
+							}
 							if( rightNumber * constantForSorting > leftNumber * constantForSorting ) {
 								return true ;
 							}
@@ -202,7 +212,7 @@ function CodeforcesContestStandingDirective( cfApi , cfcObj , cfsObj , cftsObj )
 				<div class="panel-body">\
 					<div class="well well-sm">\
 						<div>\
-							<span class="filter-span">Filters:</span> \
+							<span class="filter-span">Filters:</span>\
 							<select class="form-control generic-select-tag" data-ng-change="contestSelected()" data-ng-model="selectedContest">\
 								<option data-ng-repeat="item in contestList.dataList" data-ng-bind="item.name" value="{{item.id}}" data-ng-init="contestListLoading($index)"></option>\
 							</select>\
@@ -309,7 +319,7 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 							Verdict distribution breakdown: <span class="label" data-ng-repeat="item in submissionList.summary.verdicts" data-ng-bind="item.name + \' : \' + item.frequency" data-ng-class="item.cssClass"></span>\
 						</div>\
 						<div>\
-							<span class="filter-span">Filters: </span>\
+							<span class="filter-span">Filters:</span>\
 							<select class="form-control generic-select-tag" data-ng-change="filterSubmissionDataList()" data-ng-model="selectedTag">\
 								<option value="">Any Tag</option>\
 								<option data-ng-repeat="item in tagList" data-ng-bind="item.name+\' (\'+item.frequency+\')\'" value="{{item.name}}"></option>\
@@ -514,6 +524,74 @@ function CodeforcesContestSubmissionsDirective( cfApi , cfcObj ) {
 			} ;
 
 			scope.$watch( 'showContestSubmissionsFlag' , scope.showContestSubmissionsFlagChanged , true ) ;
+		}
+	} ;
+}
+
+function CodeforcesProblemSetDirective( cfApi , cftsObj ) {
+	return {
+		restrict : 'E' ,
+		transclude : true ,
+		replace : true ,
+		template : '\
+			<div class="panel panel-info">\
+				<div class="panel-heading"><h3 data-ng-bind-html="pageHeader"></h3></div>\
+				<div class="panel-body">\
+					<div class="well well-sm">\
+						<div>\
+							<span class="filter-span">Filters:</span>\
+							<select class="form-control generic-select-tag" data-ng-change="filterProblemSetDataList()" data-ng-model="selectedTag">\
+								<option value="">Any Tag</option>\
+								<option data-ng-repeat="item in tagList" data-ng-bind="item.name+\' (\'+item.frequency+\')\'" value="{{item.name}}"></option>\
+							</select>\
+							<select class="form-control generic-select-tag" data-ng-change="filterProblemSetDataList()" data-ng-model="selectedPoint">\
+								<option value="">Any Points</option>\
+								<option data-ng-repeat="item in pointList" data-ng-bind="item.name+\' (\'+item.frequency+\')\'" value="{{item.name}}"></option>\
+							</select>\
+							<select class="form-control generic-select-tag" data-ng-change="filterProblemSetDataList()" data-ng-model="selectedProblemIndex">\
+								<option value="">Any Problem Index</option>\
+								<option data-ng-repeat="item in problemIndexList" data-ng-bind="item.name+\' (\'+item.frequency+\')\'" value="{{item.name}}"></option>\
+							</select>\
+							<button type="button" data-ng-click="clearFilters()" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> Clear Filters</button>\
+						</div>\
+					</div>\
+					<codeforces-table-directive column-list="customProblemSetTableStructure" rowcell-list="problemSetListObj.filteredDataList"></codeforces-table-directive>\
+				</div>\
+			</div>' ,
+		scope : {
+	    	'showLoadingFlag' : '=' , 
+			'showProblemSetFlag' : '=' ,
+			'pageHeader' : '='
+	    } ,
+        link: function( scope , element , attrs ) {
+			
+			scope.clearFilters = function() {
+				scope.selectedTag = '' ;
+				scope.selectedProblemIndex = '' ;
+				scope.selectedPoint = '' ;
+			} ;
+			
+			scope.filterProblemSetDataList = function() {
+				scope.problemSetListObj.filteredDataList = cfApi.getProblemTableListThroughFilter( scope.problemSetListObj.dataList , scope.selectedTag , scope.selectedProblemIndex , scope.selectedPoint ) ;
+			} ;
+			
+			scope.problemSetListResponse = function( response ) {
+				scope.problemSetListObj = response ;
+				scope.showLoadingFlag = false ;
+				scope.clearFilters() ;
+				scope.tagList = response.summary.tagsAlphabeticallySorted ;
+				scope.problemIndexList = response.summary.problemIndexesAlphabeticallySorted ;
+				scope.pointList = response.summary.pointsAlphabeticallySorted ;
+			} ;
+			
+			scope.showProblemSetFlagChanged = function( newValue , oldValue ) {
+				if( newValue == true ) {
+					cfApi.getProblemTableList( scope.problemSetListResponse ) ;
+				}
+			} ;
+
+			scope.$watch( 'showProblemSetFlag' , scope.showProblemSetFlagChanged , true ) ;
+			scope.customProblemSetTableStructure = cftsObj.getCustomProblemSetTableStructure() ;
 		}
 	} ;
 }
