@@ -213,7 +213,7 @@ function CodeforcesContestStandingDirective( cfApi , cfcObj , cfsObj , cftsObj )
 					<div class="well well-sm">\
 						<div>\
 							<span class="filter-span">Filters:</span>\
-							<select class="form-control generic-select-tag" data-ng-change="contestSelected()" data-ng-model="selectedContest">\
+							<select class="form-control generic-select-tag contest-select-tag" data-ng-change="contestSelected()" data-ng-model="selectedContest">\
 								<option data-ng-repeat="item in contestList.dataList" data-ng-bind="item.name" value="{{item.id}}" data-ng-init="contestListLoading($index)"></option>\
 							</select>\
 							<select class="form-control generic-select-tag" data-ng-change="countrySelected()" data-ng-model="selectedCountry">\
@@ -493,7 +493,7 @@ function CodeforcesContestSubmissionsDirective( cfApi , cfcObj ) {
 			<div>\
 				<div class="well well-sm">\
 					<span class="filter-span">Select Contest:</span>\
-					<select class="form-control generic-select-tag" data-ng-change="contestSelected()" data-ng-model="selectedContest">\
+					<select class="form-control generic-select-tag contest-select-tag" data-ng-change="contestSelected()" data-ng-model="selectedContest">\
 						<option data-ng-repeat="item in contestList.dataList" data-ng-bind="item.name" value="{{item.id}}" data-ng-init="contestListLoading($index)"></option>\
 					</select>\
 				</div>\
