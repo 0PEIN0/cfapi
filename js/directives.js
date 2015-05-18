@@ -565,23 +565,24 @@ function CodeforcesProblemSetDirective( cfApi , cftsObj ) {
 	    } ,
         link: function( scope , element , attrs ) {
 			
-			scope.clearFilters = function() {
-				scope.selectedTag = '' ;
-				scope.selectedProblemIndex = '' ;
-				scope.selectedPoint = '' ;
-			} ;
-			
 			scope.filterProblemSetDataList = function() {
 				scope.problemSetListObj.filteredDataList = cfApi.getProblemTableListThroughFilter( scope.problemSetListObj.dataList , scope.selectedTag , scope.selectedProblemIndex , scope.selectedPoint ) ;
 			} ;
 			
+			scope.clearFilters = function() {
+				scope.selectedTag = '' ;
+				scope.selectedProblemIndex = '' ;
+				scope.selectedPoint = '' ;
+				scope.filterProblemSetDataList() ;
+			} ;
+			
 			scope.problemSetListResponse = function( response ) {
 				scope.problemSetListObj = response ;
-				scope.showLoadingFlag = false ;
 				scope.clearFilters() ;
 				scope.tagList = response.summary.tagsAlphabeticallySorted ;
 				scope.problemIndexList = response.summary.problemIndexesAlphabeticallySorted ;
 				scope.pointList = response.summary.pointsAlphabeticallySorted ;
+				scope.showLoadingFlag = false ;
 			} ;
 			
 			scope.showProblemSetFlagChanged = function( newValue , oldValue ) {
