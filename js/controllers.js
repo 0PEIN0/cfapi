@@ -6,5 +6,5 @@ Github Repository Link: https://github.com/0PEIN0/cfapi
 License: GNU General Public License version 2
 */
 
-function CodeforcesController( $scope , $sce , cfApi ) {
+function CodeforcesController( $scope ) {
 }
