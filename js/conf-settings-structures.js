@@ -14,6 +14,9 @@ function CodeforcesConfiguration() {
 	this.defaultRecentSubmissions = 1000 ;
 	this.defaultUserSubmissions = 10000 ;
 	
+	this.maxRowsPerPageInPagination = 10 ;
+	this.maxButtonsInPagination = 5 ;
+	
 	this.timeZoneOffsetInHours = 3 ;
 	this.localStorageTimeOutHours = 1 ;
 	this.constantMultiplierWhileSortingNumbers = 10000 ;

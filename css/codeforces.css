@@ -213,6 +213,10 @@ table tr td {
   height : 20px ;
 }
 
+.nav-pills>li {
+  font-size : 13px ;
+}
+
 .overlay {
   background-color : rgba( 0 , 0 , 0 , 0.8 ) ;
   z-index : 999 ;
@@ -243,7 +247,16 @@ span.table-cell-generic {
 .contest-select-tag {
   width : 20% ;
 }
+
 .filter-span {
   float : left ;
   margin-right : 2.5px ;
+}
+
+.well-sm-override {
+  margin-bottom : 0px ;
+}
+
+.pagination-custom {
+  font-size : 12px ; 
 }

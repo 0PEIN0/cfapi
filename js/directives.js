@@ -85,20 +85,33 @@ function CodeforcesTableDirective( $sce , cfcObj , shsObj ) {
         replace : true ,
 		transclude : true ,
         template : '\
-        	<table class="table table-striped table-bordered customTable">\
-	            <thead>\
-	              <th data-ng-repeat="column in columnList" data-ng-style="{\'width\':((column.width!=null)?\'{{column.width}}\':\'\')}">\
-	                  <span><a href="javascript:void(0);" data-ng-click="sortColumn($index)">{{column.name}} <span class="glyphicon glyphicon-sort"></span></a></span>\
-	              </th>\
-	            </thead>\
-	            <tbody>\
-	              <tr data-ng-repeat="row in rowcellList track by $index" data-ng-init="rowIndex = $index">\
-	                <td data-ng-repeat="column in columnList track by $index" data-ng-init="columnIndex = $index">\
-	                    <span class="table-cell-generic" data-ng-bind-html="forceTrustHtml( getTableCellHtml( rowIndex , columnIndex ) )"></span>\
-	                </td>\
-	              </tr>\
-	            </tbody>\
-	        </table>' ,
+			<div>\
+				<nav class="text-center">\
+			      <ul class="pagination pagination-custom pagination-centered">\
+				  	<li data-ng-class="(currentPageNumber<=maxButtons)?\'disabled\':\'\'"><a href="javascript:void(0);" aria-label="Previous"><span aria-hidden="true">Start</span></a></li>\
+			        <li data-ng-class="(currentPageNumber<=maxButtons)?\'disabled\':\'\'"><a href="javascript:void(0);" aria-label="Previous"><span aria-hidden="true">&lt;&lt;</span></a></li>\
+					<li data-ng-class="(currentPageNumber==1)?\'disabled\':\'\'"><a href="javascript:void(0);" aria-label="Previous"><span aria-hidden="true">&lt;</span></a></li>\
+			        <li data-ng-repeat="item in buttonList track by $index" data-ng-click="paginationNumberButtonClicked(item.name)" data-ng-class="(currentPageNumber==item.name)?\'active\':\'\'"><a href="javascript:void(0);" data-ng-bind="item.name"></a></li>\
+					<li data-ng-class="(currentPageNumber==totalDataListLength)?\'disabled\':\'\'"><a href="javascript:void(0);" aria-label="Next"><span aria-hidden="true">&gt;</span></a></li>\
+			        <li data-ng-class="(currentPageNumber>totalDataListLength-maxButtons)?\'disabled\':\'\'"><a href="javascript:void(0);" aria-label="Next"><span aria-hidden="true">&gt;&gt;</span></a></li>\
+					<li data-ng-class="(currentPageNumber>totalDataListLength-maxButtons)?\'disabled\':\'\'"><a href="javascript:void(0);" aria-label="Previous"><span aria-hidden="true">End</span></a></li>\
+			      </ul>\
+			    </nav>\
+	        	<table class="table table-striped table-bordered customTable">\
+		            <thead>\
+		              <th data-ng-repeat="column in columnList" data-ng-style="{\'width\':((column.width!=null)?\'{{column.width}}\':\'\')}">\
+		                  <span><a href="javascript:void(0);" data-ng-click="sortColumn($index)">{{column.name}} <span class="glyphicon glyphicon-sort"></span></a></span>\
+		              </th>\
+		            </thead>\
+		            <tbody>\
+		              <tr data-ng-repeat="row in customRowcellList track by $index" data-ng-init="rowIndex = $index">\
+		                <td data-ng-repeat="column in columnList track by $index" data-ng-init="columnIndex = $index">\
+		                    <span class="table-cell-generic" data-ng-bind-html="forceTrustHtml( getTableCellHtml( rowIndex , columnIndex ) )"></span>\
+		                </td>\
+		              </tr>\
+		            </tbody>\
+		        </table>\
+			</div>' ,
         scope : {
 	    	'columnList' : '=' ,
 			'rowcellList' : '='
@@ -111,6 +124,23 @@ function CodeforcesTableDirective( $sce , cfcObj , shsObj ) {
 				return $sce.trustAsHtml( htmlString ) ;
 			} ;
 			
+			scope.loadDataForPageNumber = function() {
+				var start , end , i ;
+				start = ( scope.currentPageNumber - 1 ) * scope.maxRowsPerPage + 1 ;
+				end = start + scope.maxRowsPerPage - 1 ;
+				end = Math.min( end , scope.totalDataListLength ) ;
+				scope.customRowcellList = [] ;
+				for( i = start ; i <= end ; i++ ) {
+					scope.customRowcellList.push( scope.rowcellList[ i - 1 ] ) ;
+				}
+				console.log( start , end ) ;
+			} ;
+			
+			scope.paginationNumberButtonClicked = function( pageNumber ) {
+				scope.currentPageNumber = pageNumber ;
+				scope.loadDataForPageNumber() ;
+			} ;
+			
 			scope.getTableCellHtml = function( rowIndex , columnIndex ) {
 				var property ;
 				property = scope.columnList[ columnIndex ].sortIndex ;
@@ -118,6 +148,21 @@ function CodeforcesTableDirective( $sce , cfcObj , shsObj ) {
 					return '' ;
 				}
 				return scope.rowcellList[ rowIndex ][ property + 'Html' ] ;
+			} ;
+			
+			scope.rowCellListChanged = function( newValue , oldValue ) {
+				var i ;
+				if( newValue != null ) {
+					scope.totalDataListLength = scope.rowcellList.length ;
+					scope.numberOfPages = Math.ceil( scope.totalDataListLength / scope.maxRowsPerPage ) ;
+					scope.numberOfButtons = Math.min( scope.maxButtons , scope.numberOfPages ) ;
+					scope.buttonList = [] ;
+					for( i = 0 ; i < scope.numberOfButtons ; i++ ) {
+						scope.buttonList.push( { name : ( i + 1 ) } ) ;
+					}
+					scope.currentPageNumber = 1 ;
+					scope.loadDataForPageNumber() ;
+				}
 			} ;
 			
 			scope.sortColumn = function( idx ) {
@@ -197,6 +242,19 @@ function CodeforcesTableDirective( $sce , cfcObj , shsObj ) {
 					}
 				} ) ;
 			} ;
+			
+			scope.init = function() {
+				scope.$watch( 'rowcellList' , scope.rowCellListChanged , true ) ;
+				scope.customRowcellList = [] ;
+				scope.maxRowsPerPage = cfcObj.maxRowsPerPageInPagination ;
+				scope.maxButtons = cfcObj.maxButtonsInPagination ;
+				scope.numberOfButtons = 0 ;
+				scope.numberOfPages = 0 ;
+				scope.currentPageNumber = 1 ;
+				scope.totalDataListLength = 0 ;
+			} ;
+			
+			scope.init() ;
         }
     } ;
 }
@@ -210,7 +268,7 @@ function CodeforcesContestStandingDirective( cfApi , cfcObj , cfsObj , cftsObj )
 			<div class="panel panel-info">\
 				<div class="panel-heading"><h3 data-ng-bind-html="pageHeader"></h3></div>\
 				<div class="panel-body">\
-					<div class="well well-sm">\
+					<div class="well well-sm well-sm-override">\
 						<div>\
 							<span class="filter-span">Filters:</span>\
 							<select class="form-control generic-select-tag contest-select-tag" data-ng-change="contestSelected()" data-ng-model="selectedContest">\
@@ -305,7 +363,7 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 			<div class="panel panel-info">\
 				<div class="panel-heading"><h3 data-ng-bind-html="pageHeader"></h3></div>\
 				<div class="panel-body">\
-					<div class="well well-sm">\
+					<div class="well well-sm well-sm-override">\
 						<div>\
 							Total Accepted Submissions: <span class="badge badge-custom" data-ng-bind="submissionList.summary.totalAccepted+\' / \'+submissionList.summary.total"></span>\
 						</div>\
@@ -491,7 +549,7 @@ function CodeforcesContestSubmissionsDirective( cfApi , cfcObj ) {
 		replace : true ,
 		template : '\
 			<div>\
-				<div class="well well-sm">\
+				<div class="well well-sm well-sm-override">\
 					<span class="filter-span">Select Contest:</span>\
 					<select class="form-control generic-select-tag contest-select-tag" data-ng-change="contestSelected()" data-ng-model="selectedContest">\
 						<option data-ng-repeat="item in contestList.dataList" data-ng-bind="item.name" value="{{item.id}}" data-ng-init="contestListLoading($index)"></option>\
@@ -552,7 +610,7 @@ function CodeforcesProblemSetDirective( cfApi , cftsObj ) {
 			<div class="panel panel-info">\
 				<div class="panel-heading"><h3 data-ng-bind-html="pageHeader"></h3></div>\
 				<div class="panel-body">\
-					<div class="well well-sm">\
+					<div class="well well-sm well-sm-override">\
 						<div>\
 							<span class="filter-span">Filters:</span>\
 							<select class="form-control generic-select-tag" data-ng-change="filterProblemSetDataList()" data-ng-model="selectedTag">\
