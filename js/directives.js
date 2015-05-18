@@ -70,7 +70,7 @@ function CodeforcesRootDirective( cfcObj , cftsObj ) {
 				for( i = 0 ; i < len ; i++ ) {
 					scope.navigationFlags.push( false ) ;
 				}
-				scope.currentNavIndex = 4 ;
+				scope.currentNavIndex = 1 ;
 				scope.navElementClicked( scope.currentNavIndex ) ;
 			} ;
 		
