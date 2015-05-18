@@ -14,7 +14,7 @@ app.service( 'StringHandler' , [ StringHandler ] ) ;
 app.service( 'SortHandlerService' , [ SortHandlerService ] ) ;
 app.service( 'LocalStorageService' , [ 'CodeforcesConfiguration' , LocalStorageService ] ) ;
 app.service( 'CodeforcesApiService' , [ '$http' , '$timeout' , '$sce' , 'LocalStorageService' , 'CodeforcesSettings' , 'CodeforcesConfiguration' , 'StringHandler' , CodeforcesApiService ] ) ;
-app.controller( 'CodeforcesController' , [ '$scope' , '$sce' , 'CodeforcesApiService' , CodeforcesController ] ) ;
+app.controller( 'CodeforcesController' , [ '$scope' , CodeforcesController ] ) ;
 app.directive( 'codeforcesRootDirective' , [ 'CodeforcesConfiguration' , '$sce' , CodeforcesRootDirective ] ) ;
 app.directive( 'codeforcesTableDirective' , [ '$sce' , 'CodeforcesConfiguration' , 'SortHandlerService' , CodeforcesTableDirective ] ) ;
 app.directive( 'codeforcesContestStandingDirective' , [ 'CodeforcesApiService' , 'CodeforcesConfiguration' , 'CodeforcesSettings' , 'CodeforcesTableStructures' , CodeforcesContestStandingDirective ] ) ;
