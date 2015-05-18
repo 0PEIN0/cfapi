@@ -17,7 +17,7 @@ function CodeforcesConfiguration() {
 	this.timeZoneOffsetInHours = 3 ;
 	this.localStorageTimeOutHours = 1 ;
 	this.constantMultiplierWhileSortingNumbers = 10000 ;
-	this.defaultContestId = 278 ;//262
+	this.defaultContestId = 262 ;
 	this.perApiRequestUserHandleLimit = 500 ;
 	this.subsequentApiCallTimeoutInMilliseconds = 400 ;
 	this.gymMinimumContestId = 100000 ;
