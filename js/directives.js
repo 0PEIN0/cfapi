@@ -375,6 +375,9 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 						<div>\
 							Verdict distribution breakdown: <span class="label" data-ng-repeat="item in submissionList.summary.verdicts" data-ng-bind="item.name + \' : \' + item.frequency" data-ng-class="item.cssClass"></span>\
 						</div>\
+						<div data-ng-show="showUnofficialOptionCheckbox==true">\
+							<input type="checkbox" aria-label="..." data-ng-model="showUnofficialUserSubmissionsFlag" data-ng-change="filterSubmissionDataList()">Show Unofficial\
+						</div>\
 						<div>\
 							<span class="filter-span">Filters:</span>\
 							<select class="form-control generic-select-tag" data-ng-change="filterSubmissionDataList()" data-ng-model="selectedTag">\
@@ -403,9 +406,6 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 							</select>\
 							<button type="button" data-ng-click="clearFilters()" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Clear Filters</button>\
 						</div>\
-					</div>\
-					<div data-ng-show="showUnofficialOptionCheckbox==true">\
-						<input type="checkbox" aria-label="..." data-ng-model="showUnofficialUserSubmissionsFlag" data-ng-change="filterSubmissionDataList()">Show Unofficial\
 					</div>\
 					<codeforces-table-directive column-list="submissionTableStructure" rowcell-list="submissionList.filteredDataList" ></codeforces-table-directive>\
 				</div>\
