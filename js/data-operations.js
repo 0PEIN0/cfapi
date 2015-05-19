@@ -604,6 +604,42 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		return res ;
 	} ;
 	
+	this.parseContestStandingsWithUserInfo = function( standingList , userInfoList ) {
+		var i , sz1 , j , sz2 ;
+		sz1 = standingList.length ;
+		sz2 = userInfoList.length ;
+		for( i = 0 ; i < sz1 ; i++ ) {
+			for( j = 0 ; j < sz2 ; j++ ) {
+				if( standingList[ i ].handle[ 0 ].handle == userInfoList[ j ].handle )  {
+					standingList[ i ].handleHtml = self.generateHandleHtml( standingList[ i ] , 'handle' , userInfoList[ j ] ) ;
+					break ;
+				}
+			}
+		}
+		return standingList ;
+	} ;
+	
+	this.parseContestStandingsByCountry = function( standingList , userInfoList , countryName ) {
+		var i , sz1 , res , j , sz2 , rank ;
+		res = [] ;
+		sz1 = standingList.length ;
+		sz2 = userInfoList.length ;
+		rank = 1 ;
+		for( i = 0 ; i < sz1 ; i++ ) {
+			for( j = 0 ; j < sz2 ; j++ ) {
+				if( standingList[ i ].handle != null && standingList[ i ].handle[ 0 ] != null && standingList[ i ].handle[ 0 ].handle != null && userInfoList[ j ].handle != null ) {
+					if( standingList[ i ].handle[ 0 ].handle == userInfoList[ j ].handle && userInfoList[ j ].country == countryName ) {
+						standingList[ i ].relativeRank = rank++ ;
+						standingList[ i ].relativeRankHtml = '' + standingList[ i ].relativeRank ;
+						res.push( standingList[ i ] ) ;
+						break ;
+					}
+				}
+			}
+		}
+		return res ;
+	} ;
+	
 	this.parseProblemSet = function( data ) {
 		var res , i , len ;
 		res = {} ;
@@ -660,42 +696,6 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 			}
 			if( fl == 1 ) {
 				res.push( problemSetList[ i ] ) ;
-			}
-		}
-		return res ;
-	} ;
-	
-	this.parseContestStandingsWithUserInfo = function( standingList , userInfoList ) {
-		var i , sz1 , j , sz2 ;
-		sz1 = standingList.length ;
-		sz2 = userInfoList.length ;
-		for( i = 0 ; i < sz1 ; i++ ) {
-			for( j = 0 ; j < sz2 ; j++ ) {
-				if( standingList[ i ].handle[ 0 ].handle == userInfoList[ j ].handle )  {
-					standingList[ i ].handleHtml = self.generateHandleHtml( standingList[ i ] , 'handle' , userInfoList[ j ] ) ;
-					break ;
-				}
-			}
-		}
-		return standingList ;
-	} ;
-	
-	this.parseContestStandingsByCountry = function( standingList , userInfoList , countryName ) {
-		var i , sz1 , res , j , sz2 , rank ;
-		res = [] ;
-		sz1 = standingList.length ;
-		sz2 = userInfoList.length ;
-		rank = 1 ;
-		for( i = 0 ; i < sz1 ; i++ ) {
-			for( j = 0 ; j < sz2 ; j++ ) {
-				if( standingList[ i ].handle != null && standingList[ i ].handle[ 0 ] != null && standingList[ i ].handle[ 0 ].handle != null && userInfoList[ j ].handle != null ) {
-					if( standingList[ i ].handle[ 0 ].handle == userInfoList[ j ].handle && userInfoList[ j ].country == countryName ) {
-						standingList[ i ].relativeRank = rank++ ;
-						standingList[ i ].relativeRankHtml = '' + standingList[ i ].relativeRank ;
-						res.push( standingList[ i ] ) ;
-						break ;
-					}
-				}
 			}
 		}
 		return res ;
