@@ -19,13 +19,14 @@ function CodeforcesConfiguration() {
 	
 	this.timeZoneOffsetInHours = 3 ;
 	this.localStorageTimeOutHours = 1 ;
-	this.defaultNavigationIndex = 3 ;
+	this.defaultNavigationIndex = 2 ;
 	this.constantMultiplierWhileSortingNumbers = 10000 ;
 	this.defaultContestId = 262 ;
 	this.perApiRequestUserHandleLimit = 500 ;
 	this.subsequentApiCallTimeoutInMilliseconds = 400 ;
 	this.gymMinimumContestId = 100000 ;
 	
+	this.acceptedSubmissionStatus = 'ok' ;
 	this.pretestSubmissionTestSetType = 'pretests' ;
 	this.standingResultType = 'preliminary' ;
 	

@@ -152,7 +152,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 	self = {} ;
 
 	self.transformVerdicts = function( textString , testSetType ) {
-		if( testSetType != null && testSetType.toLowerCase() == cfcObj.pretestSubmissionTestSetType.toLowerCase() ) {
+		if( testSetType != null && testSetType.toLowerCase() == cfcObj.pretestSubmissionTestSetType.toLowerCase() && textString.toLowerCase() == cfcObj.acceptedSubmissionStatus.toLowerCase() ) {
 			textString = 'pretests-passed' ;
 		}
 		textString = shObj.replaceAssociatedStrings( cfsObj.verdictTextReplacements , textString ) ;
@@ -355,18 +355,18 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 	
 	self.buildRoomHtml = function( dataObject ) {
 		var res ;
-		res = '<a href="' + cfcObj.codeforcesBaseUrl + '/contest/' + dataObject.contestId + '/room/' + dataObject.party.room + '">' + dataObject.party.room + '</a>' ;
+		res = '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/contest/' + dataObject.contestId + '/room/' + dataObject.party.room + '">' + dataObject.party.room + '</a>' ;
 		return res ;
 	} ;
 
-	self.buildUserStandingObject = function( dataObject , summary ) {
+	self.buildUserStandingObject = function( dataObject , summary , contestId ) {
 		var userStanding , i , sz , cssClass ;
+		dataObject.contestId = contestId ;
 		userStanding = {} ;
 		userStanding.rank = dataObject.rank ;
 		userStanding.rankHtml = '' + dataObject.rank ;
 		userStanding.room = dataObject.party.room ;
-		//to-do self.buildRoomHtml( dataObject )
-		userStanding.roomHtml = '' + userStanding.room ;
+		userStanding.roomHtml = self.buildRoomHtml( dataObject ) ;
 		userStanding.handle = dataObject.authorHandles ;
 		userStanding.handleHtml = self.generateHandleHtml( dataObject , 'party' , null ) ;
 		userStanding.points = dataObject.points ;
@@ -602,10 +602,9 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		res.summary.hasHacks = false ;
 		data = data.rows ;
 		sz1 = data.length ;
-		console.log( data ) ; 
 		for( i = 0 ; i < sz1 ; i++ ) {
 			data[ i ].authorHandles = data[ i ].party.members ;
-			userStanding = self.buildUserStandingObject( data[ i ] , res.summary ) ;
+			userStanding = self.buildUserStandingObject( data[ i ] , res.summary , res.summary.contest.id ) ;
 			if( userStanding.penalty > 0 ) {
 				res.summary.hasPenalty = true ;
 			}
