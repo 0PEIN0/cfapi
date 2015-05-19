@@ -294,7 +294,12 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 			res += countryImageHtml + '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/profile/' + handle + '">' + '<div class="user-rating-core ' + userHandleCssClass + '">' + handle + '</div>' + '</a>' ;
 		}
 		if( dataObject.teamName != null && dataObject.teamName != '' ) {
-			res += '(<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/team/' + dataObject.teamId + '">' + dataObject.teamName + '</a>)' ;
+			if( dataObject.teamId != null && dataObject.teamId != '' ) {
+				res += '(<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/team/' + dataObject.teamId + '">' + dataObject.teamName + '</a>)' ;
+			}
+			else {
+				res += '(' + dataObject.teamName + ')' ;
+			}
 		}
 		return res ;
 	} ;
@@ -316,7 +321,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		if( dataObject.contestId != null && dataObject.index != null ) {
 			problemHtml += '<span class="problem-info">(' + dataObject.contestId + '-' + dataObject.index + ')</span>' ;
 		}
-		if( dataObject.points != null ) {
+		if( dataObject.points != null && dataObject.points != -1 ) {
 			problemHtml += '<span class="problem-info">POINTS: ' + dataObject.points + '</span>' ;
 		}
 		return problemHtml ;
@@ -769,11 +774,15 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		res.summary.totalAccepted = 0 ;
 		res.summary.totalInContest = 0 ;
 		res.summary.totalInContestAccepted = 0 ;
+		console.log( data ) ;
 		for( i = 0 ; i < sz1 ; i++ ) {
 			data[ i ].creationDateTimeString = self.makeDateTimeStringFromMilliseconds( data[ i ].creationTimeSeconds ) ;
 			data[ i ].problemName = data[ i ].problem.name ;
 			data[ i ].problemIndex = data[ i ].problem.index ;
 			data[ i ].problemPoints = data[ i ].problem.points ;
+			if( data[ i ].problemPoints == null ) {
+				data[ i ].problemPoints = -1 ;
+			}
 			data[ i ].authorHandles = self.getHandlesInAnArray( data[ i ].author.members ) ;
 			data[ i ].teamName = data[ i ].author.teamName ;
 			data[ i ].teamId = data[ i ].author.teamId ;
@@ -803,6 +812,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		res = self.calculateSummaryOfAProperty( res , data , 'problemIndexes' , 'problemIndex' ) ;
 		res = self.calculateSummaryOfAProperty( res , data , 'points' , 'problemPoints' ) ;
 		res.summary.users = self.getUniqueAuthorList( data ) ;
+		console.log( res ) ;
 		return res ;
 	} ;
 	

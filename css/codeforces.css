@@ -55,15 +55,19 @@ License: GNU General Public License version 2
 }
 
 .label-idleness-limit-exceeded {
-  background-color : #21A8BA;
+  background-color : #21A8BA ;
 }
 
 .label-judgement-failed {
-  background-color : #0F40BA;
+  background-color : #0F40BA ;
 }
 
 .label-pretests-passed {
-  background-color : #8cb85c;
+  background-color : #8cb85c ;
+}
+
+.label-rejected {
+  background-color : #8C0915 ;
 }
 
 .standings-cell-core {

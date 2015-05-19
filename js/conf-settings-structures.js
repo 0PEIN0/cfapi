@@ -78,7 +78,8 @@ function CodeforcesSettings() {
 		'In queue' , 
 		'Skipped' , 
 		'Hacked' ,
-		'Pretests passed' ] ;
+		'Pretests passed' ,
+		'Rejected' ] ;
 	this.angularJsonpRequestQueryParameter = 'jsonp=JSON_CALLBACK' ;
 	
 	this.getCountryList = function() {
