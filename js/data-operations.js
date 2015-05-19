@@ -240,52 +240,63 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		return res ;
 	} ;
 
-	self.generateHandleHtml = function( dataObject , propertyName , userInfoObj ) {
-		var i , sz , authorHandles , handle , countryImageHtml , countryList , memberList , userHandleCssClass , cssClassList , ratingDesignationList , rankString ;
-		if( dataObject[ propertyName ].members != null ) {
-			memberList = dataObject[ propertyName ].members ;
-		}
-		else {
-			memberList = dataObject[ propertyName ] ;
-		}
+	self.generateHandleHtml = function( dataObject , propertyName , userInfoList ) {
+		var i , sz1 , j , sz2 , k , sz3 , sz4 , userInfoObj , res , handleList , handle , countryImageHtml , countryList , userHandleCssClass , cssClassList , ratingDesignationList , rankString ;
+		res = '' ;
+		handleList = dataObject[ propertyName ] ;
 		ratingDesignationList = cfsObj.ratingDesignations ;
 		cssClassList = cfsObj.ratingCssClasses ;
-		sz = ratingDesignationList.length ;
-		userHandleCssClass = '' ;
-		if( userInfoObj != null ) {
-			if( userInfoObj.rank == null || userInfoObj.rank == '' ) {
-				rankString = 'unrated' ;
-			}
-			else {
-				rankString = userInfoObj.rank.toLowerCase() ;
-			}
-			for( i = 0 ; i < sz ; i++ ) {
-				if( ratingDesignationList[ i ] != null && ratingDesignationList[ i ].toLowerCase() == rankString ) {
-					userHandleCssClass = cssClassList[ i ] ;
-					break ;
+		sz1 = handleList.length ;
+		sz2 = 0 ;
+		if( userInfoList != null ) {
+			sz2 = userInfoList.length ;
+		}
+		sz3 = ratingDesignationList.length ;
+		sz4 = countryList = cfsObj.getCountryListAsObject() ;
+		for( i = 0 ; i < sz1 ; i++ ) {
+			handle = handleList[ i ] ;
+			countryImageHtml = '' ;
+			userHandleCssClass = '' ;
+			if( userInfoList != null && userInfoList.length > 0 ) {
+				userInfoObj = null ;
+				for( j = 0 ; j < sz2 ; j++ ) {
+					if( handleList[ i ].toLowerCase().localeCompare( userInfoList[ j ].handle.toLowerCase() ) == 0 ) {
+						userInfoObj = userInfoList[ j ] ;
+						break ;
+					}
+				}
+				if( userInfoObj != null ) {
+					if( userInfoObj.rank == null || userInfoObj.rank == '' ) {
+						rankString = 'unrated' ;
+					}
+					else {
+						rankString = userInfoObj.rank.toLowerCase() ;
+					}
+					for( k = 0 ; k < sz3 ; k++ ) {
+						if( ratingDesignationList[ k ] != null && ratingDesignationList[ k ].toLowerCase() == rankString ) {
+							userHandleCssClass = cssClassList[ k ] ;
+							break ;
+						}
+					}
+					if( userInfoObj.country != null && userInfoObj.country != '' ) {
+						while( userInfoObj.country.search( ' ' ) != -1 ) {
+							userInfoObj.country = userInfoObj.country.replace( ' ' , '' ) ;
+						}
+					}
+					else {
+						userInfoObj.country = '' ;
+					}
+					if( userInfoObj.country != null && userInfoObj.country != '' && countryList[ userInfoObj.country ] != null ) {
+						countryImageHtml = '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/ratings/country/' + userInfoObj.country + '">' + '<img title="' + userInfoObj.country + '" alt="' + userInfoObj.country + '" class="flag-img" src="' + countryList[ userInfoObj.country ] + '"></a>' ;
+					}
 				}
 			}
-		}
-		sz = memberList.length ;
-		authorHandles = '' ;
-		countryList = cfsObj.getCountryListAsObject() ;
-		if( userInfoObj != null && userInfoObj.country != null && userInfoObj.country != '' ) {
-			while( userInfoObj.country.search( ' ' ) != -1 ) {
-				userInfoObj.country = userInfoObj.country.replace( ' ' , '' ) ;
+			res += countryImageHtml + '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/profile/' + handle + '">' + '<div class="user-rating-core ' + userHandleCssClass + '">' + handle + '</div>' + '</a>' ;
+			if( dataObject.teamName != null && dataObject.teamName != '' ) {
+				res += ' (<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/team/' + dataObject.teamId + '">' + dataObject.teamName + '</a>)' ;
 			}
 		}
-		for( i = 0 ; i < sz ; i++ ) {
-			handle = memberList[ i ].handle ;
-			countryImageHtml = '' ;
-			if( userInfoObj != null && userInfoObj.country != null && userInfoObj.country != '' && countryList[ userInfoObj.country ] != null ) {
-				countryImageHtml = '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/ratings/country/' + userInfoObj.country + '">' + '<img title="' + userInfoObj.country + '" alt="' + userInfoObj.country + '" class="flag-img" src="' + countryList[ userInfoObj.country ] + '"></a>' ;
-			}
-			authorHandles += countryImageHtml + '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/profile/' + handle + '">' + '<div class="user-rating-core ' + userHandleCssClass + '">' + handle + '</div>' + '</a>' ;
-		}
-		if( dataObject[ propertyName ].teamName != null && dataObject[ propertyName ].teamName != '' ) {
-			authorHandles += ' (<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/team/' + dataObject[ propertyName ].teamId + '">' + dataObject[ propertyName ].teamName + '</a>)' ;
-		}
-		return authorHandles ;
+		return res ;
 	} ;
 	
 	self.generateProblemHtml = function( dataObject , testSetType ) {
@@ -368,7 +379,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		userStanding.room = dataObject.party.room ;
 		userStanding.roomHtml = self.buildRoomHtml( dataObject ) ;
 		userStanding.handle = dataObject.authorHandles ;
-		userStanding.handleHtml = self.generateHandleHtml( dataObject , 'party' , null ) ;
+		userStanding.handleHtml = self.generateHandleHtml( dataObject , 'authorHandles' , null ) ;
 		userStanding.points = dataObject.points ;
 		userStanding.pointsHtml = '<div class="standings-cell-points">' + dataObject.points + '</div>' ;
 		userStanding.penalty = dataObject.penalty ;
@@ -418,7 +429,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		submission.dateTime = dataObject.creationDateTimeString ;
 		submission.dateTimeHtml = dataObject.creationDateTimeString ;
 		submission.handle = dataObject.authorHandles ;
-		submission.handleHtml = self.generateHandleHtml( dataObject , 'author' , null ) ;
+		submission.handleHtml = self.generateHandleHtml( dataObject , 'authorHandles' , null ) ;
 		submission.problemName = dataObject.problem.name ;
 		submission.problemNameHtml = self.generateProblemHtml( dataObject.problem , dataObject.testset ) ;
 		submission.problemTags = dataObject.problem.tags.join( ', ' ) ;
@@ -474,8 +485,26 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		problem.problemTypeHtml = '' + problem.problemType ;
 		return problem ;
 	} ;
+	
+	self.getHandlesInAnArray = function( handleList ) {
+		var i , sz , res ;
+		res = [] ;
+		sz = handleList.length ;
+		for( i = 0 ; i < sz ; i++ ) {
+			if( handleList[ i ].handle != null ) {
+				res.push( handleList[ i ].handle ) ;
+			}
+			else if( handleList[ i ].member != null ) {
+				res.push( handleList[ i ].member ) ;
+			}
+			else {
+				res.push( handleList[ i ] ) ;
+			}
+		}
+		return res ;
+	} ;
 
-	self.getAuthorList = function( dataList ) {
+	self.getUniqueAuthorList = function( dataList ) {
 		var authorList , i , sz1 , j , sz2 , userMap , mapCnt ;
 		authorList = [] ;
 		userMap = [] ;
@@ -484,9 +513,9 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		for( i = 0 ; i < sz1 ; i++ ) {
 			sz2 = dataList[ i ].authorHandles.length ;
 			for( j = 0 ; j < sz2 ; j++ ) {
-				if( userMap[ dataList[ i ].authorHandles[ j ].handle ] == null ) {
-					userMap[ dataList[ i ].authorHandles[ j ].handle ] = mapCnt++ ;
-					authorList.push( dataList[ i ].authorHandles[ j ].handle ) ;
+				if( userMap[ dataList[ i ].authorHandles[ j ] ] == null ) {
+					userMap[ dataList[ i ].authorHandles[ j ] ] = mapCnt++ ;
+					authorList.push( dataList[ i ].authorHandles[ j ] ) ;
 				}
 			}
 		}
@@ -603,7 +632,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		data = data.rows ;
 		sz1 = data.length ;
 		for( i = 0 ; i < sz1 ; i++ ) {
-			data[ i ].authorHandles = data[ i ].party.members ;
+			data[ i ].authorHandles = self.getHandlesInAnArray( data[ i ].party.members ) ;
 			userStanding = self.buildUserStandingObject( data[ i ] , res.summary , res.summary.contest.id ) ;
 			if( userStanding.penalty > 0 ) {
 				res.summary.hasPenalty = true ;
@@ -614,7 +643,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 			res.dataList.push( userStanding ) ;
 		}
 		res.filteredDataList = res.dataList ;
-		res.summary.users = self.getAuthorList( data ) ;
+		res.summary.users = self.getUniqueAuthorList( data ) ;
 		res.summary.numberOfProblems = res.summary.problems.length ;
 		return res ;
 	} ;
@@ -624,12 +653,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		sz1 = standingList.length ;
 		sz2 = userInfoList.length ;
 		for( i = 0 ; i < sz1 ; i++ ) {
-			for( j = 0 ; j < sz2 ; j++ ) {
-				if( standingList[ i ].handle[ 0 ].handle == userInfoList[ j ].handle )  {
-					standingList[ i ].handleHtml = self.generateHandleHtml( standingList[ i ] , 'handle' , userInfoList[ j ] ) ;
-					break ;
-				}
-			}
+			standingList[ i ].handleHtml = self.generateHandleHtml( standingList[ i ] , 'handle' , userInfoList ) ;
 		}
 		return standingList ;
 	} ;
@@ -730,7 +754,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 	} ;
 
 	this.parseSubmissions = function( data ) {
-		var i , sz1 , res , j , submission ;
+		var i , sz1 , res , j , sz2 , submission ;
 		res = {} ;
 		res.dataList = [] ;
 		res.summary = {} ;
@@ -744,7 +768,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 			data[ i ].problemName = data[ i ].problem.name ;
 			data[ i ].problemIndex = data[ i ].problem.index ;
 			data[ i ].problemPoints = data[ i ].problem.points ;
-			data[ i ].authorHandles = data[ i ].author.members ;
+			data[ i ].authorHandles = self.getHandlesInAnArray( data[ i ].author.members ) ;
 			data[ i ].timeConsumedSeconds = shObj.roundToDecimalPlaces( ( data[ i ].timeConsumedMillis / 1000 ) , 3 ) ;
 			data[ i ].memoryConsumedMegaBytes = shObj.roundToDecimalPlaces( ( data[ i ].memoryConsumedBytes / ( 1024 * 1024 ) ) , 2 ) ;
 			data[ i ].verdict = self.transformVerdicts( data[ i ].verdict , data[ i ].testset ) ;
@@ -770,7 +794,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		res = self.calculateSummaryOfAProperty( res , data , 'tags' , 'tags' ) ;
 		res = self.calculateSummaryOfAProperty( res , data , 'problemIndexes' , 'problemIndex' ) ;
 		res = self.calculateSummaryOfAProperty( res , data , 'points' , 'problemPoints' ) ;
-		res.summary.users = self.getAuthorList( data ) ;
+		res.summary.users = self.getUniqueAuthorList( data ) ;
 		return res ;
 	} ;
 	
@@ -809,44 +833,14 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 	} ;
 	
 	this.parseSubmissionsWithUserInfo = function( submissionListObj , userInfoList ) {
-		var i , sz1 , j , sz2 , submissionList , fl , sz3 , k ;
+		var i , sz1 , j , sz2 , submissionList ;
 		submissionList = submissionListObj.dataList ;
 		sz1 = submissionList.length ;
 		sz2 = userInfoList.length ;
 		for( i = 0 ; i < sz1 ; i++ ) {
-			for( j = 0 ; j < sz2 ; j++ ) {
-				if( submissionList[ i ].handle[ 0 ].handle == userInfoList[ j ].handle )  {
-					submissionList[ i ].handleHtml = self.generateHandleHtml( submissionList[ i ] , 'handle' , userInfoList[ j ] ) ;
-					if( userInfoList[ j ].country != null && userInfoList[ j ].country != '' ) {
-						submissionList[ i ].country = userInfoList[ j ].country ;
-						sz3 = submissionListObj.summary.countries.length ;
-						fl = 0 ;
-						for( k = 0 ; k < sz3 ; k++ ) {
-							if( submissionListObj.summary.countries[ k ].name == userInfoList[ j ].country ) {
-								fl = 1 ;
-								submissionListObj.summary.countries[ k ].frequency++ ;
-								break ;
-							}
-						}
-						if( fl == 0 ) {
-							submissionListObj.summary.countries.push( { name : userInfoList[ j ].country , frequency : 1 } ) ;
-						}
-					}
-					break ;
-				}
-			}
+			submissionList[ i ].handleHtml = self.generateHandleHtml( submissionList[ i ] , 'handle' , userInfoList ) ;
 		}
-		submissionListObj.summary.countriesAlphabeticallySorted = [] ;
-		sz1 = submissionListObj.summary.countries.length ;
-		for( i = 0 ; i < sz1 ; i++ ) {
-			submissionListObj.summary.countriesAlphabeticallySorted.push( submissionListObj.summary.countries[ i ] ) ;
-		}
-		submissionListObj.summary.countriesAlphabeticallySorted = submissionListObj.summary.countriesAlphabeticallySorted.sort( function( left , right ) {
-			if( left == null || right == null ) {
-				return 0 ;
-			}
-			return left.name.localeCompare( right.name ) ;
-		} ) ;
+		submissionListObj = self.calculateSummaryOfAProperty( submissionListObj , userInfoList , 'countries' , 'country' ) ;
 		return submissionListObj ;
 	} ;
 	
@@ -857,7 +851,6 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		for( i = 0 ; i < sz1 ; i++ ) {
 			for( j = 0 ; j < sz2 ; j++ ) {
 				problemIdentification = '' + problemSetList[ j ].contestId + '-' + problemSetList[ j ].index ;
-				//|| ( submissionList[ i ].problemName == problemSetList[ j ].name && parseInt( submissionList[ i ].problemIdentification.split( '-' )[ 0 ] ) < cfcObj.gymMinimumContestId )
 				if( submissionList[ i ].problemIdentification == problemIdentification )  { 
 					submissionList[ i ].userSolved = problemSetList[ j ].solvedCount ;
 					submissionList[ i ].userSolvedHtml = '' + submissionList[ i ].userSolved ;

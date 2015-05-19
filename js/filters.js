@@ -13,7 +13,8 @@ function DataLimitingFilter() {
 		}
     var res ;
     res = ( arr || [] ).slice( start , end ) ;
-    //console.log( start , end , res ) ;
+    //console.log( start , end ) ;
+    //console.log( res ) ;
     return res ;
   } ;
 }

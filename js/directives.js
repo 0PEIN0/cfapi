@@ -134,9 +134,9 @@ function CodeforcesTableDirective( $sce , cfcObj , shsObj ) {
 			} ;
 			
 			scope.paginationNumberButtonClicked = function( pageNumber ) {
-				scope.$apply();
 				scope.currentPageNumber = pageNumber ;
 				scope.loadDataForPageNumber() ;
+				//setTimeout( function() { scope.rowcellList[0].langHtml = 'zzz' ; scope.$apply() ; } , 3000 ) ;
 			} ;
 			
 			scope.getTableCellHtml = function( rowIndex , columnIndex ) {
@@ -158,7 +158,6 @@ function CodeforcesTableDirective( $sce , cfcObj , shsObj ) {
 					for( i = 0 ; i < scope.numberOfButtons ; i++ ) {
 						scope.buttonList.push( { name : ( i + 1 ) } ) ;
 					}
-					scope.currentPageNumber = 1 ;
 					scope.loadDataForPageNumber() ;
 				}
 			} ;
