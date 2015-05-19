@@ -152,7 +152,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 	self = {} ;
 
 	self.transformVerdicts = function( textString , testSetType ) {
-		if( testSetType.toLowerCase() == cfcObj.pretestSubmissionTestSetType.toLowerCase() ) {
+		if( testSetType != null && testSetType.toLowerCase() == cfcObj.pretestSubmissionTestSetType.toLowerCase() ) {
 			textString = 'pretests-passed' ;
 		}
 		textString = shObj.replaceAssociatedStrings( cfsObj.verdictTextReplacements , textString ) ;
@@ -295,7 +295,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 			problemHtml += '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/gym/' + dataObject.contestId + '/problem/' + dataObject.index + '"><div>' + dataObject.name + '</div></a>' ;
 		}
 		else {
-			if( testSetType.toLowerCase() == cfcObj.pretestSubmissionTestSetType.toLowerCase() ) {
+			if( testSetType != null && testSetType.toLowerCase() == cfcObj.pretestSubmissionTestSetType.toLowerCase() ) {
 				problemHtml += '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/contest/' + dataObject.contestId + '/problem/' + dataObject.index + '"><div>' + dataObject.name + '</div></a>' ;				
 			}
 			else {
@@ -354,7 +354,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 	} ;
 
 	self.buildUserStandingObject = function( dataObject , summary ) {
-		var userStanding , i , sz ;
+		var userStanding , i , sz , cssClass ;
 		userStanding = {} ;
 		userStanding.rank = dataObject.rank ;
 		userStanding.rankHtml = '' + dataObject.rank ;
@@ -389,7 +389,13 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 				}
 			}
 			else {
-				userStanding[ String.fromCharCode( 'a'.charCodeAt( 0 ) + i ) + 'Html' ] = '<div class="standings-cell-core standings-cell-accepted">' + dataObject.problemResults[ i ].points + '</div>' ;
+				if( dataObject.problemResults[ i ].type.toLowerCase() == cfcObj.standingResultType.toLowerCase() ) {
+					cssClass = 'standings-cell-pretests-passed' ;
+				}
+				else {
+					cssClass = 'standings-cell-accepted' ;
+				}
+				userStanding[ String.fromCharCode( 'a'.charCodeAt( 0 ) + i ) + 'Html' ] = '<div class="standings-cell-core ' + cssClass + '">' + dataObject.problemResults[ i ].points + '</div>' ;
 			}
 		}
 		return userStanding ;
@@ -587,6 +593,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		res.summary.hasHacks = false ;
 		data = data.rows ;
 		sz1 = data.length ;
+		console.log( data ) ; 
 		for( i = 0 ; i < sz1 ; i++ ) {
 			data[ i ].authorHandles = data[ i ].party.members ;
 			userStanding = self.buildUserStandingObject( data[ i ] , res.summary ) ;

@@ -10,7 +10,7 @@ function CodeforcesConfiguration() {
 	this.defaultUserHandle = 'battousai' ;
 	
 	this.defaultContestStandingCount = 10000 ;
-	this.defaultContestStatusCount = 100000 ;
+	this.defaultContestStatusCount = 1000000 ;
 	this.defaultRecentSubmissions = 1000 ;
 	this.defaultUserSubmissions = 10000 ;
 	
@@ -19,6 +19,7 @@ function CodeforcesConfiguration() {
 	
 	this.timeZoneOffsetInHours = 3 ;
 	this.localStorageTimeOutHours = 1 ;
+	this.defaultNavigationIndex = 3 ;
 	this.constantMultiplierWhileSortingNumbers = 10000 ;
 	this.defaultContestId = 262 ;
 	this.perApiRequestUserHandleLimit = 500 ;
@@ -26,6 +27,7 @@ function CodeforcesConfiguration() {
 	this.gymMinimumContestId = 100000 ;
 	
 	this.pretestSubmissionTestSetType = 'pretests' ;
+	this.standingResultType = 'preliminary' ;
 	
 	this.jsonpUrlParameter = null ;
 	this.angularHttpObj = null ;

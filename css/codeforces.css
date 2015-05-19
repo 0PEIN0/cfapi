@@ -86,6 +86,11 @@ License: GNU General Public License version 2
   font-weight : bold ;
 }
 
+.standings-cell-pretests-passed {
+  color : blue ;
+  font-weight : normal ;
+}
+
 .standings-cell-not-accepted {
   color : red ;
   font-weight : bold ;
