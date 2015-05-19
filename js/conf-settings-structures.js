@@ -14,7 +14,7 @@ function CodeforcesConfiguration() {
 	this.defaultRecentSubmissions = 1000 ;
 	this.defaultUserSubmissions = 10000 ;
 	
-	this.maxRowsPerPageInPagination = 100 ;
+	this.maxRowsPerPageInPagination = 1000 ;
 	this.maxButtonsInPagination = 5 ;
 	
 	this.timeZoneOffsetInHours = 3 ;
@@ -119,6 +119,7 @@ function CodeforcesTableStructures( $sce ) {
 	self.standingTableStructure = [ 
 		{ name : 'Rank' , sortIndex : 'rank' } , 
 		{ name : 'Relative Rank' , sortIndex : 'relativeRank' } , 
+		{ name : 'Room Number' , sortIndex : 'room' } , 
 		{ name : 'Handle(s)' , sortIndex : 'handle' , width : '230px' } , 
 		{ name : 'Points' , sortIndex : 'points' } , 
 		{ name : 'Penalty' , sortIndex : 'penalty' } , 

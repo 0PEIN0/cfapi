@@ -352,12 +352,21 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		}
 		return res ;
 	} ;
+	
+	self.buildRoomHtml = function( dataObject ) {
+		var res ;
+		res = '<a href="' + cfcObj.codeforcesBaseUrl + '/contest/' + dataObject.contestId + '/room/' + dataObject.party.room + '">' + dataObject.party.room + '</a>' ;
+		return res ;
+	} ;
 
 	self.buildUserStandingObject = function( dataObject , summary ) {
 		var userStanding , i , sz , cssClass ;
 		userStanding = {} ;
 		userStanding.rank = dataObject.rank ;
 		userStanding.rankHtml = '' + dataObject.rank ;
+		userStanding.room = dataObject.party.room ;
+		//to-do self.buildRoomHtml( dataObject )
+		userStanding.roomHtml = '' + userStanding.room ;
 		userStanding.handle = dataObject.authorHandles ;
 		userStanding.handleHtml = self.generateHandleHtml( dataObject , 'party' , null ) ;
 		userStanding.points = dataObject.points ;
