@@ -292,9 +292,9 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 				}
 			}
 			res += countryImageHtml + '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/profile/' + handle + '">' + '<div class="user-rating-core ' + userHandleCssClass + '">' + handle + '</div>' + '</a>' ;
-			if( dataObject.teamName != null && dataObject.teamName != '' ) {
-				res += ' (<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/team/' + dataObject.teamId + '">' + dataObject.teamName + '</a>)' ;
-			}
+		}
+		if( dataObject.teamName != null && dataObject.teamName != '' ) {
+			res += '(<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/team/' + dataObject.teamId + '">' + dataObject.teamName + '</a>)' ;
 		}
 		return res ;
 	} ;
@@ -380,6 +380,8 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		userStanding.roomHtml = self.buildRoomHtml( dataObject ) ;
 		userStanding.handle = dataObject.authorHandles ;
 		userStanding.handleHtml = self.generateHandleHtml( dataObject , 'authorHandles' , null ) ;
+		userStanding.teamName = dataObject.teamName ;
+		userStanding.teamId = dataObject.teamId ;
 		userStanding.points = dataObject.points ;
 		userStanding.pointsHtml = '<div class="standings-cell-points">' + dataObject.points + '</div>' ;
 		userStanding.penalty = dataObject.penalty ;
@@ -430,6 +432,8 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		submission.dateTimeHtml = dataObject.creationDateTimeString ;
 		submission.handle = dataObject.authorHandles ;
 		submission.handleHtml = self.generateHandleHtml( dataObject , 'authorHandles' , null ) ;
+		submission.teamName = dataObject.teamName ;
+		submission.teamId = dataObject.teamId ;
 		submission.problemName = dataObject.problem.name ;
 		submission.problemNameHtml = self.generateProblemHtml( dataObject.problem , dataObject.testset ) ;
 		submission.problemTags = dataObject.problem.tags.join( ', ' ) ;
@@ -633,6 +637,8 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		sz1 = data.length ;
 		for( i = 0 ; i < sz1 ; i++ ) {
 			data[ i ].authorHandles = self.getHandlesInAnArray( data[ i ].party.members ) ;
+			data[ i ].teamName = data[ i ].party.teamName ;
+			data[ i ].teamId = data[ i ].party.teamId ;  
 			userStanding = self.buildUserStandingObject( data[ i ] , res.summary , res.summary.contest.id ) ;
 			if( userStanding.penalty > 0 ) {
 				res.summary.hasPenalty = true ;
@@ -754,7 +760,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 	} ;
 
 	this.parseSubmissions = function( data ) {
-		var i , sz1 , res , j , sz2 , submission ;
+		var i , sz1 , res , submission ;
 		res = {} ;
 		res.dataList = [] ;
 		res.summary = {} ;
@@ -769,6 +775,8 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 			data[ i ].problemIndex = data[ i ].problem.index ;
 			data[ i ].problemPoints = data[ i ].problem.points ;
 			data[ i ].authorHandles = self.getHandlesInAnArray( data[ i ].author.members ) ;
+			data[ i ].teamName = data[ i ].author.teamName ;
+			data[ i ].teamId = data[ i ].author.teamId ;
 			data[ i ].timeConsumedSeconds = shObj.roundToDecimalPlaces( ( data[ i ].timeConsumedMillis / 1000 ) , 3 ) ;
 			data[ i ].memoryConsumedMegaBytes = shObj.roundToDecimalPlaces( ( data[ i ].memoryConsumedBytes / ( 1024 * 1024 ) ) , 2 ) ;
 			data[ i ].verdict = self.transformVerdicts( data[ i ].verdict , data[ i ].testset ) ;
