@@ -456,6 +456,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		submission.executionMemoryHtml = '' + dataObject.memoryConsumedMegaBytes + ' MB' ;
 		submission.index = dataObject.problemIndex ;
 		submission.points = dataObject.problemPoints ;
+		submission.contestId = dataObject.problem.contestId ;
 		return submission ;
 	} ;
 	
@@ -867,7 +868,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		for( i = 0 ; i < sz1 ; i++ ) {
 			for( j = 0 ; j < sz2 ; j++ ) {
 				problemIdentification = '' + problemSetList[ j ].contestId + '-' + problemSetList[ j ].index ;
-				if( submissionList[ i ].problemIdentification == problemIdentification )  { 
+				if( submissionList[ i ].problemIdentification == problemIdentification || ( submissionList[ i ].problemName == problemSetList[ j ].name && Math.abs( submissionList[ i ].contestId - problemSetList[ j ].contestId ) <= 1 ) )  { 
 					submissionList[ i ].userSolved = problemSetList[ j ].solvedCount ;
 					submissionList[ i ].userSolvedHtml = '' + submissionList[ i ].userSolved ;
 					break ;
