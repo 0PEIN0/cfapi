@@ -774,7 +774,6 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		res.summary.totalAccepted = 0 ;
 		res.summary.totalInContest = 0 ;
 		res.summary.totalInContestAccepted = 0 ;
-		console.log( data ) ;
 		for( i = 0 ; i < sz1 ; i++ ) {
 			data[ i ].creationDateTimeString = self.makeDateTimeStringFromMilliseconds( data[ i ].creationTimeSeconds ) ;
 			data[ i ].problemName = data[ i ].problem.name ;
@@ -812,7 +811,6 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		res = self.calculateSummaryOfAProperty( res , data , 'problemIndexes' , 'problemIndex' ) ;
 		res = self.calculateSummaryOfAProperty( res , data , 'points' , 'problemPoints' ) ;
 		res.summary.users = self.getUniqueAuthorList( data ) ;
-		console.log( res ) ;
 		return res ;
 	} ;
 	
