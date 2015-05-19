@@ -62,6 +62,10 @@ License: GNU General Public License version 2
   background-color : #0F40BA;
 }
 
+.label-pretests-passed {
+  background-color : #8cb85c;
+}
+
 .standings-cell-core {
   padding : 0.5em ;
   font-size : 0.9em ;

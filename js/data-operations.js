@@ -151,7 +151,10 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 	
 	self = {} ;
 
-	self.transformVerdicts = function( textString ) {
+	self.transformVerdicts = function( textString , testSetType ) {
+		if( testSetType.toLowerCase() == cfcObj.pretestSubmissionTestSetType.toLowerCase() ) {
+			textString = 'pretests-passed' ;
+		}
 		textString = shObj.replaceAssociatedStrings( cfsObj.verdictTextReplacements , textString ) ;
 		textString = shObj.makeTheFirstCharacterOfStringCapitalized( textString ) ;
 		return textString ;
@@ -285,14 +288,19 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		return authorHandles ;
 	} ;
 	
-	self.generateProblemHtml = function( dataObject ) {
+	self.generateProblemHtml = function( dataObject , testSetType ) {
 		var problemHtml ;
 		problemHtml = '' ;
 		if( dataObject.contestId >= cfcObj.gymMinimumContestId ) {		
 			problemHtml += '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/gym/' + dataObject.contestId + '/problem/' + dataObject.index + '"><div>' + dataObject.name + '</div></a>' ;
 		}
 		else {
-			problemHtml += '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/problemset/problem/' + dataObject.contestId + '/' + dataObject.index + '"><div>' + dataObject.name + '</div></a>' ;		
+			if( testSetType.toLowerCase() == cfcObj.pretestSubmissionTestSetType.toLowerCase() ) {
+				problemHtml += '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/contest/' + dataObject.contestId + '/problem/' + dataObject.index + '"><div>' + dataObject.name + '</div></a>' ;				
+			}
+			else {
+				problemHtml += '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/problemset/problem/' + dataObject.contestId + '/' + dataObject.index + '"><div>' + dataObject.name + '</div></a>' ;
+			}		
 		}
 		if( dataObject.contestId != null && dataObject.index != null ) {
 			problemHtml += '<span class="problem-info">(' + dataObject.contestId + '-' + dataObject.index + ')</span>' ;
@@ -397,7 +405,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		submission.handle = dataObject.authorHandles ;
 		submission.handleHtml = self.generateHandleHtml( dataObject , 'author' , null ) ;
 		submission.problemName = dataObject.problem.name ;
-		submission.problemNameHtml = self.generateProblemHtml( dataObject.problem ) ;
+		submission.problemNameHtml = self.generateProblemHtml( dataObject.problem , dataObject.testset ) ;
 		submission.problemTags = dataObject.problem.tags.join( ', ' ) ;
 		submission.problemTagsHtml = self.generateProblemTagsHtml( submission ) ;
 		submission.problemIdentification = '' + dataObject.problem.contestId + '-' + dataObject.problem.index ;
@@ -724,7 +732,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 			data[ i ].authorHandles = data[ i ].author.members ;
 			data[ i ].timeConsumedSeconds = shObj.roundToDecimalPlaces( ( data[ i ].timeConsumedMillis / 1000 ) , 3 ) ;
 			data[ i ].memoryConsumedMegaBytes = shObj.roundToDecimalPlaces( ( data[ i ].memoryConsumedBytes / ( 1024 * 1024 ) ) , 2 ) ;
-			data[ i ].verdict = self.transformVerdicts( data[ i ].verdict ) ;
+			data[ i ].verdict = self.transformVerdicts( data[ i ].verdict , data[ i ].testset ) ;
 			data[ i ].verdictText = self.formatVerdictTextsToShow( data[ i ] ) ;
 			data[ i ].inContestSubmission = ( data[ i ].author.participantType == 'CONTESTANT' ) ? true : false ;
 			data[ i ].verdictTextCssClass = self.buildCssClassFromVerdict( data[ i ].verdict ) ;
@@ -834,7 +842,8 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		for( i = 0 ; i < sz1 ; i++ ) {
 			for( j = 0 ; j < sz2 ; j++ ) {
 				problemIdentification = '' + problemSetList[ j ].contestId + '-' + problemSetList[ j ].index ;
-				if( submissionList[ i ].problemIdentification == problemIdentification || ( submissionList[ i ].problemName == problemSetList[ j ].name && parseInt( submissionList[ i ].problemIdentification.split( '-' )[ 0 ] ) < cfcObj.gymMinimumContestId ) )  { 
+				//|| ( submissionList[ i ].problemName == problemSetList[ j ].name && parseInt( submissionList[ i ].problemIdentification.split( '-' )[ 0 ] ) < cfcObj.gymMinimumContestId )
+				if( submissionList[ i ].problemIdentification == problemIdentification )  { 
 					submissionList[ i ].userSolved = problemSetList[ j ].solvedCount ;
 					submissionList[ i ].userSolvedHtml = '' + submissionList[ i ].userSolved ;
 					break ;

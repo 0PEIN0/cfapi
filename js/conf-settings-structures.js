@@ -14,7 +14,7 @@ function CodeforcesConfiguration() {
 	this.defaultRecentSubmissions = 1000 ;
 	this.defaultUserSubmissions = 10000 ;
 	
-	this.maxRowsPerPageInPagination = 10 ;
+	this.maxRowsPerPageInPagination = 100 ;
 	this.maxButtonsInPagination = 5 ;
 	
 	this.timeZoneOffsetInHours = 3 ;
@@ -24,6 +24,8 @@ function CodeforcesConfiguration() {
 	this.perApiRequestUserHandleLimit = 500 ;
 	this.subsequentApiCallTimeoutInMilliseconds = 400 ;
 	this.gymMinimumContestId = 100000 ;
+	
+	this.pretestSubmissionTestSetType = 'pretests' ;
 	
 	this.jsonpUrlParameter = null ;
 	this.angularHttpObj = null ;
@@ -43,7 +45,8 @@ function CodeforcesSettings() {
 		{ source : 'testing' , destination : 'Running' } , 
 		{ source : 'challenged' , destination : 'Hacked' } , 
 		{ source : '_' , destination : ' ' } , 
-		{ source : 'failed' , destination : 'Judgement Failed' } ] ;
+		{ source : 'failed' , destination : 'Judgement failed' } , 
+		{ source : 'pretests-passed' , destination : 'Pretests passed' } ] ;
 	this.ratingDesignations = [ 
 		'International Grandmaster' , 
 		'Grandmaster' , 
@@ -71,7 +74,8 @@ function CodeforcesSettings() {
 		'Compilation error' , 
 		'In queue' , 
 		'Skipped' , 
-		'Hacked' ] ;
+		'Hacked' ,
+		'Pretests passed' ] ;
 	this.angularJsonpRequestQueryParameter = 'jsonp=JSON_CALLBACK' ;
 	
 	this.getCountryList = function() {

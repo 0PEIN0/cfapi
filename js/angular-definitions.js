@@ -7,6 +7,7 @@ License: GNU General Public License version 2
 */
 
 var app = angular.module( 'CodeforcesApplication' , [ 'ngSanitize' ] ) ;
+app.filter( 'dataLimiting' , [ DataLimitingFilter ] ) ; 
 app.service( 'CodeforcesConfiguration' , [ CodeforcesConfiguration ] ) ;
 app.service( 'CodeforcesSettings' , [ CodeforcesSettings ] ) ;
 app.service( 'CodeforcesTableStructures' , [ '$sce' , CodeforcesTableStructures ] ) ;

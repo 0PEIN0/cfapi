@@ -103,8 +103,8 @@ function CodeforcesTableDirective( $sce , cfcObj , shsObj ) {
 		                  <span><a href="javascript:void(0);" data-ng-click="sortColumn($index)">{{column.name}} <span class="glyphicon glyphicon-sort"></span></a></span>\
 		              </th>\
 		            </thead>\
-		            <tbody>\
-		              <tr data-ng-repeat="row in customRowcellList track by $index" data-ng-init="rowIndex = $index">\
+		            <tbody data-ng-init="customRowcellListStartIndex=-1;customRowcellListEndIndex=-1;">\
+		              <tr data-ng-repeat="row in rowcellList | dataLimiting:customRowcellListStartIndex:customRowcellListEndIndex track by $index" data-ng-init="rowIndex = $index">\
 		                <td data-ng-repeat="column in columnList track by $index" data-ng-init="columnIndex = $index">\
 		                    <span class="table-cell-generic" data-ng-bind-html="forceTrustHtml( getTableCellHtml( rowIndex , columnIndex ) )"></span>\
 		                </td>\
@@ -125,18 +125,16 @@ function CodeforcesTableDirective( $sce , cfcObj , shsObj ) {
 			} ;
 			
 			scope.loadDataForPageNumber = function() {
-				var start , end , i ;
+				var start , end ;
 				start = ( scope.currentPageNumber - 1 ) * scope.maxRowsPerPage + 1 ;
 				end = start + scope.maxRowsPerPage - 1 ;
 				end = Math.min( end , scope.totalDataListLength ) ;
-				scope.customRowcellList = [] ;
-				for( i = start ; i <= end ; i++ ) {
-					scope.customRowcellList.push( scope.rowcellList[ i - 1 ] ) ;
-				}
-				console.log( start , end ) ;
+				scope.customRowcellListStartIndex = start - 1 ;
+				scope.customRowcellListEndIndex = end - 1 ;
 			} ;
 			
 			scope.paginationNumberButtonClicked = function( pageNumber ) {
+				scope.$apply();
 				scope.currentPageNumber = pageNumber ;
 				scope.loadDataForPageNumber() ;
 			} ;
@@ -252,6 +250,8 @@ function CodeforcesTableDirective( $sce , cfcObj , shsObj ) {
 				scope.numberOfPages = 0 ;
 				scope.currentPageNumber = 1 ;
 				scope.totalDataListLength = 0 ;
+				scope.customRowcellListStartIndex = -1 ;
+				scope.customRowcellListEndIndex = -1 ;
 			} ;
 			
 			scope.init() ;
@@ -278,7 +278,7 @@ function CodeforcesContestStandingDirective( cfApi , cfcObj , cfsObj , cftsObj )
 								<option value="">Any Country</option>\
 								<option data-ng-repeat="item in countryList" data-ng-bind="item.countryName" value="{{item.countryName}}"></option>\
 							</select>\
-							<button type="button" data-ng-click="clearFilters()" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> Clear Filters</button>\
+							<button type="button" data-ng-click="clearFilters()" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Clear Filters</button>\
 						</div>\
 					</div>\
 					<codeforces-table-directive column-list="customStandingTableStructure" rowcell-list="contestStandingsList.filteredDataList"></codeforces-table-directive>\
@@ -402,7 +402,7 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 								<option value="">Any Problem Index</option>\
 								<option data-ng-repeat="item in problemIndexList" data-ng-bind="item.name+\' (\'+item.frequency+\')\'" value="{{item.name}}"></option>\
 							</select>\
-							<button type="button" data-ng-click="clearFilters()" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> Clear Filters</button>\
+							<button type="button" data-ng-click="clearFilters()" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Clear Filters</button>\
 						</div>\
 					</div>\
 					<div data-ng-show="showUnofficialOptionCheckbox==true">\
@@ -625,7 +625,7 @@ function CodeforcesProblemSetDirective( cfApi , cftsObj ) {
 								<option value="">Any Problem Index</option>\
 								<option data-ng-repeat="item in problemIndexList" data-ng-bind="item.name+\' (\'+item.frequency+\')\'" value="{{item.name}}"></option>\
 							</select>\
-							<button type="button" data-ng-click="clearFilters()" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> Clear Filters</button>\
+							<button type="button" data-ng-click="clearFilters()" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Clear Filters</button>\
 						</div>\
 					</div>\
 					<codeforces-table-directive column-list="customProblemSetTableStructure" rowcell-list="problemSetListObj.filteredDataList"></codeforces-table-directive>\
