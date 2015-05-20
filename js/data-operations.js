@@ -1,3 +1,4 @@
+/* global . */
 /*
 Author: S. M. Ijaz-ul-Amin Chowdhury
 Codeforces Handle: .PEIN.
@@ -600,6 +601,37 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		
 		return res ;
 	} ;
+	
+	self.extractCountryListAgainstHandleListUsingUserInfoList = function( dataList , userInfoList ) {
+		var i , sz1 , j , sz2 , k , sz3 , l , sz4 , fl ;
+		sz1 = dataList.length ;
+		sz2 = userInfoList.length ;
+		for( i = 0 ; i < sz1 ; i++ ) {
+			dataList[ i ].countries = [] ;
+			if( dataList[ i ].handle != null ) {
+				sz3 = dataList[ i ].handle.length ;
+				for( k = 0 ; k < sz3 ; k++ ) {
+					for( j = 0 ; j < sz2 ; j++ ) {
+						if( dataList[ i ].handle[ k ] == userInfoList[ j ].handle ) {
+							sz4 = dataList[ i ].countries.length ;
+							fl = 0 ;
+							for( l = 0 ; l < sz4 ; l++ ) {
+								if( dataList[ i ].countries[ l ] == userInfoList[ j ].country ) {
+									fl = 1 ;
+									break ;
+								}
+							}
+							if( fl == 0 ) {
+								dataList[ i ].countries.push( userInfoList[ j ].country ) ;
+							}
+							break ;
+						}
+					}
+				}
+			}
+		}
+		return dataList ;
+	} ;
 
 	this.parseDefaultNoParsing = function( data ) {
 		var res ;
@@ -660,32 +692,29 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		return res ;
 	} ;
 	
-	this.parseContestStandingsWithUserInfo = function( standingList , userInfoList ) {
-		var i , sz1 , j , sz2 ;
+	this.parseContestStandingsWithUserInfo = function( standingListObj , userInfoList ) {
+		var i , sz1 , standingList ;
+		standingList = standingListObj.dataList ;
 		sz1 = standingList.length ;
-		sz2 = userInfoList.length ;
 		for( i = 0 ; i < sz1 ; i++ ) {
 			standingList[ i ].handleHtml = self.generateHandleHtml( standingList[ i ] , 'handle' , userInfoList ) ;
 		}
-		return standingList ;
+		standingList = self.extractCountryListAgainstHandleListUsingUserInfoList( standingList , userInfoList ) ;
+		standingListObj.dataList = standingList ;
+		standingListObj = self.calculateSummaryOfAProperty( standingListObj , userInfoList , 'countries' , 'country' ) ;
+		return standingListObj ;
 	} ;
 	
-	this.parseContestStandingsByCountry = function( standingList , userInfoList , countryName ) {
-		var i , sz1 , res , j , sz2 , rank ;
+	this.parseContestStandingsByCountry = function( standingList , countryName ) {
+		var i , sz1 , res , rank ;
 		res = [] ;
 		sz1 = standingList.length ;
-		sz2 = userInfoList.length ;
 		rank = 1 ;
 		for( i = 0 ; i < sz1 ; i++ ) {
-			for( j = 0 ; j < sz2 ; j++ ) {
-				if( standingList[ i ].handle != null && standingList[ i ].handle[ 0 ] != null && standingList[ i ].handle[ 0 ].handle != null && userInfoList[ j ].handle != null ) {
-					if( standingList[ i ].handle[ 0 ].handle == userInfoList[ j ].handle && userInfoList[ j ].country == countryName ) {
-						standingList[ i ].relativeRank = rank++ ;
-						standingList[ i ].relativeRankHtml = '' + standingList[ i ].relativeRank ;
-						res.push( standingList[ i ] ) ;
-						break ;
-					}
-				}
+			if( standingList[ i ].countries != null && standingList[ i ].countries.length > 0 && standingList[ i ].countries.join( ',' ).toLowerCase().indexOf( countryName.toLowerCase() ) != -1 ) {
+				standingList[ i ].relativeRank = rank++ ;
+				standingList[ i ].relativeRankHtml = '' + standingList[ i ].relativeRank ;
+				res.push( standingList[ i ] ) ;
 			}
 		}
 		return res ;
@@ -850,35 +879,13 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 	} ;
 	
 	this.parseSubmissionsWithUserInfo = function( submissionListObj , userInfoList ) {
-		var i , sz1 , j , sz2 , submissionList , k , sz3 , l , sz4 , fl ;
+		var i , sz1 , submissionList ;
 		submissionList = submissionListObj.dataList ;
 		sz1 = submissionList.length ;
-		sz2 = userInfoList.length ;
 		for( i = 0 ; i < sz1 ; i++ ) {
 			submissionList[ i ].handleHtml = self.generateHandleHtml( submissionList[ i ] , 'handle' , userInfoList ) ;
-			submissionList[ i ].countries = [] ;
-			if( submissionList[ i ].handle != null ) {
-				sz3 = submissionList[ i ].handle.length ;
-				for( k = 0 ; k < sz3 ; k++ ) {
-					for( j = 0 ; j < sz2 ; j++ ) {
-						if( submissionList[ i ].handle[ k ] == userInfoList[ j ].handle ) {
-							sz4 = submissionList[ i ].countries.length ;
-							fl = 0 ;
-							for( l = 0 ; l < sz4 ; l++ ) {
-								if( submissionList[ i ].countries[ l ] == userInfoList[ j ].country ) {
-									fl = 1 ;
-									break ;
-								}
-							}
-							if( fl == 0 ) {
-								submissionList[ i ].countries.push( userInfoList[ j ].country ) ;
-							}
-							break ;
-						}
-					}
-				}
-			}
 		}
+		submissionList = self.extractCountryListAgainstHandleListUsingUserInfoList( submissionList , userInfoList ) ;
 		submissionListObj.dataList = submissionList ;
 		submissionListObj = self.calculateSummaryOfAProperty( submissionListObj , userInfoList , 'countries' , 'country' ) ;
 		return submissionListObj ;

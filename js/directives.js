@@ -276,7 +276,7 @@ function CodeforcesContestStandingDirective( cfApi , cfcObj , cfsObj , cftsObj )
 							</select>\
 							<select class="form-control generic-select-tag" data-ng-change="countrySelected()" data-ng-model="selectedCountry">\
 								<option value="">Any Country</option>\
-								<option data-ng-repeat="item in countryList" data-ng-bind="item.countryName" value="{{item.countryName}}"></option>\
+								<option data-ng-repeat="item in countryList" data-ng-bind="item.name+\' (\'+item.frequency+\')\'" value="{{item.name}}"></option>\
 							</select>\
 							<button type="button" data-ng-click="clearFilters()" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Clear Filters</button>\
 						</div>\
@@ -300,6 +300,7 @@ function CodeforcesContestStandingDirective( cfApi , cfcObj , cfsObj , cftsObj )
 				scope.userInfoList = scope.userInfoList.concat( response.dataList ) ;
 				if( scope.contestStandingsList != null && scope.contestStandingsList.summary.users.length > 0 && scope.userInfoList.length == scope.contestStandingsList.summary.users.length ) {
 					scope.contestStandingsList = cfApi.updateContestStandingsList( scope.contestStandingsList , scope.userInfoList ) ;
+					scope.countryList = scope.contestStandingsList.summary.countriesAlphabeticallySorted ;
 				}
 			} ;
 			
@@ -332,7 +333,7 @@ function CodeforcesContestStandingDirective( cfApi , cfcObj , cfsObj , cftsObj )
 			
 			scope.countrySelected = function() {
 				if( scope.selectedCountry != null && scope.selectedCountry != '' ) {
-					scope.contestStandingsList.filteredDataList = cfApi.getOfficialContestStandingsByCountry( scope.contestStandingsList.dataList , scope.userInfoList , scope.selectedCountry ) ;
+					scope.contestStandingsList.filteredDataList = cfApi.getOfficialContestStandingsByCountry( scope.contestStandingsList.dataList , scope.selectedCountry ) ;
 					scope.customStandingTableStructure = cftsObj.getCustomStandingTableStructure( scope.contestStandingsList.summary , true ) ;
 				}
 				else {
@@ -348,7 +349,7 @@ function CodeforcesContestStandingDirective( cfApi , cfcObj , cfsObj , cftsObj )
 			} ;
 
 			scope.$watch( 'showStandingFlag' , scope.showStandingFlagChanged , true ) ;
-			scope.countryList = cfsObj.getCountryList() ;
+			scope.countryList = [] ;
 			scope.userHandle = cfApi.getDefaultUserHandle() ;
 		}
 	} ;

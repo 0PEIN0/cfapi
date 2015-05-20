@@ -80,15 +80,12 @@ function CodeforcesApiService( $http , $timeout , $sce , lssObj , cfsObj , cfcOb
 		self.makeJsonpRequest( self.cfaubObj.buildContestStandingsUrl( contestId , from , count , handles , room , false ) , self.cfdlpObj.parseContestStandings , callbackFunction , false ) ;
 	} ;
 	
-	this.getOfficialContestStandingsByCountry = function( standingList , userInfoList , countryName ) {
-		return self.cfdlpObj.parseContestStandingsByCountry( standingList , userInfoList , countryName ) ;
+	this.getOfficialContestStandingsByCountry = function( standingList , countryName ) {
+		return self.cfdlpObj.parseContestStandingsByCountry( standingList , countryName ) ;
 	} ;
 	
 	this.updateContestStandingsList = function( standingListObj , userInfoList ) {
-		var res ;
-		res = standingListObj ;
-		res.dataList = self.cfdlpObj.parseContestStandingsWithUserInfo( standingListObj.dataList , userInfoList ) ;
-		return res ;
+		return self.cfdlpObj.parseContestStandingsWithUserInfo( standingListObj , userInfoList ) ;
 	} ;
 
 	this.getContestStandingsIncludingUnofficial = function( callbackFunction , contestId , room , from , count , handles ) {
