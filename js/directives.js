@@ -104,7 +104,7 @@ function CodeforcesTableDirective( $sce , cfcObj , shsObj ) {
 		              </th>\
 		            </thead>\
 		            <tbody data-ng-init="customRowcellListStartIndex=-1;customRowcellListEndIndex=-1;">\
-		              <tr data-ng-repeat="row in rowcellList | dataLimiting:customRowcellListStartIndex:customRowcellListEndIndex track by $index" data-ng-init="rowIndex = $index">\
+		              <tr data-ng-repeat="row in rowcellList track by $index" data-ng-init="rowIndex = $index">\
 		                <td data-ng-repeat="column in columnList track by $index" data-ng-init="columnIndex = $index">\
 		                    <span class="table-cell-generic" data-ng-bind-html="forceTrustHtml( getTableCellHtml( rowIndex , columnIndex ) )"></span>\
 		                </td>\
@@ -137,6 +137,7 @@ function CodeforcesTableDirective( $sce , cfcObj , shsObj ) {
 				scope.currentPageNumber = pageNumber ;
 				scope.loadDataForPageNumber() ;
 				//setTimeout( function() { scope.rowcellList[0].langHtml = 'zzz' ; scope.$apply() ; } , 3000 ) ;
+				//| dataLimiting:customRowcellListStartIndex:customRowcellListEndIndex 
 			} ;
 			
 			scope.getTableCellHtml = function( rowIndex , columnIndex ) {
