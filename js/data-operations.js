@@ -819,7 +819,6 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		var res , i , sz , fl ;
 		res = [] ;
 		sz = submissionList.length ;
-		console.log( verdictName , showUnofficialSubmissions , tagName , languageName , countryName , problemIndex , problemPoint ) ;
 		for( i = 0 ; i < sz ; i++ ) {
 			fl = 1 ;
 			if( fl == 1 && verdictName != null && verdictName != '' && submissionList[ i ].verdict.toLowerCase().indexOf( verdictName.toLowerCase() ) == -1 ) {
@@ -834,7 +833,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 			if( fl == 1 && languageName != null && languageName != '' && submissionList[ i ].lang.toLowerCase().indexOf( languageName.toLowerCase() ) == -1 ) {
 				fl = 0 ;
 			}
-			if( fl == 1 && countryName != null && countryName != '' && ( submissionList[ i ].country == null || submissionList[ i ].country == '' || submissionList[ i ].country.toLowerCase() != countryName.toLowerCase() ) ) {
+			if( fl == 1 && countryName != null && countryName != '' && ( submissionList[ i ].countries == null || submissionList[ i ].countries == '' || submissionList[ i ].countries.length == 0 || submissionList[ i ].countries.join( ',' ).toLowerCase().indexOf( countryName.toLowerCase() ) == -1 ) ) {
 				fl = 0 ;
 			}
 			if( fl == 1 && problemIndex != null && problemIndex != '' && submissionList[ i ].index.toLowerCase().indexOf( problemIndex.toLowerCase() ) == -1 ) {
@@ -851,15 +850,37 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 	} ;
 	
 	this.parseSubmissionsWithUserInfo = function( submissionListObj , userInfoList ) {
-		var i , sz1 , j , sz2 , submissionList ;
+		var i , sz1 , j , sz2 , submissionList , k , sz3 , l , sz4 , fl ;
 		submissionList = submissionListObj.dataList ;
 		sz1 = submissionList.length ;
 		sz2 = userInfoList.length ;
 		for( i = 0 ; i < sz1 ; i++ ) {
 			submissionList[ i ].handleHtml = self.generateHandleHtml( submissionList[ i ] , 'handle' , userInfoList ) ;
+			submissionList[ i ].countries = [] ;
+			if( submissionList[ i ].handle != null ) {
+				sz3 = submissionList[ i ].handle.length ;
+				for( k = 0 ; k < sz3 ; k++ ) {
+					for( j = 0 ; j < sz2 ; j++ ) {
+						if( submissionList[ i ].handle[ k ] == userInfoList[ j ].handle ) {
+							sz4 = submissionList[ i ].countries.length ;
+							fl = 0 ;
+							for( l = 0 ; l < sz4 ; l++ ) {
+								if( submissionList[ i ].countries[ l ] == userInfoList[ j ].country ) {
+									fl = 1 ;
+									break ;
+								}
+							}
+							if( fl == 0 ) {
+								submissionList[ i ].countries.push( userInfoList[ j ].country ) ;
+							}
+							break ;
+						}
+					}
+				}
+			}
 		}
+		submissionListObj.dataList = submissionList ;
 		submissionListObj = self.calculateSummaryOfAProperty( submissionListObj , userInfoList , 'countries' , 'country' ) ;
-		console.log( submissionListObj ) ;
 		return submissionListObj ;
 	} ;
 	
