@@ -14,7 +14,7 @@ function CodeforcesConfiguration() {
 	this.defaultRecentSubmissions = 1000 ;
 	this.defaultUserSubmissions = 10000 ;
 	
-	this.maxRowsPerPageInPagination = 1000 ;
+	this.maxRowsPerPageInPagination = 100 ;
 	this.maxButtonsInPagination = 5 ;
 	
 	this.defaultNavigationIndex = 1 ;

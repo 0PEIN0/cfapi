@@ -60,6 +60,10 @@ function CodeforcesApiService( $http , $timeout , $sce , lssObj , cfsObj , cfcOb
 		self.makeJsonpRequest( paramList.url , paramList.dataParsingCallbackFunction , paramList.callbackFunction , paramList.isLocalStorageMaterial ) ;
 	} ;
 	
+	this.broadcastTableDataReadyFlag = function( scopeParam ) {
+		return $timeout( function() { scopeParam.$broadcast( 'table-data-ready' ) ; } , 0 ) ;
+	} ;
+	
 	this.getDefaultUserHandle = function() {
 		return self.cfcObj.defaultUserHandle ;
 	} ;

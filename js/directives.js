@@ -83,18 +83,18 @@ function CodeforcesTableDirective( $sce , cfcObj , shsObj ) {
 	return {
         restrict : 'E' ,
         replace : true ,
-		transclude : true ,
+		transclude : false ,
         template : '\
 			<div>\
-				<nav class="text-center">\
+				<nav class="text-center" data-ng-show="rowcellListEndIndex>0">\
 			      <ul class="pagination pagination-custom pagination-centered">\
-				  	<li data-ng-class="(currentPageNumber<=maxButtons)?\'disabled\':\'\'"><a href="javascript:void(0);" aria-label="Previous"><span aria-hidden="true">Start</span></a></li>\
-			        <li data-ng-class="(currentPageNumber<=maxButtons)?\'disabled\':\'\'"><a href="javascript:void(0);" aria-label="Previous"><span aria-hidden="true">&lt;&lt;</span></a></li>\
-					<li data-ng-class="(currentPageNumber==1)?\'disabled\':\'\'"><a href="javascript:void(0);" aria-label="Previous"><span aria-hidden="true">&lt;</span></a></li>\
-			        <li data-ng-repeat="item in buttonList track by $index" data-ng-click="paginationNumberButtonClicked(item.name)" data-ng-class="(currentPageNumber==item.name)?\'active\':\'\'"><a href="javascript:void(0);" data-ng-bind="item.name"></a></li>\
-					<li data-ng-class="(currentPageNumber==totalDataListLength)?\'disabled\':\'\'"><a href="javascript:void(0);" aria-label="Next"><span aria-hidden="true">&gt;</span></a></li>\
-			        <li data-ng-class="(currentPageNumber>totalDataListLength-maxButtons)?\'disabled\':\'\'"><a href="javascript:void(0);" aria-label="Next"><span aria-hidden="true">&gt;&gt;</span></a></li>\
-					<li data-ng-class="(currentPageNumber>totalDataListLength-maxButtons)?\'disabled\':\'\'"><a href="javascript:void(0);" aria-label="Previous"><span aria-hidden="true">End</span></a></li>\
+				  	<li data-ng-class="(currentPageNumber==1)?\'disabled\':\'\'" data-ng-click="paginationChangePage(1)"><a href="javascript:void(0);" aria-label="Previous"><span aria-hidden="true">Start</span></a></li>\
+			        <li data-ng-class="(currentPageNumber==1)?\'disabled\':\'\'" data-ng-click="paginationChangePage(currentPageNumber-maxButtons)"><a href="javascript:void(0);" aria-label="Previous"><span aria-hidden="true">&lt;&lt;</span></a></li>\
+					<li data-ng-class="(currentPageNumber==1)?\'disabled\':\'\'" data-ng-click="paginationChangePage(currentPageNumber-1)"><a href="javascript:void(0);" aria-label="Previous"><span aria-hidden="true">&lt;</span></a></li>\
+			        <li data-ng-repeat="item in buttonList track by $index" data-ng-click="paginationChangePage(item.name)" data-ng-class="(currentPageNumber==item.name)?\'active\':\'\'"><a href="javascript:void(0);" data-ng-bind="item.name"></a></li>\
+					<li data-ng-class="(currentPageNumber==numberOfPages)?\'disabled\':\'\'" data-ng-click="paginationChangePage(currentPageNumber+1)"><a href="javascript:void(0);" aria-label="Next"><span aria-hidden="true">&gt;</span></a></li>\
+			        <li data-ng-class="(currentPageNumber==numberOfPages)?\'disabled\':\'\'" data-ng-click="paginationChangePage(currentPageNumber+maxButtons)"><a href="javascript:void(0);" aria-label="Next"><span aria-hidden="true">&gt;&gt;</span></a></li>\
+					<li data-ng-class="(currentPageNumber==numberOfPages)?\'disabled\':\'\'" data-ng-click="paginationChangePage(numberOfPages)"><a href="javascript:void(0);" aria-label="Previous"><span aria-hidden="true">End</span></a></li>\
 			      </ul>\
 			    </nav>\
 	        	<table class="table table-striped table-bordered customTable">\
@@ -103,11 +103,11 @@ function CodeforcesTableDirective( $sce , cfcObj , shsObj ) {
 		                  <span><a href="javascript:void(0);" data-ng-click="sortColumn($index)">{{column.name}} <span class="glyphicon glyphicon-sort"></span></a></span>\
 		              </th>\
 		            </thead>\
-		            <tbody data-ng-init="customRowcellListStartIndex=-1;customRowcellListEndIndex=-1;">\
-		              <tr data-ng-repeat="row in rowcellList track by $index" data-ng-init="rowIndex = $index">\
-		                <td data-ng-repeat="column in columnList track by $index" data-ng-init="columnIndex = $index">\
-		                    <span class="table-cell-generic" data-ng-bind-html="forceTrustHtml( getTableCellHtml( rowIndex , columnIndex ) )"></span>\
-		                </td>\
+		            <tbody>\
+		              <tr data-ng-repeat="row in rowcellList | dataLimiting:rowcellListStartIndex:rowcellListEndIndex track by $index" data-ng-init="rowIndex = $index;">\
+						<td data-ng-repeat="item in columnList">\
+							<span class="table-cell-generic" data-ng-bind-html="forceTrustHtml( row[ columnList[ $index ].sortIndex + \'Html\' ] )"></span>\
+						</td>\
 		              </tr>\
 		            </tbody>\
 		        </table>\
@@ -129,38 +129,65 @@ function CodeforcesTableDirective( $sce , cfcObj , shsObj ) {
 				start = ( scope.currentPageNumber - 1 ) * scope.maxRowsPerPage + 1 ;
 				end = start + scope.maxRowsPerPage - 1 ;
 				end = Math.min( end , scope.totalDataListLength ) ;
-				scope.customRowcellListStartIndex = start - 1 ;
-				scope.customRowcellListEndIndex = end - 1 ;
+				scope.rowcellListStartIndex = start - 1 ;
+				scope.rowcellListEndIndex = end ;
 			} ;
 			
-			scope.paginationNumberButtonClicked = function( pageNumber ) {
+			scope.paginationChangePage = function( pageNumber ) {
+				var i , sz , start , end , left , right ;
+				if( pageNumber < 1 ) {
+					pageNumber = 1 ;
+				}
+				if( pageNumber > scope.numberOfPages ) {
+					pageNumber = scope.numberOfPages ;
+				}
+				sz = scope.buttonList.length ;
+				if( pageNumber >= scope.buttonList[ 0 ].name && pageNumber <= scope.buttonList[ sz - 1 ].name ) {
+				}
+				else {
+					left = Math.floor( ( scope.maxButtons - 1 ) / 2 ) ;
+					right = scope.maxButtons - 1 - left ;
+					start = pageNumber - left ;
+					end = pageNumber + right ;
+					if( start < 1 ) {
+						start = 1 ;
+						end = Math.min( scope.maxButtons , scope.numberOfPages ) ;
+					}
+					if( end > scope.numberOfPages ) {
+						start = Math.max( 1 , scope.numberOfPages - scope.maxButtons + 1 ) ;
+						end = scope.numberOfPages ;
+					}
+					scope.buttonList = [] ;
+					for( i = start ; i <= end ; i++ ) {
+						scope.buttonList.push( { name : i } ) ;
+					}
+				}
 				scope.currentPageNumber = pageNumber ;
 				scope.loadDataForPageNumber() ;
-				//setTimeout( function() { scope.rowcellList[0].langHtml = 'zzz' ; scope.$apply() ; } , 3000 ) ;
-				//| dataLimiting:customRowcellListStartIndex:customRowcellListEndIndex 
 			} ;
 			
-			scope.getTableCellHtml = function( rowIndex , columnIndex ) {
-				var property ;
-				property = scope.columnList[ columnIndex ].sortIndex ;
-				if( scope.rowcellList[ rowIndex ] == null ) {
-					return '' ;
-				}
-				return scope.rowcellList[ rowIndex ][ property + 'Html' ] ;
-			} ;
-			
-			scope.rowCellListChanged = function( newValue , oldValue ) {
+			scope.tableDataReadyBroadcast = function() {
 				var i ;
-				if( newValue != null ) {
-					scope.totalDataListLength = scope.rowcellList.length ;
-					scope.numberOfPages = Math.ceil( scope.totalDataListLength / scope.maxRowsPerPage ) ;
-					scope.numberOfButtons = Math.min( scope.maxButtons , scope.numberOfPages ) ;
-					scope.buttonList = [] ;
-					for( i = 0 ; i < scope.numberOfButtons ; i++ ) {
-						scope.buttonList.push( { name : ( i + 1 ) } ) ;
-					}
-					scope.loadDataForPageNumber() ;
+				scope.totalDataListLength = scope.rowcellList.length ;
+				scope.numberOfPages = Math.ceil( scope.totalDataListLength / scope.maxRowsPerPage ) ;
+				scope.numberOfButtons = Math.min( scope.maxButtons , scope.numberOfPages ) ;
+				scope.buttonList = [] ;
+				for( i = 0 ; i < scope.numberOfButtons ; i++ ) {
+					scope.buttonList.push( { name : ( i + 1 ) } ) ;
 				}
+				scope.loadDataForPageNumber() ;
+			} ;
+			
+			scope.init = function() {
+				scope.$on( 'table-data-ready' , scope.tableDataReadyBroadcast ) ;
+				scope.maxRowsPerPage = cfcObj.maxRowsPerPageInPagination ;
+				scope.maxButtons = cfcObj.maxButtonsInPagination ;
+				scope.numberOfButtons = 0 ;
+				scope.numberOfPages = 0 ;
+				scope.currentPageNumber = 1 ;
+				scope.totalDataListLength = 0 ;
+				scope.rowcellListStartIndex = 0 ;
+				scope.rowcellListEndIndex = scope.maxRowsPerPage ;
 			} ;
 			
 			scope.sortColumn = function( idx ) {
@@ -241,19 +268,6 @@ function CodeforcesTableDirective( $sce , cfcObj , shsObj ) {
 				} ) ;
 			} ;
 			
-			scope.init = function() {
-				scope.$watch( 'rowcellList' , scope.rowCellListChanged , true ) ;
-				scope.customRowcellList = [] ;
-				scope.maxRowsPerPage = cfcObj.maxRowsPerPageInPagination ;
-				scope.maxButtons = cfcObj.maxButtonsInPagination ;
-				scope.numberOfButtons = 0 ;
-				scope.numberOfPages = 0 ;
-				scope.currentPageNumber = 1 ;
-				scope.totalDataListLength = 0 ;
-				scope.customRowcellListStartIndex = -1 ;
-				scope.customRowcellListEndIndex = -1 ;
-			} ;
-			
 			scope.init() ;
         }
     } ;
@@ -328,6 +342,7 @@ function CodeforcesContestStandingDirective( cfApi , cfcObj , cfsObj , cftsObj )
 				cfApi.getUserInfo( scope.userListInfoResponse , response.summary.users ) ;
 				scope.customStandingTableStructure = cftsObj.getCustomStandingTableStructure( response.summary , false ) ;
 				scope.contestStandingsList = response ;
+				cfApi.broadcastTableDataReadyFlag( scope ) ;
 				scope.showLoadingFlag = false ;
 			} ;
 			
@@ -340,6 +355,7 @@ function CodeforcesContestStandingDirective( cfApi , cfcObj , cfsObj , cftsObj )
 					scope.contestStandingsList.filteredDataList = scope.contestStandingsList.dataList ; 
 					scope.customStandingTableStructure = cftsObj.getCustomStandingTableStructure( scope.contestStandingsList.summary , false ) ;
 				}
+				cfApi.broadcastTableDataReadyFlag( scope ) ;
 			} ;
 			
 			scope.showStandingFlagChanged = function( newValue , oldValue ) {
@@ -423,6 +439,7 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 
 			scope.filterSubmissionDataList = function() {
 				scope.submissionList.filteredDataList = cfApi.getSubmissionListThroughFilter( scope.submissionList.dataList , scope.selectedVerdict , scope.showUnofficialUserSubmissionsFlag , scope.selectedTag , scope.selectedLanguage , scope.selectedCountry , scope.selectedProblemIndex , scope.selectedPoint ) ;
+				cfApi.broadcastTableDataReadyFlag( scope ) ;
 			} ;
 			
 			scope.clearSelectors = function() {
@@ -458,6 +475,7 @@ function CodeforcesSubmissionsDirective( cfApi , cftsObj ) {
 			scope.submissionListLoadedFlagChanged = function( newValue , oldValue ) {
 				if( newValue == true ) {
 					scope.submissionList.filteredDataList = scope.submissionList.dataList ;
+					cfApi.broadcastTableDataReadyFlag( scope ) ;
 					scope.verdictList = scope.submissionList.summary.verdictsAlphabeticallySorted ;
 					scope.tagList = scope.submissionList.summary.tagsAlphabeticallySorted ;
 					scope.languageList = scope.submissionList.summary.languagesAlphabeticallySorted ;
@@ -641,6 +659,7 @@ function CodeforcesProblemSetDirective( cfApi , cftsObj ) {
 			
 			scope.filterProblemSetDataList = function() {
 				scope.problemSetListObj.filteredDataList = cfApi.getProblemTableListThroughFilter( scope.problemSetListObj.dataList , scope.selectedTag , scope.selectedProblemIndex , scope.selectedPoint ) ;
+				cfApi.broadcastTableDataReadyFlag( scope ) ;
 			} ;
 			
 			scope.clearFilters = function() {
@@ -657,6 +676,7 @@ function CodeforcesProblemSetDirective( cfApi , cftsObj ) {
 				scope.problemIndexList = response.summary.problemIndexesAlphabeticallySorted ;
 				scope.pointList = response.summary.pointsAlphabeticallySorted ;
 				scope.showLoadingFlag = false ;
+				cfApi.broadcastTableDataReadyFlag( scope ) ;
 			} ;
 			
 			scope.showProblemSetFlagChanged = function( newValue , oldValue ) {

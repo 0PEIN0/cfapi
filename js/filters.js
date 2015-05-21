@@ -7,14 +7,13 @@ License: GNU General Public License version 2
 */
 
 function DataLimitingFilter() {
-	return function( arr , start , end ) {
-		if( start == -1 || end == -1 ) {
-			return [] ;
+    return function( arr , start , end ) {
+		if( start == -1 || end == -1 || ( start == 0 && end == 0 ) || arr == null ) {
+			 return [] ;
 		}
-    var res ;
-    res = ( arr || [] ).slice( start , end ) ;
-    //console.log( start , end ) ;
-    //console.log( res ) ;
-    return res ;
-  } ;
+        var res ;
+        end = Math.min( arr.length , end ) ;
+        res = arr.slice( start , end ) ;
+        return res ;
+    } ;
 }
