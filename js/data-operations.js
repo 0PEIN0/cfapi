@@ -545,7 +545,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 					fl = 0 ;
 					sz2 = res.summary[ summaryPropertyName ].length ;
 					for( j = 0 ; j < sz2 ; j++ ) {
-						if( res.summary[ summaryPropertyName ][ j ].name == dataList[ i ][ dataListPropertyName ][ k ] ) {
+						if( res.summary[ summaryPropertyName ][ j ].name == dataList[ i ][ dataListPropertyName ][ k ] && dataList[ i ][ dataListPropertyName ][ k ] != '' ) {
 							fl = 1 ;
 							res.summary[ summaryPropertyName ][ j ].frequency++ ;
 							break ;
@@ -599,7 +599,6 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 			}
 			return left.name.localeCompare( right.name ) ;
 		} ) ;
-		
 		return res ;
 	} ;
 	
@@ -702,7 +701,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		}
 		standingList = self.extractCountryListAgainstHandleListUsingUserInfoList( standingList , userInfoList ) ;
 		standingListObj.dataList = standingList ;
-		standingListObj = self.calculateSummaryOfAProperty( standingListObj , userInfoList , 'countries' , 'country' ) ;
+		standingListObj = self.calculateSummaryOfAProperty( standingListObj , standingListObj.dataList , 'countries' , 'countries' ) ;
 		return standingListObj ;
 	} ;
 	
@@ -837,7 +836,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		}
 		res = self.calculateSummaryOfAProperty( res , data , 'languages' , 'programmingLanguage' ) ;
 		res = self.calculateSummaryOfAProperty( res , data , 'verdicts' , 'verdict' ) ;
-		res = self.calculateSummaryOfAProperty( res , data , 'countries' , 'countries' ) ;
+		res = self.calculateSummaryOfAProperty( res , res.dataList , 'countries' , 'countries' ) ;
 		res = self.calculateSummaryOfAProperty( res , data , 'tags' , 'tags' ) ;
 		res = self.calculateSummaryOfAProperty( res , data , 'problemIndexes' , 'problemIndex' ) ;
 		res = self.calculateSummaryOfAProperty( res , data , 'points' , 'problemPoints' ) ;
@@ -888,7 +887,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		}
 		submissionList = self.extractCountryListAgainstHandleListUsingUserInfoList( submissionList , userInfoList ) ;
 		submissionListObj.dataList = submissionList ;
-		submissionListObj = self.calculateSummaryOfAProperty( submissionListObj , userInfoList , 'countries' , 'country' ) ;
+		submissionListObj = self.calculateSummaryOfAProperty( submissionListObj , submissionListObj.dataList , 'countries' , 'countries' ) ;
 		return submissionListObj ;
 	} ;
 	
