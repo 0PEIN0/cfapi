@@ -445,6 +445,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		submission.problemTags = dataObject.problem.tags.join( ', ' ) ;
 		submission.problemTagsHtml = self.generateProblemTagsHtml( submission ) ;
 		submission.problemIdentification = '' + dataObject.problem.contestId + '-' + dataObject.problem.index ;
+		submission.inContestSubmission = dataObject.inContestSubmission ;
 		submission.userSolved = -1 ;
 		submission.userSolvedHtml = '' ;
 		submission.lang = dataObject.programmingLanguage ;
