@@ -30,23 +30,11 @@ function CodeforcesApiService( $http , $timeout , $sce , lssObj , cfsObj , cfcOb
 		if( callbackFunction == null ) {
 			throw new Error( 'No callbackFunction parameter is supplied for makeJsonpRequest method!' ) ;
 		}
-		if( isLocalStorageMaterial == true ) {
-			var responseData ; 
-			responseData = lssObj.Get( 'Codeforces:' + url ) ;
-			if( responseData != null ) {
-				responseData = dataParsingCallbackFunction( responseData ) ;
-				callbackFunction( responseData ) ;
-				return ;
-			}
-		}
 		if( $http != null ) {
 			$http.jsonp( url ).success( function( responseData ) {
 				responseData = self.checkValidityOfResponse( responseData ) ;
 				responseData = dataParsingCallbackFunction( responseData ) ;
 				callbackFunction( responseData ) ;
-				if( isLocalStorageMaterial == true ) {
-					lssObj.Set( 'Codeforces:' + url , responseData ) ;
-				}
 			} );
 		}
 		else {
