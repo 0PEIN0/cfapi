@@ -208,13 +208,13 @@ function CodeforcesTableDirective( $sce , cfcObj , shsObj ) {
 						return false ;
 					}
 					if( column.sortIndex == 'handle' ) {
-						leftString = left[ column.sortIndex ][ 0 ].handle ;
+						leftString = left[ column.sortIndex ][ 0 ] ;
 					}
 					else {
 						leftString = left[ column.sortIndex ] ;
 					}
 					if( column.sortIndex == 'handle' ) {
-						rightString = right[ column.sortIndex ][ 0 ].handle ;
+						rightString = right[ column.sortIndex ][ 0 ] ;
 					}
 					else {
 						rightString = right[ column.sortIndex ] ;
