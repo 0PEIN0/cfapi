@@ -153,7 +153,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 	self = {} ;
 
 	self.transformVerdicts = function( textString , testSetType ) {
-		if( testSetType != null && testSetType.toLowerCase() == cfcObj.pretestSubmissionTestSetType.toLowerCase() && textString.toLowerCase() == cfcObj.acceptedSubmissionStatus.toLowerCase() ) {
+		if( textString != null && testSetType != null && testSetType.toLowerCase() == cfcObj.pretestSubmissionTestSetType.toLowerCase() && textString.toLowerCase() == cfcObj.acceptedSubmissionStatus.toLowerCase() ) {
 			textString = 'pretests-passed' ;
 		}
 		textString = shObj.replaceAssociatedStrings( cfsObj.verdictTextReplacements , textString ) ;
