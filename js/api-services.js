@@ -15,6 +15,7 @@ function CodeforcesApiService( $http , $timeout , $sce , lssObj , cfsObj , cfcOb
 	self.shObj = shObj ;
 	self.cfaubObj = new CodeforcesApiUrlBuilder( self.cfsObj , self.cfcObj ) ;
 	self.cfdlpObj = new CodeforcesDataListParser( self.cfsObj , self.cfcObj , self.shObj ) ;
+	self.lastHttpRequestMadeOnTime = 0 ;
 
 	self.checkValidityOfResponse = function( data ) {
 		if( data.status != 'OK' ) {
@@ -31,11 +32,19 @@ function CodeforcesApiService( $http , $timeout , $sce , lssObj , cfsObj , cfcOb
 			throw new Error( 'No callbackFunction parameter is supplied for makeJsonpRequest method!' ) ;
 		}
 		if( $http != null ) {
-			$http.jsonp( url ).success( function( responseData ) {
-				responseData = self.checkValidityOfResponse( responseData ) ;
-				responseData = dataParsingCallbackFunction( responseData ) ;
-				callbackFunction( responseData ) ;
-			} );
+			if( ( new Date() ).getTime() - self.lastHttpRequestMadeOnTime > self.cfcObj.subsequentApiCallTimeoutInMilliseconds ) {
+				self.lastHttpRequestMadeOnTime = ( new Date() ).getTime() ;
+				$http.jsonp( url ).success( function( responseData ) {
+					responseData = self.checkValidityOfResponse( responseData ) ;
+					responseData = dataParsingCallbackFunction( responseData ) ;
+					callbackFunction( responseData ) ;
+				} ) ;
+			}
+			else {
+				$timeout( function() {
+					self.makeJsonpRequest( url , dataParsingCallbackFunction , callbackFunction , isLocalStorageMaterial ) ;
+				} , self.cfcObj.subsequentApiCallTimeoutInMilliseconds ) ;
+			}
 		}
 		else {
 			throw new Error( 'No http object is supplied!' ) ;

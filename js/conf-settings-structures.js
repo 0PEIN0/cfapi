@@ -17,13 +17,13 @@ function CodeforcesConfiguration() {
 	this.maxRowsPerPageInPagination = 100 ;
 	this.maxButtonsInPagination = 5 ;
 	
-	this.defaultNavigationIndex = 1 ;
+	this.defaultNavigationIndex = 3 ;
 	this.timeZoneOffsetInHours = 3 ;
 	this.localStorageTimeOutHours = 1 ;
 	this.constantMultiplierWhileSortingNumbers = 10000 ;
 	this.defaultContestId = 546 ;
 	this.perApiRequestUserHandleLimit = 600 ;
-	this.subsequentApiCallTimeoutInMilliseconds = 500 ;
+	this.subsequentApiCallTimeoutInMilliseconds = 200 ;
 	this.gymMinimumContestId = 100000 ;
 	
 	this.acceptedSubmissionStatus = 'ok' ;
