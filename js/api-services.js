@@ -140,7 +140,7 @@ function CodeforcesApiService( $http , $timeout , $sce , lssObj , cfsObj , cfcOb
 			}
 			handlesOnHand += userHandles[ i ] ;
 			if( ( i > 0 && i % lim == 0 ) || i == sz - 1 ) {
-				$timeout( self.makeJsonpRequestSingleParameter , self.cfcObj.subsequentApiCallTimeoutInMilliseconds , true , { url : self.cfaubObj.buildUserInfoUrl( handlesOnHand ) , dataParsingCallbackFunction : self.cfdlpObj.parseUserListInfo , callbackFunction : callbackFunction , isLocalStorageMaterial : false } ) ;
+				self.makeJsonpRequestSingleParameter( { url : self.cfaubObj.buildUserInfoUrl( handlesOnHand ) , dataParsingCallbackFunction : self.cfdlpObj.parseUserListInfo , callbackFunction : callbackFunction , isLocalStorageMaterial : false } ) ;
 				handlesOnHand = '' ;
 			}
 		}

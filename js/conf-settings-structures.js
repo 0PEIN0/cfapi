@@ -23,7 +23,7 @@ function CodeforcesConfiguration() {
 	this.constantMultiplierWhileSortingNumbers = 10000 ;
 	this.defaultContestId = 546 ;
 	this.perApiRequestUserHandleLimit = 600 ;
-	this.subsequentApiCallTimeoutInMilliseconds = 200 ;
+	this.subsequentApiCallTimeoutInMilliseconds = 50 ;
 	this.gymMinimumContestId = 100000 ;
 	
 	this.acceptedSubmissionStatus = 'ok' ;
