@@ -604,7 +604,7 @@ function CodeforcesContestSubmissionsDirective( cfApi , cfcObj ) {
 				if( scope.selectedContest != null ) {
 					scope.showLoadingFlag = true ;
 					scope.submissionListLoadedFlag = false ;
-					cfApi.getContestStatus( scope.submissionListResponse , scope.selectedContest , 1 , 1000 ) ;
+					cfApi.getContestStatus( scope.submissionListResponse , scope.selectedContest , 1 , 3000 ) ;
 				}
 			} ;
 			

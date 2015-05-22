@@ -55,14 +55,14 @@ function CodeforcesApiUrlBuilder( cfsObj , cfcObj ) {
 		if( contestId == null || contestId == '' ) {
 			throw new Error( 'Empty contest id provided!' ) ;
 		}
-		return cfsObj.baseUrl + 'contest.hacks?' + cfcObj.jsonpUrlParameter + '&contestId=' + contestId ;
+		return cfsObj.codeforcesApiBaseUrl + 'contest.hacks?' + cfsObj.angularJsonpRequestQueryParameter + '&contestId=' + contestId ;
 	} ;
 
 	this.buildContestListUrl = function( showGymContests ) {
 		if( showGymContests == null ) {
 			throw new Error( 'Empty "showGymContests" parameter provided!' ) ;
 		}
-		return cfsObj.baseUrl + 'contest.list?' + cfcObj.jsonpUrlParameter + '&gym=' + showGymContests ;
+		return cfsObj.codeforcesApiBaseUrl + 'contest.list?' + cfsObj.angularJsonpRequestQueryParameter + '&gym=' + showGymContests ;
 	} ;
 
 	this.buildContestStandingsUrl = function( contestId , from , count , handles , room , showUnofficial ) {
@@ -76,7 +76,7 @@ function CodeforcesApiUrlBuilder( cfsObj , cfcObj ) {
 		params.handles = handles ;
 		params.room = room ;
 		params = self.checkContestStandingsParameters( params ) ;
-		return cfsObj.baseUrl + 'contest.standings?' + cfcObj.jsonpUrlParameter + '&contestId=' + contestId + '&from=' + params.from + '&count=' + params.count + '&handles=' + params.handles + '&room=' + params.room + '&showUnofficial=' + showUnofficial ;
+		return cfsObj.codeforcesApiBaseUrl + 'contest.standings?' + cfsObj.angularJsonpRequestQueryParameter + '&contestId=' + contestId + '&from=' + params.from + '&count=' + params.count + '&handles=' + params.handles + '&room=' + params.room + '&showUnofficial=' + showUnofficial ;
 	} ;
 
 	this.buildContestStatusUrl = function( contestId , handle , from , count ) {
@@ -89,49 +89,49 @@ function CodeforcesApiUrlBuilder( cfsObj , cfcObj ) {
 		params.from = from ;
 		params.count = count ;
 		params = self.checkContestStatusParameters( params ) ;
-		return cfsObj.baseUrl + 'contest.status?' + cfcObj.jsonpUrlParameter + '&contestId=' + contestId + '&handle=' + params.handle + '&from=' + params.from + '&count=' + params.count ;
+		return cfsObj.codeforcesApiBaseUrl + 'contest.status?' + cfsObj.angularJsonpRequestQueryParameter + '&contestId=' + contestId + '&handle=' + params.handle + '&from=' + params.from + '&count=' + params.count ;
 	} ;
 
 	this.buildProblemsUrl = function( tags ) {
 		if( tags == null ) {
 			tags = '' ;
 		}
-		return cfsObj.baseUrl + 'problemset.problems?' + cfcObj.jsonpUrlParameter + '&tags=' + tags ;
+		return cfsObj.codeforcesApiBaseUrl + 'problemset.problems?' + cfsObj.angularJsonpRequestQueryParameter + '&tags=' + tags ;
 	} ;
 
 	this.buildRecentSubmissionsForAllInPracticeUrl = function( count ) {
 		if( count == null || count == '' ) {
 			count = cfcObj.defaultRecentSubmissions ;
 		}
-		return cfsObj.baseUrl + 'problemset.recentStatus?' + cfcObj.jsonpUrlParameter + '&count=' + count  ;
+		return cfsObj.codeforcesApiBaseUrl + 'problemset.recentStatus?' + cfsObj.angularJsonpRequestQueryParameter + '&count=' + count  ;
 	} ;
 	
 	this.buildSubmissionListUrl = function( count ) {
 		if( count == null || count == '' ) {
 			count = cfcObj.defaultRecentSubmissions ;
 		}
-		return cfsObj.baseUrl + 'problemset.recentStatus?' + cfcObj.jsonpUrlParameter + '&count=' + count  ;
+		return cfsObj.codeforcesApiBaseUrl + 'problemset.recentStatus?' + cfsObj.angularJsonpRequestQueryParameter + '&count=' + count  ;
 	} ;
 
 	this.buildUserInfoUrl = function( userHandles ) {
 		if( userHandles == null || userHandles == '' ) {
 			throw new Error( 'Empty user handle provided!' ) ;
 		}
-		return cfsObj.baseUrl + 'user.info?' + cfcObj.jsonpUrlParameter + '&handles=' + userHandles ;
+		return cfsObj.codeforcesApiBaseUrl + 'user.info?' + cfsObj.angularJsonpRequestQueryParameter + '&handles=' + userHandles ;
 	} ;
 
 	this.buildRaterUsersUrl = function( isActiveOnly ) {
 		if( isActiveOnly == null ) {
 			throw new Error( 'Empty "isActiveOnly" parameter provided!' ) ;
 		}
-		return cfsObj.baseUrl + 'user.ratedList?' + cfcObj.jsonpUrlParameter + '&activeOnly=' + isActiveOnly ;
+		return cfsObj.codeforcesApiBaseUrl + 'user.ratedList?' + cfsObj.angularJsonpRequestQueryParameter + '&activeOnly=' + isActiveOnly ;
 	} ;
 
 	this.buildUserRatingUrl = function( userHandle ) {
 		if( userHandle == null || userHandle == '' ) {
 			throw new Error( 'Empty user handle provided!' ) ;	
 		}
-		return cfsObj.baseUrl + 'user.rating?' + cfcObj.jsonpUrlParameter + '&handle=' + userHandle ;
+		return cfsObj.codeforcesApiBaseUrl + 'user.rating?' + cfsObj.angularJsonpRequestQueryParameter + '&handle=' + userHandle ;
 	} ;
 
 	this.buildUserStatusUrl = function( userHandle , from , count ) {
@@ -143,7 +143,7 @@ function CodeforcesApiUrlBuilder( cfsObj , cfcObj ) {
 		params.from = from ;
 		params.count = count ;
 		params = self.checkUserSubmissionsParameters( params ) ;
-		return cfsObj.baseUrl + 'user.status?' + cfcObj.jsonpUrlParameter + '&handle=' + userHandle + '&from=' + params.from + '&count=' + params.count ;
+		return cfsObj.codeforcesApiBaseUrl + 'user.status?' + cfsObj.angularJsonpRequestQueryParameter + '&handle=' + userHandle + '&from=' + params.from + '&count=' + params.count ;
 	} ;
 }
 
@@ -288,15 +288,15 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 						userInfoObj.country = '' ;
 					}
 					if( userInfoObj.country != null && userInfoObj.country != '' && countryList[ userInfoObj.country ] != null ) {
-						countryImageHtml = '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/ratings/country/' + userInfoObj.country + '">' + '<img title="' + userInfoObj.country + '" alt="' + userInfoObj.country + '" class="flag-img" src="' + countryList[ userInfoObj.country ] + '"></a>' ;
+						countryImageHtml = '<a target="_blank" href="' + cfsObj.codeforcesBaseUrl + '/ratings/country/' + userInfoObj.country + '">' + '<img title="' + userInfoObj.country + '" alt="' + userInfoObj.country + '" class="flag-img" src="' + countryList[ userInfoObj.country ] + '"></a>' ;
 					}
 				}
 			}
-			res += countryImageHtml + '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/profile/' + handle + '">' + '<div class="user-rating-core ' + userHandleCssClass + '">' + handle + '</div>' + '</a>' ;
+			res += countryImageHtml + '<a target="_blank" href="' + cfsObj.codeforcesBaseUrl + '/profile/' + handle + '">' + '<div class="user-rating-core ' + userHandleCssClass + '">' + handle + '</div>' + '</a>' ;
 		}
 		if( dataObject.teamName != null && dataObject.teamName != '' ) {
 			if( dataObject.teamId != null && dataObject.teamId != '' ) {
-				res += '(<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/team/' + dataObject.teamId + '">' + dataObject.teamName + '</a>)' ;
+				res += '(<a target="_blank" href="' + cfsObj.codeforcesBaseUrl + '/team/' + dataObject.teamId + '">' + dataObject.teamName + '</a>)' ;
 			}
 			else {
 				res += '(' + dataObject.teamName + ')' ;
@@ -309,14 +309,14 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		var problemHtml ;
 		problemHtml = '' ;
 		if( dataObject.contestId >= cfcObj.gymMinimumContestId ) {		
-			problemHtml += '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/gym/' + dataObject.contestId + '/problem/' + dataObject.index + '"><div>' + dataObject.name + '</div></a>' ;
+			problemHtml += '<a target="_blank" href="' + cfsObj.codeforcesBaseUrl + '/gym/' + dataObject.contestId + '/problem/' + dataObject.index + '"><div>' + dataObject.name + '</div></a>' ;
 		}
 		else {
 			if( testSetType != null && testSetType.toLowerCase() == cfcObj.pretestSubmissionTestSetType.toLowerCase() ) {
-				problemHtml += '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/contest/' + dataObject.contestId + '/problem/' + dataObject.index + '"><div>' + dataObject.name + '</div></a>' ;				
+				problemHtml += '<a target="_blank" href="' + cfsObj.codeforcesBaseUrl + '/contest/' + dataObject.contestId + '/problem/' + dataObject.index + '"><div>' + dataObject.name + '</div></a>' ;				
 			}
 			else {
-				problemHtml += '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/problemset/problem/' + dataObject.contestId + '/' + dataObject.index + '"><div>' + dataObject.name + '</div></a>' ;
+				problemHtml += '<a target="_blank" href="' + cfsObj.codeforcesBaseUrl + '/problemset/problem/' + dataObject.contestId + '/' + dataObject.index + '"><div>' + dataObject.name + '</div></a>' ;
 			}		
 		}
 		if( dataObject.contestId != null && dataObject.index != null ) {
@@ -338,7 +338,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		var res ;
 		res = '' ;
 		if( dataObject.problem.contestId < cfcObj.gymMinimumContestId ) {
-			res += '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/contest/' + dataObject.problem.contestId + '/submission/' + dataObject.id + '"><div>' + dataObject.id + '</div></a>' ;
+			res += '<a target="_blank" href="' + cfsObj.codeforcesBaseUrl + '/contest/' + dataObject.problem.contestId + '/submission/' + dataObject.id + '"><div>' + dataObject.id + '</div></a>' ;
 		}
 		else {
 			res += '' + dataObject.id ;
@@ -350,10 +350,10 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		var res ;
 		res = '' ;
 		if( dataObject.contestId < cfcObj.gymMinimumContestId ) {
-			res += '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/contest/' + dataObject.contestId + '"><div>' + dataObject.contestId + '</div></a>' ;
+			res += '<a target="_blank" href="' + cfsObj.codeforcesBaseUrl + '/contest/' + dataObject.contestId + '"><div>' + dataObject.contestId + '</div></a>' ;
 		}
 		else {
-			res += '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/gym/' + dataObject.contestId + '"><div>' + dataObject.contestId + '</div></a>' ;
+			res += '<a target="_blank" href="' + cfsObj.codeforcesBaseUrl + '/gym/' + dataObject.contestId + '"><div>' + dataObject.contestId + '</div></a>' ;
 		}
 		return res ;
 	} ;
@@ -362,17 +362,17 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		var res ;
 		res = '' ;
 		if( dataObject.contestId < cfcObj.gymMinimumContestId ) {
-			res += '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/contest/' + dataObject.contestId + '/problem/' + dataObject.index + '"><div>' + dataObject.index + '</div></a>' ;
+			res += '<a target="_blank" href="' + cfsObj.codeforcesBaseUrl + '/contest/' + dataObject.contestId + '/problem/' + dataObject.index + '"><div>' + dataObject.index + '</div></a>' ;
 		}
 		else {
-			res += '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/gym/' + dataObject.contestId + '/problem/' + dataObject.index + '"><div>' + dataObject.index + '</div></a>' ;
+			res += '<a target="_blank" href="' + cfsObj.codeforcesBaseUrl + '/gym/' + dataObject.contestId + '/problem/' + dataObject.index + '"><div>' + dataObject.index + '</div></a>' ;
 		}
 		return res ;
 	} ;
 	
 	self.buildRoomHtml = function( dataObject ) {
 		var res ;
-		res = '<a target="_blank" href="' + cfcObj.codeforcesBaseUrl + '/contest/' + dataObject.contestId + '/room/' + dataObject.party.room + '">' + dataObject.party.room + '</a>' ;
+		res = '<a target="_blank" href="' + cfsObj.codeforcesBaseUrl + '/contest/' + dataObject.contestId + '/room/' + dataObject.party.room + '">' + dataObject.party.room + '</a>' ;
 		return res ;
 	} ;
 

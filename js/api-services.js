@@ -15,8 +15,6 @@ function CodeforcesApiService( $http , $timeout , $sce , lssObj , cfsObj , cfcOb
 	self.shObj = shObj ;
 	self.cfaubObj = new CodeforcesApiUrlBuilder( self.cfsObj , self.cfcObj ) ;
 	self.cfdlpObj = new CodeforcesDataListParser( self.cfsObj , self.cfcObj , self.shObj ) ;
-	self.cfcObj.angularHttpObj = $http ;
-	self.cfcObj.jsonpUrlParameter = self.cfsObj.angularJsonpRequestQueryParameter ;
 
 	self.checkValidityOfResponse = function( data ) {
 		if( data.status != 'OK' ) {
@@ -41,8 +39,8 @@ function CodeforcesApiService( $http , $timeout , $sce , lssObj , cfsObj , cfcOb
 				return ;
 			}
 		}
-		if( self.cfcObj.angularHttpObj != null ) {
-			self.cfcObj.angularHttpObj.jsonp( url ).success( function( responseData ) {
+		if( $http != null ) {
+			$http.jsonp( url ).success( function( responseData ) {
 				responseData = self.checkValidityOfResponse( responseData ) ;
 				responseData = dataParsingCallbackFunction( responseData ) ;
 				callbackFunction( responseData ) ;
