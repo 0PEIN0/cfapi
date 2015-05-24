@@ -334,7 +334,7 @@ function CodeforcesContestStandingDirective( cfApi , cfcObj , cfsObj , cftsObj )
 			scope.contestSelected = function() {
 				if( scope.selectedContest != null ) {
 					scope.showLoadingFlag = true ;
-					cfApi.getOfficialContestStandings( scope.contestStandingsResponse , scope.selectedContest ) ;
+					cfApi.getContestStandingsIncludingUnofficial( scope.contestStandingsResponse , scope.selectedContest ) ;
 					scope.selectedCountry = '' ;
 				}
 			} ;
