@@ -19,11 +19,11 @@ function CodeforcesConfiguration() {
 	
 	this.defaultNavigationIndex = 3 ;
 	this.timeZoneOffsetInHours = 3 ;
-	this.localStorageTimeOutHours = 1 ;
+	this.localStorageTimeOutHours = 90000 ;
 	this.constantMultiplierWhileSortingNumbers = 10000 ;
 	this.defaultContestId = 546 ;
 	this.perApiRequestUserHandleLimit = 600 ;
-	this.subsequentApiCallTimeoutInMilliseconds = 50 ;
+	this.subsequentApiCallTimeoutInMilliseconds = 200 ;
 	this.gymMinimumContestId = 100000 ;
 	
 	this.acceptedSubmissionStatus = 'ok' ;
@@ -137,7 +137,7 @@ function CodeforcesTableStructures( $sce ) {
 		{ name : 'Contest Submissions' , title : 'Contest Submissions' } ,
 		{ name : 'Contest Standings' , title : 'Contest Standings' } ,
 		{ name : 'Problem List' , title : 'Problem List' } , 
-		{ name : '' , title : '<img alt="Settings" title="Settings" class="navigation-image" src="images/settings.png"/>' } ] ;
+		{ name : 'Settings' , title : '<img alt="Settings" title="Settings" class="navigation-image" src="images/settings.png"/>' } ] ;
 	
 	this.getCustomStandingTableStructure = function( summary , showRelativeRankFlag ) {
 		var res , i , sz , problemColumn ;

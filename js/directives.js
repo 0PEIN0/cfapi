@@ -30,6 +30,7 @@ function CodeforcesRootDirective( cfcObj , cftsObj ) {
 						<codeforces-contest-submissions-directive data-ng-show="navigationFlags[2] == true" show-loading-flag="showLoadingFlag" show-contest-submissions-flag="navigationFlags[2]" page-header="navElementNameList[2].title"></codeforces-contest-submissions-directive>\
 						<codeforces-contest-standing-directive data-ng-show="navigationFlags[3] == true" show-loading-flag="showLoadingFlag" show-standing-flag="navigationFlags[3]" page-header="navElementNameList[3].title"></codeforces-contest-standing-directive>\
 						<codeforces-problem-set-directive data-ng-show="navigationFlags[4] == true" show-loading-flag="showLoadingFlag" show-problem-set-flag="navigationFlags[4]" page-header="navElementNameList[4].title"></codeforces-problem-set-directive>\
+						<codeforces-settings-directive data-ng-show="navigationFlags[5] == true" show-loading-flag="showLoadingFlag" page-header="navElementNameList[5].name"></codeforces-settings-directive>\
 					</div>\
 				</div>\
 			</div>' ,
@@ -53,6 +54,7 @@ function CodeforcesRootDirective( cfcObj , cftsObj ) {
 					for( i = 0 ; i < len ; i++ ) {
 						scope.navigationFlags[ i ] = false ;
 					}
+					console.log( idx ) ;
 					scope.showLoadingFlag = true ;
 					scope.currentNavIndex = idx ;
 					scope.navigationFlags[ idx ] = true ;
@@ -687,6 +689,45 @@ function CodeforcesProblemSetDirective( cfApi , cftsObj ) {
 
 			scope.$watch( 'showProblemSetFlag' , scope.showProblemSetFlagChanged , true ) ;
 			scope.customProblemSetTableStructure = cftsObj.getCustomProblemSetTableStructure() ;
+		}
+	} ;
+}
+
+
+function CodeforcesSettingsDirective( lssObj , cfcObj ) {
+	return {
+		restrict : 'E' ,
+		transclude : true ,
+		replace : true ,
+		template : '\
+			<div class="panel panel-info">\
+				<div class="panel-heading"><h3 data-ng-bind-html="pageHeader"></h3></div>\
+				<div class="panel-body">\
+					<div class="well well-sm well-sm-override">\
+						<div>\
+							<span class="filter-span">Set Global User Handle: </span>\
+							<input type="text" data-ng-model="userHandle"/>\
+							<button type="button" data-ng-click="updateForm()" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> Update</button>\
+						</div>\
+					</div>\
+				</div>\
+			</div>' ,
+		scope : {
+	    	'showLoadingFlag' : '=' ,
+			'pageHeader' : '='
+	    } ,
+		link : function( scope , element , attrs ) {
+			
+			scope.updateForm = function() {
+				
+			} ;
+			
+			scope.init = function() {
+				scope.userHandle = cfcObj.defaultUserHandle ;
+				scope.showLoadingFlag = false ;
+			} ;
+			
+			scope.init() ;
 		}
 	} ;
 }

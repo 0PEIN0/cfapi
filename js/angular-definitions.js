@@ -24,3 +24,4 @@ app.directive( 'codeforcesUserStatisticsDirective' , [ 'CodeforcesApiService' , 
 app.directive( 'codeforcesRecentSubmissionsDirective' , [ 'CodeforcesApiService' , CodeforcesRecentSubmissionsDirective ] ) ;
 app.directive( 'codeforcesContestSubmissionsDirective' , [ 'CodeforcesApiService' , 'CodeforcesConfiguration' , CodeforcesContestSubmissionsDirective ] ) ;
 app.directive( 'codeforcesProblemSetDirective' , [ 'CodeforcesApiService' , 'CodeforcesTableStructures' , CodeforcesProblemSetDirective ] ) ;
+app.directive( 'codeforcesSettingsDirective' , [ 'LocalStorageService' , 'CodeforcesConfiguration' , CodeforcesSettingsDirective ] ) ;
