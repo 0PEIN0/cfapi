@@ -179,6 +179,20 @@ function StringHandler() {
 		}
 		return res ;
 	} ;
+	
+	this.replaceAllOccurrences = function( textString , substringSource , substringDestination ) {
+		if( textString == null ) {
+			return textString ;
+		}
+		while( textString.indexOf( substringSource ) != -1 ) {
+			textString = textString.replace( substringSource , substringDestination ) ;
+		}
+		return textString ;
+	} ;
+	
+	this.replaceAllUnderScoresWithSpaces = function( textString ) {
+		return this.replaceAllOccurrences( textString , '_' , ' ' ) ;
+	} ;
 }
 
 function SortHandlerService() {

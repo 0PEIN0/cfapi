@@ -244,6 +244,12 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 	self.generateHandleHtml = function( dataObject , propertyName , userInfoList ) {
 		var i , sz1 , j , sz2 , k , sz3 , sz4 , userInfoObj , res , handleList , handle , countryImageHtml , countryList , userHandleCssClass , cssClassList , ratingDesignationList , rankString ;
 		res = '' ;
+		if( dataObject.participantType != null && dataObject.participantType.toLowerCase() == cfcObj.outOfCompetitionParticipant.toLowerCase() ) {
+			res += '<span class="participant-type-span">' + shObj.makeTheFirstCharacterOfStringCapitalized( shObj.replaceAllUnderScoresWithSpaces( cfcObj.outOfCompetitionParticipant.toLowerCase() ) ) + '</span>' ;
+		}
+		else if( dataObject.participantType != null && dataObject.participantType.toLowerCase() == cfcObj.virtualParticipant.toLowerCase() ) {
+			res += '<span class="participant-type-span">' + shObj.makeTheFirstCharacterOfStringCapitalized( shObj.replaceAllUnderScoresWithSpaces( cfcObj.virtualParticipant.toLowerCase() ) ) + '</span>' ;
+		}
 		handleList = dataObject[ propertyName ] ;
 		ratingDesignationList = cfsObj.ratingDesignations ;
 		cssClassList = cfsObj.ratingCssClasses ;
@@ -382,8 +388,15 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		userStanding = {} ;
 		userStanding.rank = dataObject.rank ;
 		userStanding.rankHtml = '' + dataObject.rank ;
-		userStanding.room = dataObject.party.room ;
-		userStanding.roomHtml = self.buildRoomHtml( dataObject ) ;
+		if( dataObject.party.room == null ) {
+			dataObject.party.room = -1 ;
+			userStanding.roomHtml = '' ;
+		}
+		else {
+			userStanding.room = dataObject.party.room ;
+			userStanding.roomHtml = self.buildRoomHtml( dataObject ) ;
+		}
+		userStanding.participantType = dataObject.participantType ;
 		userStanding.handle = dataObject.authorHandles ;
 		userStanding.handleHtml = self.generateHandleHtml( dataObject , 'authorHandles' , null ) ;
 		userStanding.teamName = dataObject.teamName ;
@@ -677,6 +690,7 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 			data[ i ].authorHandles = self.getHandlesInAnArray( data[ i ].party.members ) ;
 			data[ i ].teamName = data[ i ].party.teamName ;
 			data[ i ].teamId = data[ i ].party.teamId ;  
+			data[ i ].participantType = data[ i ].party.participantType ;
 			userStanding = self.buildUserStandingObject( data[ i ] , res.summary , res.summary.contest.id ) ;
 			if( userStanding.penalty > 0 ) {
 				res.summary.hasPenalty = true ;

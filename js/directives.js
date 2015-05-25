@@ -54,7 +54,6 @@ function CodeforcesRootDirective( cfcObj , cftsObj ) {
 					for( i = 0 ; i < len ; i++ ) {
 						scope.navigationFlags[ i ] = false ;
 					}
-					console.log( idx ) ;
 					scope.showLoadingFlag = true ;
 					scope.currentNavIndex = idx ;
 					scope.navigationFlags[ idx ] = true ;
@@ -286,6 +285,12 @@ function CodeforcesContestStandingDirective( cfApi , cfcObj , cfsObj , cftsObj )
 				<div class="panel-body">\
 					<div class="well well-sm well-sm-override">\
 						<div>\
+							<input type="checkbox" aria-label="..." data-ng-model="showOutOfComtetitionParticipantsFlag" data-ng-change="filterContestStandingList()">Show Out of Competition Participants\
+						</div>\
+						<div>\
+							<input type="checkbox" aria-label="..." data-ng-model="showVirtualParticipantsFlag" data-ng-change="filterContestStandingList()">Show Virtual Participants\
+						</div>\
+						<div>\
 							<span class="filter-span">Filters:</span>\
 							<select class="form-control generic-select-tag contest-select-tag" data-ng-change="contestSelected()" data-ng-model="selectedContest">\
 								<option data-ng-repeat="item in contestList.dataList" data-ng-bind="item.name" value="{{item.id}}" data-ng-init="contestListLoading($index)"></option>\
@@ -310,6 +315,10 @@ function CodeforcesContestStandingDirective( cfApi , cfcObj , cfsObj , cftsObj )
 			scope.clearFilters = function() {
 				scope.selectedCountry = '' ;
 				scope.countrySelected() ;
+			} ;
+			
+			scope.filterContestStandingList = function() {
+				
 			} ;
 			
 			scope.userListInfoResponse = function( response ) {
@@ -354,7 +363,7 @@ function CodeforcesContestStandingDirective( cfApi , cfcObj , cfsObj , cftsObj )
 					scope.customStandingTableStructure = cftsObj.getCustomStandingTableStructure( scope.contestStandingsList.summary , true ) ;
 				}
 				else {
-					scope.contestStandingsList.filteredDataList = scope.contestStandingsList.dataList ; 
+					scope.contestStandingsList.filteredDataList = scope.contestStandingsList.dataList ;
 					scope.customStandingTableStructure = cftsObj.getCustomStandingTableStructure( scope.contestStandingsList.summary , false ) ;
 				}
 				cfApi.broadcastTableDataReadyFlag( scope ) ;

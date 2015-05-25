@@ -273,3 +273,7 @@ span.table-cell-generic {
 .pagination-custom {
   font-size : 12px ; 
 }
+
+.participant-type-span {
+  float : right ; 
+}

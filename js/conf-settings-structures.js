@@ -29,6 +29,8 @@ function CodeforcesConfiguration() {
 	this.acceptedSubmissionStatus = 'ok' ;
 	this.pretestSubmissionTestSetType = 'pretests' ;
 	this.standingResultType = 'preliminary' ;
+	this.outOfCompetitionParticipant = 'out_of_competition' ;
+	this.virtualParticipant = 'virtual' ;
 }
 
 function CodeforcesSettings() {
@@ -119,7 +121,7 @@ function CodeforcesTableStructures( $sce ) {
 		{ name : 'Rank' , sortIndex : 'rank' } , 
 		{ name : 'Relative Rank' , sortIndex : 'relativeRank' } , 
 		{ name : 'Room Number' , sortIndex : 'room' } , 
-		{ name : 'Handle(s)' , sortIndex : 'handle' , width : '230px' } , 
+		{ name : 'Handle(s)' , sortIndex : 'handle' , width : '300px' } , 
 		{ name : 'Points' , sortIndex : 'points' } , 
 		{ name : 'Penalty' , sortIndex : 'penalty' } , 
 		{ name : 'Hacks' , sortIndex : 'hacks' } ] ;
