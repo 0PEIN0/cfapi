@@ -17,7 +17,7 @@ function CodeforcesConfiguration() {
 	this.maxRowsPerPageInPagination = 100 ;
 	this.maxButtonsInPagination = 5 ;
 	
-	this.defaultNavigationIndex = 3 ;
+	this.defaultNavigationIndex = 1 ;
 	this.timeZoneOffsetInHours = 3 ;
 	this.localStorageTimeOutHours = 90000 ;
 	this.constantMultiplierWhileSortingNumbers = 10000 ;
