@@ -17,7 +17,7 @@ function CodeforcesConfiguration() {
 	this.maxRowsPerPageInPagination = 100 ;
 	this.maxButtonsInPagination = 5 ;
 	
-	this.defaultNavigationIndex = 5 ;
+	this.defaultNavigationIndex = 0 ;
 	this.timeZoneOffsetInHours = 3 ;
 	this.localStorageTimeOutHours = 24 * 365 ;
 	this.constantMultiplierWhileSortingNumbers = 10000 ;
@@ -78,7 +78,8 @@ function CodeforcesSettings() {
 		'Skipped' , 
 		'Hacked' ,
 		'Pretests passed' ,
-		'Rejected' ] ;
+		'Rejected' ,
+		'Judgement failed' ] ;
 	this.angularJsonpRequestQueryParameter = 'jsonp=JSON_CALLBACK' ;
 	
 	this.getCountryList = function() {

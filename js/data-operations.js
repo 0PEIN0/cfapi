@@ -536,6 +536,9 @@ function CodeforcesDataListParser( cfsObj , cfcObj , shObj ) {
 		mapCnt = 1 ;
 		sz1 = dataList.length ;
 		for( i = 0 ; i < sz1 ; i++ ) {
+			if( sz2 = dataList[ i ].authorHandles == null ) {
+				continue ;
+			}
 			sz2 = dataList[ i ].authorHandles.length ;
 			for( j = 0 ; j < sz2 ; j++ ) {
 				if( userMap[ dataList[ i ].authorHandles[ j ] ] == null ) {

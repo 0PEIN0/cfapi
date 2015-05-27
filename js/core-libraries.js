@@ -167,8 +167,11 @@ function StringHandler() {
 				}
 			}
 			else {
-				while( textString.search( associationList[ i ].source ) != -1 ) {
+				while( textString.indexOf( associationList[ i ].source ) != -1 ) {
 					textString = textString.replace( associationList[ i ].source , associationList[ i ].destination ) ;
+					if( associationList[ i ].destination.toLowerCase().search( associationList[ i ].source.toLowerCase() ) != -1 ) {
+						break ;
+					}
 				}
 			}
 		}
