@@ -17,11 +17,11 @@ function CodeforcesConfiguration() {
 	this.maxRowsPerPageInPagination = 100 ;
 	this.maxButtonsInPagination = 5 ;
 	
-	this.defaultNavigationIndex = 1 ;
+	this.defaultNavigationIndex = 5 ;
 	this.timeZoneOffsetInHours = 3 ;
-	this.localStorageTimeOutHours = 90000 ;
+	this.localStorageTimeOutHours = 24 * 365 ;
 	this.constantMultiplierWhileSortingNumbers = 10000 ;
-	this.defaultContestId = 546 ;
+	this.defaultContestId = 548 ;
 	this.perApiRequestUserHandleLimit = 600 ;
 	this.subsequentApiCallTimeoutInMilliseconds = 200 ;
 	this.gymMinimumContestId = 100000 ;

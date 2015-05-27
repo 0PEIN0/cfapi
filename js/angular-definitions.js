@@ -16,7 +16,7 @@ app.service( 'SortHandlerService' , [ SortHandlerService ] ) ;
 app.service( 'LocalStorageService' , [ 'CodeforcesConfiguration' , LocalStorageService ] ) ;
 app.service( 'CodeforcesApiService' , [ '$http' , '$timeout' , '$sce' , 'LocalStorageService' , 'CodeforcesSettings' , 'CodeforcesConfiguration' , 'StringHandler' , CodeforcesApiService ] ) ;
 app.controller( 'CodeforcesController' , [ '$scope' , CodeforcesController ] ) ;
-app.directive( 'codeforcesRootDirective' , [ 'CodeforcesConfiguration' , 'CodeforcesTableStructures' , CodeforcesRootDirective ] ) ;
+app.directive( 'codeforcesRootDirective' , [ 'CodeforcesConfiguration' , 'CodeforcesTableStructures' , 'CodeforcesApiService' , CodeforcesRootDirective ] ) ;
 app.directive( 'codeforcesTableDirective' , [ '$sce' , 'CodeforcesConfiguration' , 'SortHandlerService' , CodeforcesTableDirective ] ) ;
 app.directive( 'codeforcesContestStandingDirective' , [ 'CodeforcesApiService' , 'CodeforcesConfiguration' , 'CodeforcesSettings' , 'CodeforcesTableStructures' , CodeforcesContestStandingDirective ] ) ;
 app.directive( 'codeforcesSubmissionsDirective' , [ 'CodeforcesApiService' , 'CodeforcesTableStructures' , CodeforcesSubmissionsDirective ] ) ;
@@ -24,4 +24,4 @@ app.directive( 'codeforcesUserStatisticsDirective' , [ 'CodeforcesApiService' , 
 app.directive( 'codeforcesRecentSubmissionsDirective' , [ 'CodeforcesApiService' , CodeforcesRecentSubmissionsDirective ] ) ;
 app.directive( 'codeforcesContestSubmissionsDirective' , [ 'CodeforcesApiService' , 'CodeforcesConfiguration' , CodeforcesContestSubmissionsDirective ] ) ;
 app.directive( 'codeforcesProblemSetDirective' , [ 'CodeforcesApiService' , 'CodeforcesTableStructures' , CodeforcesProblemSetDirective ] ) ;
-app.directive( 'codeforcesSettingsDirective' , [ 'LocalStorageService' , 'CodeforcesConfiguration' , CodeforcesSettingsDirective ] ) ;
+app.directive( 'codeforcesSettingsDirective' , [ 'LocalStorageService' , 'CodeforcesConfiguration' , 'CodeforcesApiService' , CodeforcesSettingsDirective ] ) ;

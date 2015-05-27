@@ -60,7 +60,12 @@ function CodeforcesApiService( $http , $timeout , $sce , lssObj , cfsObj , cfcOb
 	} ;
 	
 	this.getDefaultUserHandle = function() {
-		return self.cfcObj.defaultUserHandle ;
+		var handle ;
+		handle = lssObj.Get( 'defaultUserHandle' ) ;
+		if( handle == null ) {
+			handle = self.cfcObj.defaultUserHandle ; 
+		}
+		return handle ;
 	} ;
 
 	this.getContestHacks = function( callbackFunction , contestId ) {
